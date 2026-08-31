@@ -6,7 +6,13 @@
   border: 1px solid var(--rule);
   border-radius: 10px;
 }
-.fig--wide { max-width: 52rem; }
+/* Real breakout past the 42rem prose column, centered on the page; min()
+   collapses it back to the viewport (minus a gutter) on small screens. */
+.fig--wide {
+  width: min(52rem, calc(100vw - 2rem));
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
 
 /* Wraps the canvas so a per-figure pause button can anchor to the animation. */
 .fig__stage { position: relative; width: 100%; }
@@ -18,11 +24,13 @@
   border-radius: 50%; border: 1px solid var(--rule);
   background: var(--fig-bg);
   background: color-mix(in srgb, var(--fig-bg) 78%, transparent);
-  color: var(--muted); cursor: pointer; opacity: 0.5;
+  color: var(--muted); cursor: pointer; opacity: 0.85;
   -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
   transition: opacity 0.14s ease, color 0.14s ease, background 0.14s ease;
 }
 .fig__stage:hover .fig__pause, .fig__pause[aria-pressed="true"], .fig__pause:focus-visible { opacity: 1; }
+/* No hover on touch devices — the intro points readers at this control, so keep it fully visible. */
+@media (hover: none) { .fig__pause { opacity: 1; } }
 .fig__pause:hover { color: var(--ink); background: var(--fig-bg); }
 .fig__pause:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 
@@ -55,5 +63,10 @@
   display: block; padding: 2rem; text-align: center; color: var(--c-bad); font-size: var(--step--1);
 }
 
-/* Placeholder height before a figure lazily mounts, to avoid scroll jumps */
-.fig:empty { min-height: 240px; }
+/* Placeholder height before a figure lazily mounts its canvas, to avoid scroll jumps */
+.fig:not(:has(.fig__stage, .fig__canvas)) { min-height: 240px; }
+
+/* Phones: a squarer canvas leaves room for in-canvas annotations. */
+@media (max-width: 640px) {
+  .fig__canvas { aspect-ratio: 4 / 3; }
+}

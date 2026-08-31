@@ -6,6 +6,8 @@
 import { Figure } from './Figure.js';
 import { makeControls, defaultsFrom } from './controls.js';
 
+const KEY_STEP = 0.08; // radians per arrow press
+
 export class ThreeFigure extends Figure {
   async init() {
     const THREE = this.THREE = await import('three');
@@ -13,7 +15,6 @@ export class ThreeFigure extends Figure {
 
     this.canvas = document.createElement('canvas');
     this.canvas.className = 'fig__canvas fig__canvas--3d';
-    this.canvas.style.touchAction = 'none'; // don't hijack page scroll while rotating
     this.root.append(this.canvas);
 
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true, alpha: true });
@@ -30,15 +31,22 @@ export class ThreeFigure extends Figure {
 
     if (this.controlsSchema) {
       this.params = { ...defaultsFrom(this.controlsSchema), ...this.params };
-      this.root.append(makeControls(this.controlsSchema, (name, value) => {
+      this._controlsEl = makeControls(this.controlsSchema, (name, value) => {
         this.params[name] = value;
         this.onChange(name, value);
-      }));
+      });
+      this.root.append(this._controlsEl);
     }
 
     this.build(THREE);
+    this._applyInteraction(THREE); // after build(): subclasses may disable rotation there
     this.mode = 'animated'; // OrbitControls damping needs a loop while visible
-    this._onResize = () => this.onResize();
+    // Coalesce resize storms: at most one relayout per figure per frame.
+    this._resizeRaf = 0;
+    this._onResize = () => {
+      if (this._resizeRaf) return;
+      this._resizeRaf = requestAnimationFrame(() => { this._resizeRaf = 0; this.onResize(); });
+    };
     window.addEventListener('resize', this._onResize);
     this.onResize();
   }
@@ -46,11 +54,52 @@ export class ThreeFigure extends Figure {
   /** Subclasses add meshes here. */
   build(_THREE) {}
 
+  /**
+   * Touch and keyboard wiring, applied after build() so a subclass that turned
+   * rotation off (orbit.enableRotate = false) opts out of interception entirely.
+   * OrbitControls' constructor sets touch-action: none, so overrides go here.
+   */
+  _applyInteraction(THREE) {
+    if (this.orbit.enableRotate === false) {
+      this.canvas.style.touchAction = 'auto'; // nothing to rotate: never block page scroll
+      return;
+    }
+    // One finger scrolls the page; two fingers rotate. Zoom is disabled above,
+    // so DOLLY_ROTATE is rotation only (this OrbitControls has no two-finger
+    // ROTATE mode); -1 matches no gesture in its touches.ONE switch.
+    this.canvas.style.touchAction = 'pan-y';
+    this.orbit.touches = { ONE: -1, TWO: THREE.TOUCH.DOLLY_ROTATE };
+
+    this.canvas.tabIndex = 0;
+    this.canvas.setAttribute('aria-label', 'Interactive 3-D view — drag or use arrow keys to rotate');
+    this._onKey = (ev) => {
+      if (ev.metaKey || ev.ctrlKey || ev.altKey) return; // keep browser shortcuts
+      let dTheta = 0, dPhi = 0;
+      if (ev.key === 'ArrowLeft') dTheta = KEY_STEP;
+      else if (ev.key === 'ArrowRight') dTheta = -KEY_STEP;
+      else if (ev.key === 'ArrowUp') dPhi = -KEY_STEP;
+      else if (ev.key === 'ArrowDown') dPhi = KEY_STEP;
+      else return;
+      ev.preventDefault();
+      // Manual spherical orbit around the target, matching drag direction.
+      const off = this.camera.position.clone().sub(this.orbit.target);
+      const sph = new THREE.Spherical().setFromVector3(off);
+      sph.theta += dTheta;
+      sph.phi += dPhi;
+      sph.makeSafe();
+      this.camera.position.copy(this.orbit.target).add(off.setFromSpherical(sph));
+      this.camera.lookAt(this.orbit.target);
+      this.draw();
+    };
+    this.canvas.addEventListener('keydown', this._onKey);
+  }
+
   onResize() {
     if (!this.renderer) return;
     const rect = this.canvas.getBoundingClientRect();
     const w = Math.max(1, Math.round(rect.width));
     const h = Math.max(1, Math.round(rect.height));
+    if (w === this.w && h === this.h) return; // same buffer: skip the re-render
     this.renderer.setSize(w, h, false);
     this.camera.aspect = w / h;
     this.camera.updateProjectionMatrix();
@@ -63,13 +112,18 @@ export class ThreeFigure extends Figure {
 
   teardown() {
     window.removeEventListener('resize', this._onResize);
+    if (this._resizeRaf) { cancelAnimationFrame(this._resizeRaf); this._resizeRaf = 0; }
+    if (this._onKey) this.canvas?.removeEventListener('keydown', this._onKey);
     this.orbit?.dispose();
     this.scene?.traverse((o) => {
       o.geometry?.dispose?.();
       const m = o.material;
-      (Array.isArray(m) ? m : [m]).forEach((x) => x?.dispose?.());
+      (Array.isArray(m) ? m : [m]).forEach((x) => { x?.map?.dispose?.(); x?.dispose?.(); });
     });
     this.renderer?.dispose();
+    this.renderer?.forceContextLoss?.(); // free the GL context now, not at GC time
+    this.renderer = null;
+    this._controlsEl?.remove();
     this.canvas?.remove();
   }
 }

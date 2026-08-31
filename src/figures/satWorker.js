@@ -8,18 +8,23 @@ import { parseTle, snapshot } from '../core/sgp4.js';
 let satrecs = [];
 
 self.onmessage = (e) => {
-  const msg = e.data;
-  if (msg.type === 'init') {
-    const parsed = parseTle(msg.text);
-    satrecs = parsed.satrecs;
-    self.postMessage({ type: 'ready', count: satrecs.length, epochMs: parsed.epochMs });
-  } else if (msg.type === 'frame') {
-    const pos = new Float32Array(3 * satrecs.length);
-    const vel = new Float32Array(3 * satrecs.length);
-    snapshot(satrecs, msg.t, pos, vel);
-    self.postMessage(
-      { type: 'frame', t: msg.t, slot: msg.slot, gen: msg.gen, pos: pos.buffer, vel: vel.buffer },
-      [pos.buffer, vel.buffer],
-    );
+  try {
+    const msg = e.data;
+    if (msg.type === 'init') {
+      const parsed = parseTle(msg.text);
+      satrecs = parsed.satrecs;
+      self.postMessage({ type: 'ready', count: satrecs.length, epochMs: parsed.epochMs });
+    } else if (msg.type === 'frame') {
+      const pos = new Float32Array(3 * satrecs.length);
+      const vel = new Float32Array(3 * satrecs.length);
+      snapshot(satrecs, msg.t, pos, vel);
+      self.postMessage(
+        { type: 'frame', t: msg.t, slot: msg.slot, gen: msg.gen, pos: pos.buffer, vel: vel.buffer },
+        [pos.buffer, vel.buffer],
+      );
+    }
+  } catch (err) {
+    // Malformed TLE text or an SGP4 blow-up: tell the main thread, don't die silently.
+    self.postMessage({ type: 'error', message: err instanceof Error ? err.message : String(err) });
   }
 };

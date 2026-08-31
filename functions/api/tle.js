@@ -13,10 +13,13 @@ export async function onRequestGet({ request, waitUntil }) {
   const hit = await cache.match(cacheKey);
   if (hit) return hit;
 
-  const up = await fetch(UPSTREAM, {
-    headers: { 'user-agent': 'how-radar-sees.pages.dev live-constellation figure' },
-  });
-  const text = up.ok ? await up.text() : '';
+  let text = '';
+  try {
+    const up = await fetch(UPSTREAM, {
+      headers: { 'user-agent': 'how-radar-sees.pages.dev live-constellation figure' },
+    });
+    text = up.ok ? await up.text() : '';
+  } catch { /* network throw -> same 503 path as a bad body */ }
   if (text.length < 100_000 || !text.includes('\n1 ')) {
     return new Response('upstream TLE data unavailable\n', {
       status: 503,

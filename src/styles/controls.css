@@ -24,6 +24,10 @@
 }
 .seg__btn:hover { color: var(--ink); }
 .seg__btn.is-active { background: var(--accent); color: #fff; }
+/* Dark mode lightens --accent (see tokens.css), so the active segment needs dark ink for contrast. */
+@media (prefers-color-scheme: dark) {
+  .seg__btn.is-active { color: #0b1220; }
+}
 .seg__btn:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 
 /* Range slider — thin track, small thumb, visible focus (cross-browser) */

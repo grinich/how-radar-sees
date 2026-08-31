@@ -14,14 +14,20 @@ export class Canvas2DFigure extends Figure {
 
     if (this.controlsSchema) {
       this.params = { ...defaultsFrom(this.controlsSchema), ...this.params };
-      this.root.append(makeControls(this.controlsSchema, (name, value) => {
+      this._controlsEl = makeControls(this.controlsSchema, (name, value) => {
         this.params[name] = value;
         this.onChange(name, value);
-      }));
+      });
+      this.root.append(this._controlsEl);
     }
 
     this._offTheme = onThemeChange(() => { this.palette = palette(); this.draw(); });
-    this._onResize = () => this.onResize();
+    // Coalesce resize storms: at most one relayout per figure per frame.
+    this._resizeRaf = 0;
+    this._onResize = () => {
+      if (this._resizeRaf) return;
+      this._resizeRaf = requestAnimationFrame(() => { this._resizeRaf = 0; this.onResize(); });
+    };
     window.addEventListener('resize', this._onResize);
     this.onResize();
   }
@@ -31,8 +37,12 @@ export class Canvas2DFigure extends Figure {
     const rect = this.canvas.getBoundingClientRect();
     const w = Math.max(1, Math.round(rect.width));
     const h = Math.max(1, Math.round(rect.height));
-    this.canvas.width = Math.round(w * dpr);
-    this.canvas.height = Math.round(h * dpr);
+    const pw = Math.round(w * dpr);
+    const ph = Math.round(h * dpr);
+    // Assigning canvas.width clears the canvas even when unchanged: skip no-ops.
+    if (pw === this.canvas.width && ph === this.canvas.height && w === this.w && h === this.h) return;
+    this.canvas.width = pw;
+    this.canvas.height = ph;
     this.g.setTransform(dpr, 0, 0, dpr, 0, 0); // draw in CSS pixels
     this.w = w;
     this.h = h;
@@ -43,7 +53,10 @@ export class Canvas2DFigure extends Figure {
 
   teardown() {
     window.removeEventListener('resize', this._onResize);
+    if (this._resizeRaf) { cancelAnimationFrame(this._resizeRaf); this._resizeRaf = 0; }
     this._offTheme?.();
+    this._offTheme = null;
+    this._controlsEl?.remove();
     this.canvas?.remove();
   }
 }

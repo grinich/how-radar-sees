@@ -24,22 +24,26 @@ export default class DtcExplorer extends Canvas2DFigure {
     if (!g) return;
     clearBg(g, w, h, c);
     const cur = this.chain(this.params.pwr);
+    const nrw = w < 480; // narrow mode: shrink the header so the plot keeps most of the canvas
 
     // headline
-    g.textAlign = 'left'; g.fillStyle = c.goodCol; g.font = `700 30px ${FONT}`;
-    g.fillText(`SNR +${cur.snr_db.toFixed(0)} dB`, 16, 36);
-    g.fillStyle = c.muted; g.font = `12px ${FONT}`;
-    g.fillText(`NESZ ${cur.nesz_db.toFixed(0)} dB   ·   resolution ${fmtM(cur.rangeRes_ground)}   ·   S-band, 15 m aperture, 350 km`, 16, 56);
+    g.textAlign = 'left'; g.fillStyle = c.goodCol; g.font = `700 ${nrw ? 20 : 30}px ${FONT}`;
+    g.fillText(`SNR +${cur.snr_db.toFixed(0)} dB`, 16, nrw ? 24 : 36);
+    g.fillStyle = c.muted; g.font = `${nrw ? 10 : 12}px ${FONT}`;
+    g.fillText(nrw
+      ? `NESZ ${cur.nesz_db.toFixed(0)} dB · range res ${fmtM(cur.rangeRes_ground)}`
+      : `NESZ ${cur.nesz_db.toFixed(0)} dB   ·   range resolution ${fmtM(cur.rangeRes_ground)}   ·   S-band, 15 m aperture, 350 km`,
+      16, nrw ? 40 : 56);
 
     // capability line from NESZ
     let cap = 'detects large ships', col = c.muted;
-    if (cur.nesz_db < -30) { cap = 'sensitive enough to image stealth aircraft'; col = c.badCol; }
+    if (cur.nesz_db < -30) { cap = 'images even the faintest surfaces, with margin to spare'; col = c.badCol; }
     else if (cur.nesz_db < -20) { cap = 'images vehicles and most ground targets'; col = c.echoCol; }
     else if (cur.nesz_db < -12) { cap = 'images typical terrain'; col = c.echoCol; }
-    g.fillStyle = col; g.font = `600 13px ${FONT}`; g.fillText(`→ ${cap}`, 16, 76);
+    g.fillStyle = col; g.font = `600 ${nrw ? 11 : 13}px ${FONT}`; g.fillText(`→ ${cap}`, 16, nrw ? 56 : 76);
 
     // SNR vs power sweep (log power)
-    const padL = 44, padR = 16, padT = 92, padB = 38;
+    const padL = nrw ? 36 : 44, padR = nrw ? 12 : 16, padT = nrw ? 64 : 92, padB = nrw ? 26 : 38;
     const x0 = padL, y0 = padT, plotW = w - padL - padR, plotH = h - padT - padB, y1 = padT + plotH;
     const pMin = 3, pMax = 44000;
     const lx = (p) => x0 + (Math.log10(p / pMin) / Math.log10(pMax / pMin)) * plotW;
@@ -52,10 +56,11 @@ export default class DtcExplorer extends Canvas2DFigure {
     // 0 dB
     if (0 > yMin && 0 < yMax) { const yz = ly(0); g.strokeStyle = rgba(c.goodCol, 0.5); g.setLineDash([4, 4]); g.beginPath(); g.moveTo(x0, yz); g.lineTo(x0 + plotW, yz); g.stroke(); g.setLineDash([]); }
     // x ticks
-    g.fillStyle = c.muted; g.font = `10px ${FONT}`; g.textAlign = 'center';
-    for (const p of [3, 15, 100, 1000, 10000, 44000]) { const x = lx(p); g.fillText(p >= 1000 ? `${p / 1000}k` : `${p}`, x, y1 + 14); }
-    g.save(); g.translate(13, y0 + plotH / 2); g.rotate(-Math.PI / 2); g.fillText('SNR (dB)', 0, 0); g.restore();
-    g.fillStyle = c.muted; g.textAlign = 'center'; g.fillText('transmit power (W)', x0 + plotW / 2, y1 + 30);
+    g.fillStyle = c.muted; g.font = `${nrw ? 9 : 10}px ${FONT}`; g.textAlign = 'center';
+    for (const p of [3, 15, 100, 1000, 10000, 44000]) { const x = lx(p); g.fillText(p >= 1000 ? `${p / 1000}k` : `${p}`, x, y1 + (nrw ? 12 : 14)); }
+    g.save(); g.translate(nrw ? 11 : 13, y0 + plotH / 2); g.rotate(-Math.PI / 2); g.fillText('SNR (dB)', 0, 0); g.restore();
+    g.fillStyle = c.muted; g.textAlign = 'center';
+    g.fillText(nrw ? 'Tx power (W)' : 'transmit power (W)', x0 + plotW / 2, y1 + (nrw ? 23 : 30));
     // curve
     g.strokeStyle = c.echoCol; g.lineWidth = 2; g.beginPath();
     pts.forEach(([p, s], i) => { const X = lx(p), Y = ly(s); i ? g.lineTo(X, Y) : g.moveTo(X, Y); });

@@ -36,9 +36,10 @@ export default class PulseCompression extends Canvas2DFigure {
 
     g.clearRect(0, 0, w, h);
     g.fillStyle = c.figBg; g.fillRect(0, 0, w, h);
+    const nrw = w < 480; // narrow mode: compact annotations, plot keeps most of the canvas
 
     // Layout
-    const padL = 46, padR = 16, padT = 58, padB = 34;
+    const padL = nrw ? 36 : 46, padR = nrw ? 12 : 16, padT = nrw ? 44 : 58, padB = nrw ? 24 : 34;
     const plotW = w - padL - padR;
     const plotH = h - padT - padB;
     const x0 = padL, y0 = padT, y1 = padT + plotH;
@@ -91,9 +92,9 @@ export default class PulseCompression extends Canvas2DFigure {
       g.setLineDash([3, 3]);
       g.beginPath(); g.moveTo(xx, y0); g.lineTo(xx, y1); g.stroke();
       g.setLineDash([]);
-      g.fillStyle = c.targetCol; g.font = '600 12px ui-sans-serif, system-ui, sans-serif';
+      g.fillStyle = c.targetCol; g.font = `600 ${nrw ? 10 : 12}px ui-sans-serif, system-ui, sans-serif`;
       g.textAlign = 'center';
-      g.fillText(lab, xx, y0 - 6);
+      g.fillText(lab, xx, y0 - 5);
     }
 
     // Resolution-cell bracket (width = c/2B) drawn near the top
@@ -105,25 +106,26 @@ export default class PulseCompression extends Canvas2DFigure {
     g.moveTo(bx0, cellY - 4); g.lineTo(bx0, cellY + 4);
     g.moveTo(bx1, cellY - 4); g.lineTo(bx1, cellY + 4);
     g.stroke();
-    g.fillStyle = c.txCol; g.font = '11px ui-sans-serif, system-ui, sans-serif';
+    g.fillStyle = c.txCol; g.font = `${nrw ? 9 : 11}px ui-sans-serif, system-ui, sans-serif`;
     g.textAlign = 'center';
-    g.fillText(`resolution cell  c/2B = ${fmtM(dr_slant)}`, (bx0 + bx1) / 2, cellY - 7);
+    g.fillText(nrw ? `c/2B = ${fmtM(dr_slant)}` : `resolution cell  c/2B = ${fmtM(dr_slant)}`, (bx0 + bx1) / 2, cellY - 7);
 
     // X axis label
-    g.fillStyle = c.muted; g.font = '11px ui-sans-serif, system-ui, sans-serif';
+    g.fillStyle = c.muted; g.font = `${nrw ? 9 : 11}px ui-sans-serif, system-ui, sans-serif`;
     g.textAlign = 'center';
-    g.fillText('slant range →', x0 + plotW / 2, h - 10);
+    g.fillText('slant range →', x0 + plotW / 2, h - (nrw ? 8 : 10));
 
     // Verdict + readouts (top-left)
     g.textAlign = 'left';
-    g.font = '700 15px ui-sans-serif, system-ui, sans-serif';
+    g.font = `700 ${nrw ? 13 : 15}px ui-sans-serif, system-ui, sans-serif`;
     g.fillStyle = resolved ? c.goodCol : c.badCol;
-    g.fillText(resolved ? 'Two targets resolved' : 'Targets merge into one', padL, 22);
-    g.font = '12px ui-sans-serif, system-ui, sans-serif';
+    g.fillText(resolved ? 'Two targets resolved' : 'Targets merge into one', padL, nrw ? 16 : 22);
+    g.font = `${nrw ? 10 : 12}px ui-sans-serif, system-ui, sans-serif`;
     g.fillStyle = c.muted;
-    g.fillText(
-      `slant res ${fmtM(dr_slant)}  ·  ground res ${fmtM(dr_ground)}  ·  spacing ${p.sep.toFixed(1)} m`,
-      padL, 40);
+    g.fillText(nrw
+      ? `slant ${fmtM(dr_slant)} · ground ${fmtM(dr_ground)} · gap ${p.sep.toFixed(1)} m`
+      : `slant res ${fmtM(dr_slant)}  ·  ground res ${fmtM(dr_ground)}  ·  spacing ${p.sep.toFixed(1)} m`,
+      padL, nrw ? 31 : 40);
   }
 }
 

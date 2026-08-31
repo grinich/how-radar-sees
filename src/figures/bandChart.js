@@ -1,6 +1,7 @@
 // @ts-check
-// §4 — Radar bands, atmospheric absorption, and where Starlink transmits. Hover
-// a band to read its typical use and weather behaviour. Illustrative curve.
+// §4 — Radar bands, atmospheric absorption, and where Starlink transmits. Hover,
+// tap, or arrow through a band to read its typical use and weather behaviour.
+// Illustrative curve.
 import { Canvas2DFigure } from '../core/Canvas2DFigure.js';
 import { clearBg, rgba, FONT } from '../core/draw.js';
 
@@ -33,30 +34,61 @@ function absorption(f) {
 export default class BandChart extends Canvas2DFigure {
   init() {
     super.init();
-    this.hoverF = null;
-    this.canvas.addEventListener('pointermove', (e) => {
+    this._px = null; // pointer x over the canvas (CSS px)
+    this._ki = null; // keyboard-selected band index
+    // Keyboard + touch: the canvas is a focusable widget, not hover-only.
+    this.canvas.tabIndex = 0;
+    this.canvas.setAttribute('aria-label',
+      'Radar band chart. Hover or tap a band, or use the left and right arrow keys to step through the bands.');
+    const point = (e) => {
       const r = this.canvas.getBoundingClientRect();
       this._px = e.clientX - r.left;
+      this._ki = null;
+      this.draw();
+    };
+    this.canvas.addEventListener('pointermove', point);
+    this.canvas.addEventListener('pointerdown', point); // tap selects the band under the finger
+    this.canvas.addEventListener('pointerleave', () => { this._px = null; this.draw(); });
+    this.canvas.addEventListener('keydown', (e) => {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      e.preventDefault();
+      const cur = this._ki ?? (this._px != null ? this._bandAt(this._px) : -1);
+      this._ki = e.key === 'ArrowRight'
+        ? Math.min(BANDS.length - 1, cur + 1)
+        : Math.max(0, cur <= 0 ? 0 : cur - 1);
+      this._px = null;
       this.draw();
     });
-    this.canvas.addEventListener('pointerleave', () => { this._px = null; this.draw(); });
+    this.canvas.addEventListener('blur', () => { this._ki = null; this.draw(); });
   }
 
   fx(f, x0, plotW) { return x0 + (Math.log10(f / FMIN) / Math.log10(FMAX / FMIN)) * plotW; }
+
+  /** Plot paddings, tightened in narrow mode so the chart keeps most of the canvas. */
+  pads() {
+    const nrw = this.w < 480;
+    return { nrw, padL: nrw ? 34 : 44, padR: nrw ? 10 : 14, padT: nrw ? 16 : 20, padB: nrw ? 64 : 92 };
+  }
+
+  /** Index of the band under a canvas x position, or -1. */
+  _bandAt(px) {
+    const { padL, padR } = this.pads();
+    const x0 = padL, plotW = this.w - padL - padR;
+    const f = FMIN * Math.pow(FMAX / FMIN, Math.max(0, Math.min(1, (px - x0) / plotW)));
+    return BANDS.findIndex((b) => f >= b.lo && f < b.hi);
+  }
 
   draw() {
     const g = this.g, w = this.w, h = this.h, c = this.palette;
     if (!g) return;
     clearBg(g, w, h, c);
-    const padL = 44, padR = 14, padT = 20, padB = 92;
+    const { nrw, padL, padR, padT, padB } = this.pads();
     const x0 = padL, plotW = w - padL - padR, y0 = padT, plotH = h - padT - padB, y1 = padT + plotH;
 
-    // hovered band from pointer
+    // highlighted band: keyboard selection wins, else the band under the pointer
     let hov = null;
-    if (this._px != null) {
-      const f = FMIN * Math.pow(FMAX / FMIN, Math.max(0, Math.min(1, (this._px - x0) / plotW)));
-      hov = BANDS.find((b) => f >= b.lo && f < b.hi) || null;
-    }
+    if (this._ki != null) hov = BANDS[this._ki];
+    else if (this._px != null) hov = BANDS[this._bandAt(this._px)] || null;
 
     // band blocks
     for (const b of BANDS) {
@@ -65,8 +97,8 @@ export default class BandChart extends Canvas2DFigure {
       g.fillStyle = active ? rgba(c.echoCol, 0.28) : rgba(c.echoCol, 0.08);
       g.fillRect(bx0, y0, bx1 - bx0, plotH);
       g.strokeStyle = rgba(c.rule, 0.8); g.strokeRect(bx0, y0, bx1 - bx0, plotH);
-      g.fillStyle = c.muted; g.font = `600 12px ${FONT}`; g.textAlign = 'center';
-      g.fillText(b.name, (bx0 + bx1) / 2, y1 + 16);
+      g.fillStyle = c.muted; g.font = `600 ${nrw ? 10 : 12}px ${FONT}`; g.textAlign = 'center';
+      g.fillText(b.name, (bx0 + bx1) / 2, y1 + (nrw ? 13 : 16));
     }
 
     // absorption curve
@@ -79,35 +111,42 @@ export default class BandChart extends Canvas2DFigure {
       i ? g.lineTo(X, Y) : g.moveTo(X, Y);
     }
     g.stroke();
-    g.fillStyle = c.noiseCol; g.font = `11px ${FONT}`; g.textAlign = 'left';
-    g.fillText('atmospheric absorption', x0 + 6, y0 + 14);
+    g.fillStyle = c.noiseCol; g.font = `${nrw ? 9 : 11}px ${FONT}`; g.textAlign = 'left';
+    g.fillText('atmospheric absorption', x0 + 6, y0 + (nrw ? 12 : 14));
 
     // frequency ticks (own row, below the band letters)
-    g.fillStyle = c.muted; g.font = `10px ${FONT}`; g.textAlign = 'center';
+    g.fillStyle = c.muted; g.font = `${nrw ? 9 : 10}px ${FONT}`; g.textAlign = 'center';
     for (const f of [1, 2, 5, 10, 20, 40, 100]) {
       const X = this.fx(f, x0, plotW);
       g.strokeStyle = rgba(c.rule, 0.6); g.beginPath(); g.moveTo(X, y1); g.lineTo(X, y1 + 4); g.stroke();
-      g.fillStyle = c.muted; g.fillText(`${f}`, X, y1 + 32);
+      g.fillStyle = c.muted; g.fillText(`${f}`, X, y1 + (nrw ? 25 : 32));
     }
 
     // Starlink transmit markers (own row, below the ticks)
     for (const s of STARLINK) {
       const bx0 = this.fx(s.lo, x0, plotW), bx1 = this.fx(s.hi, x0, plotW);
       g.fillStyle = rgba(c.txCol, 0.85);
-      g.fillRect(bx0, y1 + 42, Math.max(2, bx1 - bx0), 7);
+      g.fillRect(bx0, y1 + (nrw ? 32 : 42), Math.max(2, bx1 - bx0), nrw ? 5 : 7);
     }
-    g.fillStyle = c.txCol; g.textAlign = 'left'; g.font = `11px ${FONT}`;
-    g.fillText('▬ Starlink transmit bands  ·  frequency in GHz', x0, y1 + 64);
+    g.fillStyle = c.txCol; g.textAlign = 'left'; g.font = `${nrw ? 9 : 11}px ${FONT}`;
+    g.fillText(nrw ? '▬ Starlink bands · GHz' : '▬ Starlink transmit bands  ·  frequency in GHz', x0, y1 + (nrw ? 44 : 64));
 
-    // hover info
+    // hover / selection info
+    const infoY = nrw ? h - 8 : h - 10;
     if (hov) {
-      g.fillStyle = c.ink; g.font = `600 13px ${FONT}`; g.textAlign = 'left';
-      g.fillText(`${hov.name}-band (${hov.lo}–${hov.hi} GHz): ${hov.use}`, x0, h - 10);
-      g.fillStyle = c.muted; g.font = `12px ${FONT}`;
-      g.textAlign = 'right'; g.fillText(hov.wx, w - padR, h - 10);
+      g.fillStyle = c.ink; g.font = `600 ${nrw ? 10 : 13}px ${FONT}`; g.textAlign = 'left';
+      g.fillText(nrw
+        ? `${hov.name}-band: ${hov.use}`
+        : `${hov.name}-band (${hov.lo}–${hov.hi} GHz): ${hov.use}`, x0, infoY);
+      if (!nrw) {
+        g.fillStyle = c.muted; g.font = `12px ${FONT}`;
+        g.textAlign = 'right'; g.fillText(hov.wx, w - padR, infoY);
+      }
     } else {
-      g.fillStyle = c.muted; g.font = `12px ${FONT}`; g.textAlign = 'left';
-      g.fillText('Hover a band. Higher frequency → more bandwidth, but more weather loss.', x0, h - 10);
+      g.fillStyle = c.muted; g.font = `${nrw ? 10 : 12}px ${FONT}`; g.textAlign = 'left';
+      g.fillText(nrw
+        ? 'Hover, tap, or arrow through the bands.'
+        : 'Hover, tap, or arrow through the bands. Higher frequency → more bandwidth, but more weather loss.', x0, infoY);
     }
   }
 }

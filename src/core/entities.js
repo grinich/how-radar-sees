@@ -46,14 +46,19 @@ import { attachPopClamp } from './popclamp.js';
 
 const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
+let cardSeq = 0;
+
 function makeCard(text, e) {
   const span = document.createElement('span');
   span.className = 'entity';
   span.tabIndex = 0;
+  span.setAttribute('aria-label', text);
   span.append(document.createTextNode(text));
   const card = document.createElement('span');
   card.className = 'entity__card';
+  card.id = `entity-card-${++cardSeq}`;
   card.setAttribute('role', 'tooltip');
+  span.setAttribute('aria-describedby', card.id);
   card.innerHTML =
     `<span class="entity__thumb">${e.icon || SAT_ICON}</span>` +
     `<span class="entity__body"><b class="entity__name">${text}</b>` +

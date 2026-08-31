@@ -9,20 +9,34 @@ const KEY = 'hrs:tle:v1';
 const FRESH_MS = 2 * 3600 * 1000; // CelesTrak updates the GP set every 2 hours
 const DIRECT_URL = 'https://celestrak.org/NORAD/elements/gp.php?GROUP=starlink&FORMAT=tle';
 
+const MIN_RECORDS = 500; // a real Starlink GP set has thousands of "1 ..." lines
+const MAX_CACHE_CHARS = 4_000_000; // won't fit typical 5 MB quotas once JSON-wrapped
+
 function looksLikeTle(text) {
-  return typeof text === 'string' && text.length > 100_000 && text.includes('\n1 ') && text.includes('\n2 ');
+  if (typeof text !== 'string' || text.length < 100_000 || !text.includes('\n2 ')) return false;
+  // Require a real record count so a truncated cache or a captive-portal page
+  // that happens to contain '\n1 ' can't produce a near-empty globe.
+  let n = 0;
+  for (let i = text.indexOf('\n1 '); i !== -1 && n < MIN_RECORDS; i = text.indexOf('\n1 ', i + 1)) n++;
+  return n >= MIN_RECORDS;
 }
 
 function readCache() {
+  let cached = null;
   try {
     const raw = localStorage.getItem(KEY);
     if (!raw) return null;
     const c = JSON.parse(raw);
-    return looksLikeTle(c.text) ? c : null;
-  } catch { return null; }
+    if (looksLikeTle(c.text)) cached = c;
+  } catch { /* corrupt entry: fall through to eviction */ }
+  if (!cached) {
+    try { localStorage.removeItem(KEY); } catch { /* private mode */ }
+  }
+  return cached;
 }
 
 function writeCache(text, fetchedAt) {
+  if (text.length > MAX_CACHE_CHARS) return;
   try { localStorage.setItem(KEY, JSON.stringify({ fetchedAt, text })); } catch { /* quota/private mode */ }
 }
 

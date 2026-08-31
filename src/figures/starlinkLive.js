@@ -55,11 +55,24 @@ export default class StarlinkLive extends ThreeFigure {
         if (this._dead) return;
         if (e.data.type === 'ready') this._onReady(e.data);
         else if (e.data.type === 'frame') this._onFrame(e.data);
+        else if (e.data.type === 'error') this._workerFail(e.data.message);
       };
+      this.worker.onerror = (e) => { if (!this._dead) this._workerFail(e.message); };
+      this.worker.onmessageerror = () => { if (!this._dead) this._workerFail('message deserialization failed'); };
       this.worker.postMessage({ type: 'init', text });
     } catch {
       this._status.textContent = 'orbital data unavailable — reload to retry';
     }
+  }
+
+  /** Worker died or threw: surface it in the readout and stop asking for frames. */
+  _workerFail(detail) {
+    console.error('starlink-live worker failed:', detail);
+    clearTimeout(this._frameTimer);
+    this._inflight = false;
+    this.worker?.terminate();
+    this.worker = null;
+    this._status.textContent = 'orbital data unavailable — reload to retry';
   }
 
   _onReady({ count, epochMs }) {
@@ -89,27 +102,33 @@ export default class StarlinkLive extends ThreeFigure {
   }
 
   _request(t, slot) {
+    if (!this.worker) return;
     this._inflight = true;
+    // A dropped frame message would latch _inflight forever; time out and retry.
+    clearTimeout(this._frameTimer);
+    this._frameTimer = setTimeout(() => { this._inflight = false; this._ensure(); }, 10_000);
     this.worker.postMessage({ type: 'frame', t, slot, gen: this._gen });
   }
 
   _onFrame(m) {
+    clearTimeout(this._frameTimer);
     this._inflight = false;
     if (m.gen === this._gen) {
       const snap = { t: m.t, pos: new Float32Array(m.pos), vel: new Float32Array(m.vel) };
       if (m.slot === 'A') this.A = snap;
       else if (m.slot === 'B') this.B = snap;
       else this.N = snap;
-      // Repaint even when paused (reduced motion / pause button): the figure
-      // should still show the constellation as of "now".
-      if (this.ptsGeo && this.A) { this._writePositions(); this.draw(); }
+      // Repaint here only when paused (reduced motion / pause button) — the
+      // figure should still show the constellation as of "now". While running,
+      // the scheduler's next update() writes and draws anyway; skip the double.
+      if (this.ptsGeo && this.A && this._paused) { this._writePositions(); this.draw(); }
     }
     this._ensure();
   }
 
   /** Keep the A->B window (plus one pre-fetched snapshot N) populated. */
   _ensure() {
-    if (this._dead || !this.ptsGeo || this._inflight) return;
+    if (this._dead || !this.worker || !this.ptsGeo || this._inflight) return;
     const gap = gapMs(this.params.speed);
     if (!this.A) this._request(this.simMs, 'A');
     else if (!this.B) this._request(this.A.t + gap, 'B');
@@ -206,7 +225,9 @@ export default class StarlinkLive extends ThreeFigure {
 
   teardown() {
     this._dead = true;
+    clearTimeout(this._frameTimer);
     this.worker?.terminate();
+    this.worker = null;
     this.ptsMat?.map?.dispose();
     this._readout?.remove();
     super.teardown();

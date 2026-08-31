@@ -34,27 +34,34 @@ export default class SnrExplorer extends Canvas2DFigure {
 
     g.clearRect(0, 0, w, h);
     g.fillStyle = c.figBg; g.fillRect(0, 0, w, h);
+    const nrw = w < 480; // narrow mode: smaller header, fewer chips, plot keeps most of the canvas
 
     // ---- readout header ----
     const good = cur.snr_db >= 0;
     g.textAlign = 'left';
-    g.font = '700 30px ui-sans-serif, system-ui, sans-serif';
+    g.font = `700 ${nrw ? 20 : 30}px ui-sans-serif, system-ui, sans-serif`;
     g.fillStyle = good ? c.goodCol : c.badCol;
-    g.fillText(`SNR ${cur.snr_db >= 0 ? '+' : ''}${cur.snr_db.toFixed(1)} dB`, 16, 34);
+    g.fillText(`SNR ${cur.snr_db >= 0 ? '+' : ''}${cur.snr_db.toFixed(1)} dB`, 16, nrw ? 24 : 34);
 
-    g.font = '12px ui-sans-serif, system-ui, sans-serif';
+    g.font = `${nrw ? 10 : 12}px ui-sans-serif, system-ui, sans-serif`;
     g.fillStyle = c.muted;
-    const chips = [
-      `NESZ ${cur.nesz_db.toFixed(1)} dB`,
-      `range res ${fmtM(cur.rangeRes_ground)}`,
-      `az res ${fmtM(cur.azRes)}`,
-      `Doppler ${(cur.doppler_bw / 1000).toFixed(1)} kHz`,
-      `swath ${(cur.swath_ground / 1000).toFixed(0)} km`,
-    ];
-    g.fillText(chips.join('     '), 16, 54);
+    const chips = nrw
+      ? [ // drop the secondary chips so the line fits a phone-width canvas
+        `NESZ ${cur.nesz_db.toFixed(1)} dB`,
+        `res ${fmtM(cur.rangeRes_ground)}`,
+        `swath ${(cur.swath_ground / 1000).toFixed(0)} km`,
+      ]
+      : [
+        `NESZ ${cur.nesz_db.toFixed(1)} dB`,
+        `range res ${fmtM(cur.rangeRes_ground)}`,
+        `az res ${fmtM(cur.azRes)}`,
+        `Doppler ${(cur.doppler_bw / 1000).toFixed(1)} kHz`,
+        `swath ${(cur.swath_ground / 1000).toFixed(0)} km`,
+      ];
+    g.fillText(chips.join(nrw ? '   ' : '     '), 16, nrw ? 40 : 54);
 
     // ---- SNR vs bandwidth sweep ----
-    const padL = 46, padR = 16, padT = 74, padB = 30;
+    const padL = nrw ? 36 : 46, padR = nrw ? 12 : 16, padT = nrw ? 50 : 74, padB = nrw ? 24 : 30;
     const x0 = padL, y0 = padT, plotW = w - padL - padR, plotH = h - padT - padB, y1 = padT + plotH;
 
     const bwMin = 10, bwMax = 2000;
@@ -83,18 +90,18 @@ export default class SnrExplorer extends Canvas2DFigure {
       g.strokeStyle = hexA(c.goodCol, 0.5); g.setLineDash([4, 4]);
       g.beginPath(); g.moveTo(x0, yz); g.lineTo(x0 + plotW, yz); g.stroke();
       g.setLineDash([]);
-      g.fillStyle = c.goodCol; g.font = '10px ui-sans-serif, system-ui, sans-serif';
+      g.fillStyle = c.goodCol; g.font = `${nrw ? 9 : 10}px ui-sans-serif, system-ui, sans-serif`;
       g.textAlign = 'left'; g.fillText('0 dB — usable', x0 + 4, yz - 4);
     }
     // x ticks
-    g.fillStyle = c.muted; g.font = '10px ui-sans-serif, system-ui, sans-serif'; g.textAlign = 'center';
+    g.fillStyle = c.muted; g.font = `${nrw ? 9 : 10}px ui-sans-serif, system-ui, sans-serif`; g.textAlign = 'center';
     for (const bw of [10, 30, 100, 300, 1000, 2000]) {
       const xx = lx(bw);
       g.strokeStyle = c.rule; g.beginPath(); g.moveTo(xx, y1); g.lineTo(xx, y1 + 4); g.stroke();
-      g.fillText(bw >= 1000 ? `${bw / 1000}G` : `${bw}M`, xx, y1 + 16);
+      g.fillText(bw >= 1000 ? `${bw / 1000}G` : `${bw}M`, xx, y1 + (nrw ? 14 : 16));
     }
     // y label
-    g.save(); g.translate(14, y0 + plotH / 2); g.rotate(-Math.PI / 2);
+    g.save(); g.translate(nrw ? 11 : 14, y0 + plotH / 2); g.rotate(-Math.PI / 2);
     g.fillStyle = c.muted; g.textAlign = 'center'; g.fillText('SNR (dB)', 0, 0); g.restore();
 
     // curve

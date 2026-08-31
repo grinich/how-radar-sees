@@ -13,6 +13,17 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Skip link — first in the tab order, visually hidden until focused. */
+.skip-link {
+  position: fixed; top: 0.75rem; left: 0.75rem; z-index: 100;
+  padding: 0.5rem 0.9rem; border-radius: 8px;
+  background: var(--bg); color: var(--accent);
+  border: 1px solid var(--rule); box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
+  font-weight: 600; text-decoration: none;
+  transform: translateY(calc(-100% - 1.5rem));
+}
+.skip-link:focus { transform: none; outline: 2px solid var(--focus); outline-offset: 2px; }
+
 .site-header {
   position: relative; overflow: hidden; isolation: isolate;
   background: #05070d; color: #fff;
@@ -64,3 +75,46 @@ body {
 .eq { display: block; text-align: center; font-family: "IBM Plex Math", ui-serif, Georgia, serif; font-style: italic; margin: 1.3rem 0; color: var(--ink); }
 
 .note { color: var(--muted); font-size: var(--step--1); border-left: 2px solid var(--rule); padding-left: 0.9rem; margin: 1.4rem 0; }
+
+/* The Part-4 antenna inventory table. Scrolls inside its own box on phones. */
+.ant-table { width: 100%; margin: 1.4rem 0; border-collapse: collapse; font-size: var(--step--1); }
+.ant-table th, .ant-table td { padding: 0.4rem 0.6rem; text-align: left; border-bottom: 1px solid var(--rule); }
+.ant-table thead th { color: var(--muted); font-weight: 600; }
+.ant-table .ant-table__group th { padding-top: 1rem; color: var(--accent); font-weight: 700; border-bottom: 2px solid var(--rule); }
+@media (max-width: 640px) {
+  .ant-table { display: block; overflow-x: auto; }
+}
+
+/* Respect the OS "reduce motion" preference everywhere. (Canvas animations
+   additionally start paused — see runtime.js.) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Print: light tokens, no chrome, expanded collapsibles, unbroken figures. */
+@media print {
+  :root {
+    --bg: #ffffff; --fig-bg: #f7f7f5; --ink: #1b1b1b; --muted: #6b7280;
+    --rule: #e2e2df; --accent: #2b6cb0; --focus: #2b6cb0;
+    --c-transmit: #c2410c; --c-echo: #2563eb; --c-target: #15803d;
+    --c-noise: #9333ea; --c-good: #15803d; --c-bad: #dc2626;
+  }
+  body { background: #fff; color: var(--ink); }
+  .toc, .toc-fab, .toc-backdrop, .skip-link, .fig__controls, .fig__pause { display: none !important; }
+  .site-header { min-height: 0; background: #fff; color: var(--ink); padding: 1.5rem 1.25rem 0.5rem; }
+  .site-header__scene, .site-header__sat { display: none !important; }
+  .site-header::after { display: none; }
+  .site-header h1 { text-shadow: none; }
+  .site-header .kicker { color: var(--accent); }
+  .fig { break-inside: avoid; }
+  /* Print "go deeper" content even when the <details> is closed. */
+  .prose details.go-deeper { display: block; }
+  .prose details.go-deeper > *:not(summary) { display: block; }
+  .prose details.go-deeper > summary::before { content: ""; }
+  details.go-deeper::details-content { content-visibility: visible; display: block; }
+}

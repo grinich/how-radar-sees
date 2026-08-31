@@ -9,9 +9,22 @@ import { makeSatMats, buildV3 } from './core/starlinkSats.js';
 // The satellite's spot in the SVG's 1200x640 viewBox (matches the beam apex).
 const VB = { cx: 794, cy: 276, span: 344, w: 1200, h: 640 };
 
+/** True only when this device can actually create a WebGL context. */
+function hasWebgl() {
+  try {
+    const cv = document.createElement('canvas');
+    return !!(cv.getContext('webgl2') || cv.getContext('webgl'));
+  } catch { return false; }
+}
+
 export async function initHeroSat() {
   const header = document.querySelector('.site-header');
-  if (!header || typeof WebGLRenderingContext === 'undefined') return;
+  if (!header) return;
+  // The 3D satellite is decoration: skip the 171 KB three.js download on phones
+  // and data-saver connections (the SVG satellite stays), and where WebGL is out.
+  if (window.matchMedia?.('(max-width: 767px)').matches) return;
+  if (navigator.connection?.saveData) return;
+  if (!hasWebgl()) return;
   const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
   const canvas = document.createElement('canvas');
@@ -19,13 +32,13 @@ export async function initHeroSat() {
   const wrap = header.querySelector('.wrap');
   header.insertBefore(canvas, wrap);
 
-  let THREE, RoomEnvironment;
+  let THREE, RoomEnvironment, renderer;
   try {
     THREE = await import('three');
     ({ RoomEnvironment } = await import('three/addons/environments/RoomEnvironment.js'));
+    renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
   } catch { canvas.remove(); return; }
 
-  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -35,6 +48,7 @@ export async function initHeroSat() {
   // Subtle image-based lighting so the panels and metallic bus catch reflections.
   const pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  pmrem.dispose(); // the generated env texture stands alone; free the generator
   const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
   camera.position.set(0, 0, 6); // straight on: the bus (beam origin) sits at the canvas centre
 
@@ -81,6 +95,7 @@ export async function initHeroSat() {
   const BX = pivot.rotation.x, BY = pivot.rotation.y;
   const t0 = performance.now();
   let raf = 0;
+  let onScreen = true; // corrected by the observer's initial callback
   const tick = () => {
     const t = (performance.now() - t0) / 1000;
     pivot.rotation.y = BY + Math.sin(t * 0.34) * 0.17; // gentle sway, never edge-on
@@ -88,9 +103,13 @@ export async function initHeroSat() {
     renderer.render(scene, camera);
     raf = requestAnimationFrame(tick);
   };
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) { if (raf) cancelAnimationFrame(raf), raf = 0; }
-    else if (!raf) tick();
-  });
-  tick();
+  const start = () => { if (!raf && onScreen && !document.hidden) raf = requestAnimationFrame(tick); };
+  const stop = () => { if (raf) { cancelAnimationFrame(raf); raf = 0; } };
+  document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); else start(); });
+  // Decoration doesn't get to run 40 screens away: sway only while the header shows.
+  new IntersectionObserver((entries) => {
+    onScreen = entries[entries.length - 1].isIntersecting;
+    if (onScreen) start(); else stop();
+  }).observe(header);
+  start();
 }
