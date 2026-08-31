@@ -1,14 +1,15 @@
-<h2>The super-weapon: Direct-to-Cell</h2>
+<h2>The quiet one: Direct-to-Cell</h2>
 
 <p>The <span class="t-echo">V3 direct-to-cell antenna</span> exists to connect ordinary phones to
 satellites, so it is enormous — about fifteen metres across — and it works around 2 GHz, down in
 the S-band of Part 1's chart, at wavelengths that sail through weather and even through the plastic
 shells of drones. Remember that a big antenna helps as the <em>square</em> of its area — and by the
-model's gain figures this one has sixteen times the area of its predecessor. The result is almost
-absurd: it reaches a usable image while radiating just a <em>handful of watts</em>.</p>
+model's gain figures this one has sixteen times the area of its predecessor. The consequence takes
+a moment to sink in: this antenna reaches a usable image while radiating just a <em>handful of
+watts</em>.</p>
 
 <figure class="fig fig--wide" data-figure="dtc-antenna">
-  <figcaption>Why the V3 antenna changes everything — drawn to scale, with a 1.8 m person beside it.
+  <figcaption>The V3 direct-to-cell antenna, drawn to scale with a 1.8 m person beside it.
   At roughly fifteen metres across it has about sixteen times the collecting area of a V2 Mini's
   metre-class array (the highlighted square); sixteen of them would tile into it. Antenna gain grows
   with area and radar SNR with area², so that ≈16× area is on the order of 256× the sensitivity.</figcaption>
@@ -23,20 +24,21 @@ absurd: it reaches a usable image while radiating just a <em>handful of watts</e
 <p>That resolution number needs care, though: the readout is <em>range</em> resolution, the
 across-the-swath axis that bandwidth buys. The other axis obeys Part 2's rule — stripmap
 azimuth resolution is about half the antenna's length, and half of fifteen metres makes the pixel
-<em>eight metres long</em>. That is the quiet price of the giant antenna: its absurd sensitivity is
-bought by coarsening azimuth, so the cheap pixel is half a metre by eight metres, razor-sharp
-across the swath and blunt along it. Part 2 also sold the remedy: spotlight mode. Stare at one
-scene, synthesise a longer aperture, and the azimuth sharpens toward the range figure — paid for,
-as always, in coverage.</p>
+<em>eight metres long</em>. That is the price of the giant antenna: its sensitivity is bought by
+coarsening azimuth, so the cheap pixel is half a metre by eight metres — sharp across the swath and
+blunt along it. Part 2 also described the remedy: spotlight mode. Stare at one scene, synthesise a
+longer aperture, and the azimuth sharpens toward the range figure — paid for, as always, in
+coverage.</p>
 
-<p>At full tilt the numbers still turn science-fictional. The antenna's thousands of beams cannot
-all shout at once — simultaneous beams divide the burst power,
+<p>Driven at full power, the numbers grow stranger still. The antenna's thousands of beams cannot
+all transmit at once — simultaneous beams divide the burst power,
 and per-beam SNR falls with the count, a trade the figure's model does not include. But bursts in
 sequence do the same work on a schedule: hop the beam from scene to scene and this one antenna
 could sweep vast areas at ten-metre-class resolution, its revisit rate capped by tasking, heat, and
 data rather than physics. More practically, the spotlight video-SAR tracking of Part 3 lets it lock
-onto a single moving target and film it: a fighter jet, a cruise missile. Small drones hide their
-plastic bodies but not their metal hearts. And stealth? Shaping defeats a single viewpoint, as
+onto a single moving target and film it: a fighter jet, a cruise missile, or a small drone whose
+plastic shell is transparent at these wavelengths but whose motors and battery are not. Even
+stealth is only a partial answer here. Shaping defeats a single viewpoint, as
 Part 3 explained — but a low-flying aircraft cannot stop itself from blocking the radar's
 illumination of the ground behind it, and that moving hole in the image is a track. The bistatic
 version of that idea is not hypothetical: a 2024 field trial used a Starlink satellite's own signal
@@ -46,6 +48,6 @@ trick we built earlier applies — this one antenna could run them all.</p>
 <p>This is one antenna, on a satellite designed to sell phone service. As of August 2026, hundreds
 of V2 Mini direct-to-cell satellites are already on orbit with metre-class arrays, and the
 fifteen-metre class has begun to fly: the first twenty V3 satellites deployed from Starship's
-thirteenth flight in July 2026, with the constellation building through 2027. One antenna, we now
-know, can see. What turns seeing into surveillance is how much of the Earth it covers, and how
-often.</p>
+thirteenth flight in July 2026, with the constellation building through 2027. A single antenna,
+then, can see. Whether a fleet of them amounts to surveillance depends on how much of the Earth
+they cover, and how often — which is where we turn next.</p>

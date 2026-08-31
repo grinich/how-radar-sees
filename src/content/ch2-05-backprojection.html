@@ -2,7 +2,7 @@
 
 <p>The range-Doppler algorithm is fast but rigid. A more brute-force method,
 <span class="t-echo">time-domain back-projection</span>, is slower but wonderfully flexible — and it
-is what makes moving-target tracking work. The idea is disarmingly simple: lay down a grid of pixels
+is what makes moving-target tracking work. The idea is simple: lay down a grid of pixels
 on the ground, and for every pixel, for every pulse, look up how far the radar was from that pixel,
 grab the echo that arrived at exactly that delay, and add it in. A pixel with a real scatterer sees
 the same strong return align pulse after pulse and sums up bright; an empty pixel sees random phases
@@ -38,7 +38,7 @@ Split a long collection into overlapping intervals and you get a series of frame
 continuous radar eye on one jet, one ship, one missile. We will put it to work in the next part.</p>
 
 <p class="note">Nothing in back-projection cares whether the pulse was transmitted by the satellite
-that receives the echo — or by a different one entirely. That freedom is the geometry the endgame
-turns on.</p>
+that receives the echo — or by a different one entirely. That freedom will matter later, when
+transmitter and receiver end up on different spacecraft.</p>
 
 <div class="prevnext-note"></div>

@@ -8,9 +8,9 @@ last section that Doppler <em>is</em> the azimuth axis, so the extra shift <em>d
 target along the flight direction, in azimuth. A moving car gets painted in the grass beside the
 road it is driving on.</p>
 
-<p>The displacement is not subtle. It works out to the target's radial speed times the range,
+<p>The displacement is large. It works out to the target's radial speed times the range,
 divided by the satellite's speed: a car closing at 20 m/s, seen from 700 km by a satellite doing
-7.6 km/s, lands 20 × 700,000 ÷ 7,600 ≈ 1,800 m out of place. Painted nearly two kilometres from
+7.6 km/s, lands 20 × 700,000 ÷ 7,600 ≈ 1,800 m out of place — painted nearly two kilometres from
 the road it is on.</p>
 
 <figure class="fig fig--wide" data-figure="motion-artifacts">
@@ -19,7 +19,7 @@ the road it is on.</p>
   snapshot that quietly misplaces everything that moves.</figcaption>
 </figure>
 
-<p>This looks like a bug, but it is the seed of a superpower. Those artifacts encode the target's
+<p>This looks like a defect, but it is also an opportunity. The artifacts encode the target's
 velocity — if you can measure the azimuth displacement, you can recover how fast it was moving
 toward you. The obvious move — measure the offset and slide everything back — fails for a
 frustrating reason: in a single image, a displaced mover and a stationary object that really is

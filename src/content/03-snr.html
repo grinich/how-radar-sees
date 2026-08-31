@@ -45,11 +45,11 @@ compute:</p>
   </dl>
 </details>
 
-<p>Don't be alarmed by it — the interactive figure <em>is</em> this equation. It is the engine the
-rest of this essay runs on: later we will drop in the numbers for real satellites, and eventually
-for Starlink's own antennas, and simply read the SNR off this same panel. For now, explore. Sweep
-the <span class="t-transmit">bandwidth</span> and watch SNR fall as detail improves — the two
-genuinely trade against each other. Drop from 500 km to 350 km and the two-way path loss eases,
+<p>There is no need to work through it by hand — the interactive figure <em>is</em> this equation.
+It is the engine the rest of this essay runs on: later we will drop in the numbers for real
+satellites, and eventually for Starlink's own antennas, and simply read the SNR off this same
+panel. For now, explore. Sweep the <span class="t-transmit">bandwidth</span> and watch SNR fall as
+detail improves — the two really do trade against each other. Drop from 500 km to 350 km and the two-way path loss eases,
 lifting the echo by several decibels. Switch bands, and turn on rain to see who suffers.</p>
 
 <figure class="fig fig--wide" data-figure="snr-explorer">
@@ -67,13 +67,13 @@ but speckle-dominated as imagery. Operational designs aim for noise floors aroun
 typical −15 dB ground sits well clear. Whenever a bar in this essay just barely crosses zero,
 remember that margin, not the crossing, is what makes a picture. Part 5 returns to this.</p>
 
-<p>The equation insists on a few things worth internalising. Doubling the bandwidth costs about
-3 dB — and not for the reason you'd guess. The wider receiver does admit twice the noise, but pulse
+<p>The equation has a few consequences worth pausing on. Doubling the bandwidth costs about
+3 dB — and not for the obvious reason. The wider receiver does admit twice the noise, but pulse
 compression pays that back exactly; the real cost is that a finer range cell is a smaller patch of
-ground, and a smaller patch returns less energy. Sharper pictures are dimmer pictures. Changing the
-pulse repetition frequency, meanwhile, doesn't move the SNR at all — at a fixed duty cycle, more
+ground, and a smaller patch returns less energy — sharper pictures are dimmer pictures. Changing
+the pulse repetition frequency, meanwhile, doesn't move the SNR at all: at a fixed duty cycle, more
 pulses just means proportionally shorter ones, and the energy leaving the antenna each second is
 unchanged. And, hidden in the way the terms combine, a bigger antenna is <em>enormously</em>
-favorable: hold everything else fixed and the SNR climbs as the square of the antenna's area. That
-last fact is the seed of the whole surprise waiting at the end: Starlink's largest antenna is very
-big indeed.</p>
+favorable — hold everything else fixed and the SNR climbs as the square of the antenna's area. Keep
+that square in mind: Starlink's largest antenna is very big indeed, and it will dominate everything
+in Part 5.</p>

@@ -3,7 +3,7 @@
 // collecting area of the V2 Mini's metre-class array. A 4×4 grid shows 16 V2-Mini
 // antennas tiling into the V3; a 1.8 m person stands beside it for absolute scale.
 // Because gain grows with area and radar SNR with area², ~16× area ≈ 256× the
-// sensitivity — the whole point of the "super-weapon" section.
+// sensitivity — the whole point of the direct-to-cell section.
 import { Canvas2DFigure } from '../core/Canvas2DFigure.js';
 import { clearBg, rgba, FONT } from '../core/draw.js';
 

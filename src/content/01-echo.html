@@ -1,16 +1,17 @@
 <h2>One pulse, one echo</h2>
 
-<p>Strip everything else away and radar is a stopwatch. The antenna shouts a short radio pulse; the
-pulse tears outward at the speed of light, strikes something, and a faint
-<span class="t-echo">echo</span> returns. The radar measures one thing — the delay Δt between shout
-and echo. And because the pulse covered the distance twice, out and back, the
+<p>Stripped of everything else, radar is a stopwatch. The antenna emits a short radio pulse; the
+pulse travels outward at the speed of light, strikes something, and a faint
+<span class="t-echo">echo</span> returns. The radar measures a single quantity — the delay Δt
+between the pulse and its echo. And because the pulse covered the distance twice, out and back, the
 <span class="t-target">target</span> sits at</p>
 
 <p class="eq">R = c·Δt / 2</p>
 
-<p>— half of what the light travelled; the 2 is the round trip. That is the entire trick: distance,
-measured with a clock. Every picture in this essay, however elaborate, is this one measurement made
-millions of times. Drag the target and watch its echo slide along the time axis.</p>
+<p>— half of what the light travelled; the 2 accounts for the round trip. The whole idea of radar
+is contained in that little equation: distance, measured with a clock. Every picture in this essay,
+however elaborate, is this one measurement made millions of times. Drag the target and watch its
+echo slide along the time axis.</p>
 
 <figure class="fig fig--wide" data-figure="echo-timing">
   <figcaption>The echo, timed. Drag the target to move it in range; the plot shows the transmitted
@@ -26,7 +27,7 @@ echo, refined.</p>
 
 <h2>The view from orbit</h2>
 
-<p>Now put the stopwatch in orbit. A satellite races along its orbit while it looks
+<p>Now let's put the stopwatch in orbit. A satellite races along its orbit while it looks
 <em>sideways</em> at the ground — never straight down. The angle between the ground and the line up
 to the satellite is the <span class="t-echo">grazing angle</span>, and the distance the pulse
 travels to reach a <span class="t-target">target</span> is the <span class="t-echo">slant
@@ -44,10 +45,10 @@ with the <em>square</em> of the distance on the way out — and, after it bounce
 back. The round-trip loss goes as the <em>fourth power</em> of range. Double the distance and the
 returning <span class="t-echo">echo</span> is sixteen times fainter.</p>
 
-<p>Put numbers on it. Across a 500 km slant range the round trip takes about 3.3 milliseconds — the
-stopwatch part is easy. The power is not: transmit a one-kilowatt pulse and the echo comes back at
-around 10⁻¹⁶ watts, nineteen orders of magnitude below what left the antenna. Radar engineering is
-the art of hearing that anyway.</p>
+<p>Let's put numbers on it. Across a 500 km slant range the round trip takes about 3.3 milliseconds
+— the stopwatch part is easy. The power is not: transmit a one-kilowatt pulse and the echo comes
+back at around 10⁻¹⁶ watts, nineteen orders of magnitude below what left the antenna. Most of radar
+engineering is the business of hearing that echo anyway.</p>
 
 <h2>What makes a target bright</h2>
 
@@ -55,7 +56,7 @@ the art of hearing that anyway.</p>
 its material, its roughness, and the angle it presents. Radar people fold this into a number called
 <span class="t-target">sigma-zero</span> (σ⁰) — the radar reflectivity per unit area. It is why a
 radar image can look eerily like a photograph — a grainy one, speckled by the interference of its
-own echoes — even though no sunlight was involved. The radar brought its own light.</p>
+own echoes — even though no sunlight was involved: the radar brought its own illumination.</p>
 
 <p class="note">Radar arithmetic runs in <b>decibels</b> (dB) — a ratio on a logarithmic scale.
 3 dB is roughly a factor of two, 10 dB exactly ten, 20 dB a hundred; negative values are fractions.

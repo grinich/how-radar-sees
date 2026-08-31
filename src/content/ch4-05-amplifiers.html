@@ -43,13 +43,14 @@ efficiency.</p>
 ratio</span>. A clean radar chirp barely varies — its peak-to-average ratio is essentially 0 dB —
 while OFDM's violent peaks run 8 to 12 dB above the average, forcing the amplifiers to idle far
 below their limits. Hand those same amplifiers a chirp and they can run roughly ten times harder
-without clipping. That is the small lever. The big one is beam count: a comms array normally splits
+without clipping. That is the smaller of two levers. The bigger one is beam count: a comms array
+normally splits
 its total radio-frequency capacity across thousands of simultaneous beams, each serving a user at
 low power. Concentrate the entire array into <em>one</em> beam for a brief burst and the per-beam
 power scales by the beam count — the two levers together are worth orders of magnitude, for seconds
 at a time. The limit is not the transistors: bursts draw down batteries and dump waste heat
-faster than the radiators can shed it, so the duty cycle — how often you can shout — is capped by
-the power system, not by the physics of shouting. Hold that thought for Part 5.</p>
+faster than the radiators can shed it, so the duty cycle — how often the radar can afford to speak
+up — is capped by the power system, not by the physics. Part 5 will lean on this fact.</p>
 
 <figure class="fig fig--wide" data-figure="waveforms">
   <figcaption>Waveforms and their PAPR. Switch between a communications signal and a radar chirp and

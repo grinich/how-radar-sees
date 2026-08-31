@@ -1,7 +1,7 @@
 <h2>Faking a kilometre-wide antenna</h2>
 
-<p>Here is the insight that makes SAR possible. As the satellite flies, the same patch of ground
-stays in its beam for about a second — a kilometres-wide footprint crossed at 7.6 km/s — and at the
+<p>The insight that makes SAR possible is hiding in the satellite's own motion. As it flies, the
+same patch of ground stays in its beam for about a second — a kilometres-wide footprint crossed at 7.6 km/s — and at the
 kilohertz pulse rates radar uses, a second is <em>thousands</em> of pulses. If we record every echo
 along the way and combine them
 knowing exactly where the satellite was for each, the string of positions acts like one giant
@@ -17,11 +17,11 @@ spread of frequencies — the Doppler bandwidth — becomes the second axis of t
 <em>azimuth</em>. Drag the satellite across the scene and watch the synthetic aperture build and the
 returns fan out in Doppler.</p>
 
-<p>These are not two mechanisms. "The string of positions acts like one giant antenna" and
-"Doppler separates the targets" are the <em>same fact</em> in two languages — one told in geometry,
+<p>These are not two separate mechanisms. "The string of positions acts like one giant antenna" and
+"Doppler separates the targets" are the <em>same fact</em> told in two languages — one in geometry,
 the other in frequency. A big antenna resolves angle by comparing the phase of one wavefront across
 its width; the synthetic aperture compares the phase of successive echoes across the flight path.
-Same phase differences, same angles, one trick.</p>
+The phase differences are the same, and so are the angles they encode.</p>
 
 <figure class="fig fig--wide" data-figure="aperture-synthesis">
   <figcaption>Synthetic aperture formation. The moving antenna keeps the scene in its beam; each
@@ -34,8 +34,8 @@ Same phase differences, same angles, one trick.</p>
 longer, so the synthetic aperture is longer. In <span class="t-echo">stripmap</span> mode — the
 antenna staring fixed and sideways while the strip of ground scrolls past — the azimuth resolution
 works out to about <em>half the physical antenna length</em> — independent of range, just like the
-range resolution we met in Part 1. Two independent axes, two clever tricks, and suddenly the
-one-pixel radar images like a camera.</p>
+range resolution we met in Part 1. With one trick per axis, the one-pixel radar images like a
+camera.</p>
 
 <p>That rule seems to contradict Part 1, which said a bigger antenna is <em>enormously</em>
 favorable. It is — for sensitivity, for swath, and (as Part 3 will show) for headroom against
@@ -44,8 +44,8 @@ have an escape hatch: <span class="t-echo">spotlight</span> mode, where the beam
 stare at one chosen spot as the satellite flies past, stretching the dwell and the synthetic
 aperture far beyond what a fixed beam allows — finer azimuth resolution, bought by giving up
 coverage of everything else. A designer picks which to spend. Starlink's antennas are metres
-across, not kilometres; if this story is going anywhere, the synthetic aperture is the only road
-there.</p>
+across, not kilometres; whatever imaging they could do rests entirely on the synthetic
+aperture.</p>
 
 <p class="note">There is a catch: the radar must pulse fast enough to sample that Doppler bandwidth
 — the pulse repetition frequency must exceed it, or the image ghosts. That tension is the heart of
