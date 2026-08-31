@@ -9,6 +9,10 @@ import { makeControls, defaultsFrom } from './controls.js';
 const KEY_STEP = 0.08; // radians per arrow press
 
 export class ThreeFigure extends Figure {
+  // Palette colors are baked into materials at build(); the runtime remounts
+  // this figure on a theme flip so they're re-read (2D figures just redraw).
+  remountOnThemeChange = true;
+
   async init() {
     const THREE = this.THREE = await import('three');
     const { OrbitControls } = await import('three/addons/controls/OrbitControls.js');
@@ -18,7 +22,6 @@ export class ThreeFigure extends Figure {
     this.root.append(this.canvas);
 
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true, alpha: true });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(50, 1, 0.01, 100);
     this.orbit = new OrbitControls(this.camera, this.canvas);
@@ -99,7 +102,12 @@ export class ThreeFigure extends Figure {
     const rect = this.canvas.getBoundingClientRect();
     const w = Math.max(1, Math.round(rect.width));
     const h = Math.max(1, Math.round(rect.height));
-    if (w === this.w && h === this.h) return; // same buffer: skip the re-render
+    // Track devicePixelRatio too: it changes when the window moves between
+    // displays or the browser zooms, and a stale ratio renders blurry.
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    if (w === this.w && h === this.h && dpr === this._dpr) return; // same buffer: skip the re-render
+    this._dpr = dpr;
+    this.renderer.setPixelRatio(dpr);
     this.renderer.setSize(w, h, false);
     this.camera.aspect = w / h;
     this.camera.updateProjectionMatrix();

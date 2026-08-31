@@ -6,6 +6,7 @@
 import { ThreeFigure } from '../core/ThreeFigure.js';
 import { viewGeometry } from '../physics/geometry.js';
 import { palette } from '../core/theme.js';
+import { colInt } from '../core/draw.js';
 
 const SCALE = 1e5; // 1 scene unit = 100 km
 
@@ -110,14 +111,4 @@ export default class SarGeometry extends ThreeFigure {
       `<span>Grazing <b>${grz}°</b></span>` +
       `<span>Incidence <b>${(geo.incidence * 180 / Math.PI).toFixed(0)}°</b></span>`;
   }
-}
-
-// CSS color string -> THREE-compatible int (handles #rgb/#rrggbb; falls back to grey)
-function colInt(hex, mix) {
-  const m = String(hex).replace('#', '');
-  const n = m.length === 3 ? m.split('').map((x) => x + x).join('') : m;
-  let r = parseInt(n.slice(0, 2), 16), g = parseInt(n.slice(2, 4), 16), b = parseInt(n.slice(4, 6), 16);
-  if (Number.isNaN(r)) return 0x888888;
-  if (mix != null) { r = Math.round(r + (255 - r) * (1 - mix)); g = Math.round(g + (255 - g) * (1 - mix)); b = Math.round(b + (255 - b) * (1 - mix)); }
-  return (r << 16) | (g << 8) | b;
 }

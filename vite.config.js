@@ -56,4 +56,8 @@ export default defineConfig({
     assetsInlineLimit: 4096,
     chunkSizeWarningLimit: 800,
   },
+  test: {
+    // Session worktrees under .claude/ carry their own copies of the suite.
+    exclude: ['node_modules/**', 'dist/**', '.claude/**'],
+  },
 });

@@ -39,7 +39,6 @@ export async function initHeroSat() {
     renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
   } catch { canvas.remove(); return; }
 
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.55;
@@ -82,13 +81,16 @@ export async function initHeroSat() {
     canvas.style.left = `${offX + VB.cx * scale - px / 2}px`;
     canvas.style.top = `${offY + VB.cy * scale - px / 2}px`;
     canvas.style.width = canvas.style.height = `${px}px`;
+    // Re-read the pixel ratio: it changes when the window moves between displays.
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.setSize(px, px, false);
+    // Repaint now: setSize cleared the buffer, and with reduced motion (or the
+    // header off-screen) no animation loop will come along to do it.
+    renderer.render(scene, camera);
   }
   layout();
   window.addEventListener('resize', layout);
-
-  renderer.render(scene, camera);        // paint one frame synchronously...
-  canvas.classList.add('is-ready');      // ...and reveal now (not gated on rAF)
+  canvas.classList.add('is-ready');      // revealed synchronously (not gated on rAF)
   if (reduce) return;
   // Gentle sway around the base 3/4 angle — never a full spin, so the flat array
   // is never caught edge-on. Calm and always readable.

@@ -6,6 +6,7 @@
 // Animated figures also get their own pause button in the top-right corner.
 import { registry } from './registry.js';
 import { scheduler } from './scheduler.js';
+import { onThemeChange } from './theme.js';
 
 const live = new Map(); // element -> figure instance | 'loading'
 // Desired states, updated synchronously by the observer callbacks so the async
@@ -28,11 +29,21 @@ const farIo = new IntersectionObserver(onFar, { rootMargin: '2000px 0px', thresh
 export function mountAll(services) {
   document.querySelectorAll('[data-figure]').forEach((el) => {
     el.__services = services;
+    el.__origKids = new Set(el.children); // the static markup (figcaption); everything else is figure-added
     near.add(el); // assume near until farIo's initial callback says otherwise
     io.observe(el);
     farIo.observe(el);
   });
 }
+
+// 2D figures re-read the palette and redraw on theme change. 3D figures bake
+// palette colors into materials at build(), so remount them — the same
+// teardown/mount path scrolling exercises — to rebuild with the new palette.
+onThemeChange(() => {
+  for (const [el, fig] of [...live]) {
+    if (fig !== 'loading' && fig.remountOnThemeChange) { unmount(el); mount(el); }
+  }
+});
 
 /** Give an animated figure its own pause/play button, anchored to the canvas. */
 function addPauseButton(el, fig) {
@@ -133,5 +144,9 @@ function unmount(el) {
   }
   live.delete(el);
   el.classList.remove('is-live');
-  el.querySelector('.fig__stage')?.remove(); // pause-button wrapper added above
+  // Figures append canvases, controls, and readouts; teardown() handles
+  // listeners and GPU resources but some subclasses skip DOM removal. Sweep
+  // everything a mount added (incl. the pause-button stage wrapper) so a
+  // remount — far-scroll return or theme flip — never stacks duplicates.
+  for (const kid of [...el.children]) if (!el.__origKids?.has(kid)) kid.remove();
 }
