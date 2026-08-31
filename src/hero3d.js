@@ -7,7 +7,7 @@
 import satUrl from './assets/starlink.glb';
 
 // The satellite's spot in the SVG's 1200x640 viewBox (matches the beam apex).
-const VB = { cx: 748, cy: 150, span: 440, w: 1200, h: 640 };
+const VB = { cx: 786, cy: 158, span: 420, w: 1200, h: 640 };
 
 export async function initHeroSat() {
   const header = document.querySelector('.site-header');
@@ -28,14 +28,16 @@ export async function initHeroSat() {
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.15;
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
   camera.position.set(0, 0, 6);
 
-  scene.add(new THREE.AmbientLight(0xcfe0ff, 0.95));
-  const sun = new THREE.DirectionalLight(0xfff2e0, 3.2); sun.position.set(-4, 4, 5); scene.add(sun);
-  const rim = new THREE.DirectionalLight(0x9cc0ff, 1.1); rim.position.set(5, -1, -4); scene.add(rim);
+  scene.add(new THREE.HemisphereLight(0xcfe0ff, 0x0a1420, 1.2));
+  const sun = new THREE.DirectionalLight(0xfff4e2, 3.4); sun.position.set(-4, 5, 6); scene.add(sun);
+  const rim = new THREE.DirectionalLight(0x9cc0ff, 1.5); rim.position.set(5, 0, -4); scene.add(rim);
 
   const pivot = new THREE.Group(); scene.add(pivot);
 
@@ -50,9 +52,9 @@ export async function initHeroSat() {
   const center = box.getCenter(new THREE.Vector3());
   model.position.sub(center);
   const maxDim = Math.max(size.x, size.y, size.z) || 1;
-  model.scale.setScalar(3.3 / maxDim);
+  model.scale.setScalar(2.4 / maxDim); // leave margin so rotation never clips the canvas
   pivot.add(model);
-  pivot.rotation.set(0.5, 2.3, 0.12); // 3/4 view: bus + the long array on a diagonal
+  pivot.rotation.set(0.42, 0.8, 0.1); // 3/4 view: bus + the long array on a diagonal
 
   function layout() {
     const W = header.clientWidth, H = header.clientHeight;
