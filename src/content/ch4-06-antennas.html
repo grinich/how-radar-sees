@@ -1,0 +1,48 @@
+<h2>The antennas Starlink actually flies</h2>
+
+<p>Enough machinery — meet the hardware. A V2 Mini carries four downlink antennas; a V3 carries
+five. <span class="t-echo">Ku-band</span> is the workhorse user downlink, the beam that reaches the
+pizza-box terminals. <span class="t-echo">Ka-band</span> and <span class="t-echo">E-band</span> are
+gateway links — fat pipes to ground stations, not to customers — with E-band, at 75 GHz, carrying
+the heaviest backhaul. V3 adds a <span class="t-echo">V-band</span> antenna that V2 never carried:
+new spectrum, not a grown version of anything. And then there is
+<span class="t-echo">direct-to-cell</span>, near 2 GHz, whose job — reaching an ordinary phone with
+no dish at all — forces it to be huge.</p>
+
+<table class="ant-table">
+  <thead>
+    <tr><th>Antenna</th><th>Frequency</th><th>Role</th><th>Aperture</th><th>Gain</th><th>TX power (operational)</th></tr>
+  </thead>
+  <tbody>
+    <tr class="ant-table__group"><th colspan="6">V2 Mini — 500 km</th></tr>
+    <tr><td>E-band</td><td>75 GHz</td><td>gateway feeder</td><td>~0.5 m</td><td>52 dB</td><td>200 W</td></tr>
+    <tr><td>Ka-band</td><td>30 GHz</td><td>gateway link</td><td>~0.7 m</td><td>47 dB</td><td>260 W</td></tr>
+    <tr><td>Ku-band</td><td>11.7 GHz</td><td>user downlink</td><td>~1.3 m</td><td>44 dB</td><td>27 W</td></tr>
+    <tr><td>Direct-to-cell</td><td>2 GHz</td><td>ordinary phones</td><td>~3.8 m</td><td>38 dB</td><td>175 W</td></tr>
+  </tbody>
+  <tbody>
+    <tr class="ant-table__group"><th colspan="6">V3 — 350 km</th></tr>
+    <tr><td>E-band</td><td>75 GHz</td><td>gateway feeder</td><td>~1.4 m</td><td>61 dB</td><td>98 W</td></tr>
+    <tr><td>V-band</td><td>40 GHz</td><td>gateway / capacity (new on V3)</td><td>~1.3 m</td><td>55 dB</td><td>66 W</td></tr>
+    <tr><td>Ka-band</td><td>30 GHz</td><td>gateway link</td><td>~1.0 m</td><td>50 dB</td><td>120 W</td></tr>
+    <tr><td>Ku-band</td><td>11.7 GHz</td><td>user downlink</td><td>~3.2 m</td><td>52 dB</td><td>165 W</td></tr>
+    <tr><td>Direct-to-cell</td><td>2 GHz</td><td>ordinary phones</td><td>~15 m</td><td>50 dB</td><td>15 W</td></tr>
+  </tbody>
+</table>
+
+<p class="note">Gains and powers are the model's working figures, assembled from filings and public
+reporting; the apertures are the sizes those gains imply at each frequency.</p>
+
+<p>Read down the table and two things stand out. First, every one of these — the millimetre-wave
+gateway links included — is a phased array pointed at Earth: no dishes, no gimbals, just flat
+panels steering beams with phase, exactly the machinery of the last three sections. Second, one
+row refuses to fit. The gateway and user antennas are all metre-class or smaller; the
+direct-to-cell array is a few metres across on V2 Mini and roughly <em>fifteen</em> on V3, because
+physics offers no other way to close a link with an unmodified phone. Its gain says 50 dB; its
+area says something the gain column understates, since Part 1 showed SNR climbing as the
+<em>square</em> of antenna area.</p>
+
+<p>That is the full inventory: nine antennas across two generations, each with a band, an aperture,
+a gain, and a power budget. Part 5 will feed exactly these numbers into the link budget from Part 1
+and ask each antenna, in turn, whether it could image the ground. You now know every bar in the
+chart you are about to see.</p>

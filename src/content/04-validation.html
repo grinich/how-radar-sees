@@ -3,9 +3,12 @@
 <p>A calculator is only worth trusting if it reproduces reality. Before we point it at Starlink,
 let's aim it at satellites whose numbers are public and see whether it agrees. But first, a word
 about <span class="t-transmit">frequency</span>. Radar lives in named bands, and each is a different
-compromise between resolution, atmospheric penetration, and what the law allows. Higher frequencies
-carry more bandwidth (sharper images) but are chewed up by rain and water vapour; lower frequencies
-shrug off weather but need enormous antennas.</p>
+compromise between resolution, atmospheric penetration, and what the law allows. Bandwidth — the
+thing resolution actually needs — is not a property of the carrier, but wide slices are far easier
+to engineer, and to get allocated, high up: 600 MHz is a modest cut of X-band and more than half of
+everything L-band has. So the high bands are where sharp imagery lives, at the price of being
+chewed up by rain and water vapour; lower frequencies shrug off weather but need enormous
+antennas.</p>
 
 <figure class="fig fig--wide" data-figure="band-chart">
   <figcaption>The radar bands and atmospheric absorption. Hover the bands; note where Starlink's own
@@ -13,12 +16,20 @@ shrug off weather but need enormous antennas.</p>
   allowed to use.</figcaption>
 </figure>
 
+<p>There is a legal map under that chart, too. Transmitting radar from orbit is only lawful inside
+specific allocations — the Earth-exploration-satellite <em>active</em> bands, slices set aside by
+international agreement. Starlink's licences are nothing of the kind: they are
+fixed-satellite-service <em>communications</em> allocations, and blasting a radar waveform through
+them would be a licence violation that any regulator, or amateur with a dish, could detect. That
+will matter in Part 5, when we ask what a covert radar would actually take.</p>
+
 <p>Now the test. <span class="t-echo">ICEYE</span> flies the most numerous commercial radar
 satellites — small X-band craft with a modest antenna. <span class="t-echo">NISAR</span> is a
-NASA/ISRO giant with a 12-metre dish working at long L- and S-band wavelengths. They sit at opposite
-corners of the design space, which makes them a stringent pair to reproduce. Feed each one's
-published parameters into our engine and compare what it predicts against what the operators
-advertise.</p>
+NASA/ISRO giant with a 12-metre dish working at long L- and S-band wavelengths — and, flying since
+July 2025, its figures are no longer brochure promises but a year of on-orbit measurement. They sit
+at opposite corners of the design space, which makes them a stringent pair to reproduce. Feed each
+one's published parameters into our engine and compare what it predicts against what the operators
+report.</p>
 
 <figure class="fig fig--wide" data-figure="validation-planner">
   <figcaption>Model versus reality, live. Load each satellite and the same engine reproduces its
@@ -27,6 +38,16 @@ advertise.</p>
   forward.</figcaption>
 </figure>
 
-<p>They match. The engine reproduces a tiny commercial X-band satellite and a giant scientific L-band
-one using the same equation, so we can believe it when it tells us something surprising. And it is
-about to.</p>
+<p>They match — and not vaguely. For ICEYE the engine predicts 3.0 m range resolution and a noise
+floor of −16.2 dB against a published 3 m and roughly −16.5 dB. For NISAR it predicts the same
+3.0 m and a noise floor near −31 dB, comfortably inside the mission's ≤ −25 dB requirement. A
+disclosure: each satellite gets its own loss allowance (3 dB for ICEYE, 6 dB for NISAR's more
+complex chain), and ICEYE's 3.2 m × 0.4 m antenna is stood in for by an equivalent ~1.1 m square
+radiating 4 kW peak. This is calibration, not prediction — which is why two benchmarks from
+opposite corners of the design space beat one: the same few allowances have to satisfy both at
+once, and they do.</p>
+
+<p>So the tool is trustworthy. But a link budget is a light meter, not a camera: it says how strong
+the echo is, not how millions of echoes become a picture. Before we can point anything at Starlink,
+we have to learn how a radar image gets built at all — and that is a trick strange enough to deserve
+a part of its own.</p>

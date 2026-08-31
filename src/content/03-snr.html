@@ -10,6 +10,41 @@ compute:</p>
 
 <p class="eq">SNR = P<sub>t</sub> G<sub>t</sub> G<sub>r</sub> λ² σ⁰ δ<sub>az</sub> δ<sub>rg</sub> · (τB) · N<sub>p</sub> ⁄ [ (4π)³ R⁴ · kTB · L ]</p>
 
+<details class="go-deeper">
+  <summary>Every symbol in that equation, in plain English</summary>
+  <dl>
+    <dt><b>P<sub>t</sub></b></dt>
+    <dd>Transmit power — the watts the antenna radiates during a pulse.</dd>
+    <dt><b>G<sub>t</sub>, G<sub>r</sub></b></dt>
+    <dd>Antenna gain, transmitting and receiving — how tightly the beam is focused. It is the same
+    antenna doing both jobs, so its gain enters twice: the reason antenna area counts squared.</dd>
+    <dt><b>λ²</b></dt>
+    <dd>Wavelength squared — for a given gain, longer wavelengths mean a physically larger
+    collecting aperture. Set by the band you chose in the last section.</dd>
+    <dt><b>σ⁰</b></dt>
+    <dd>The target's reflectivity per unit area, from the material explorer — a typical mixed
+    ground pixel sits near −15 dB.</dd>
+    <dt><b>δ<sub>az</sub> δ<sub>rg</sub></b></dt>
+    <dd>The pixel's ground area, azimuth times range. Multiplying it by σ⁰ turns "reflectivity per
+    unit area" into the actual echoing patch — which is why finer pixels return less.</dd>
+    <dt><b>τB</b></dt>
+    <dd>The time-bandwidth product: pulse width times bandwidth, the gain earned by compressing the
+    chirp of the previous section.</dd>
+    <dt><b>N<sub>p</sub></b></dt>
+    <dd>The number of pulses added coherently while the target stays in the beam — a processing
+    gain we take on credit here and earn in Part 2.</dd>
+    <dt><b>(4π)³ R⁴</b></dt>
+    <dd>Geometric spreading, out and back — the fourth-power range loss from the start of this
+    part.</dd>
+    <dt><b>kTB</b></dt>
+    <dd>Thermal noise power: Boltzmann's constant × system temperature × bandwidth. The receiver's
+    noise figure inflates T — an imperfect amplifier hisses at the echo it is trying to hear.</dd>
+    <dt><b>L</b></dt>
+    <dd>Losses — cables, hardware imperfections, and the atmosphere (which is why the figure has a
+    rain switch).</dd>
+  </dl>
+</details>
+
 <p>Don't be alarmed by it — the interactive figure <em>is</em> this equation. It is the engine the
 rest of this essay runs on: later we will drop in the numbers for real satellites, and eventually
 for Starlink's own antennas, and simply read the SNR off this same panel. For now, explore. Sweep
@@ -19,14 +54,26 @@ lifting the echo by several decibels. Switch bands, and turn on rain to see who 
 
 <figure class="fig fig--wide" data-figure="snr-explorer">
   <figcaption>The radar link budget. The curve sweeps SNR against bandwidth for the current scenario;
-  the dot is where your bandwidth slider sits. Green means a usable image (SNR above 0 dB). NESZ —
+  the dot is where your bandwidth slider sits. Green means the echo clears the noise (SNR above
+  0 dB) — a permissive floor, as the prose below explains; real designs want margin. NESZ —
   the noise-equivalent σ⁰ — is the faintest surface the radar could still detect. These numbers
   reproduce the source video's validated engine.</figcaption>
 </figure>
 
-<p>The equation insists on a few things worth internalising. Changing the pulse repetition
-frequency doesn't move the SNR at all — the gains and losses cancel exactly. Doubling the bandwidth
-costs about 3 dB. And, hidden in the way the terms combine, a bigger antenna is <em>enormously</em>
-favorable: hold the antenna area fixed and the SNR climbs as the square of that area. That last fact
-is the seed of the whole surprise waiting at the end: Starlink's largest antenna is very big
-indeed.</p>
+<p>Engineers fold this whole budget into a single figure of merit: NESZ, the noise-equivalent
+sigma-zero — the σ⁰ of the faintest surface whose echo would exactly break even with the noise.
+Breaking even is a low bar. A 0 dB pixel is half noise — enough to detect that something is there,
+but speckle-dominated as imagery. Operational designs aim for noise floors around −20 dB, so that
+typical −15 dB ground sits well clear. Whenever a bar in this essay just barely crosses zero,
+remember that margin, not the crossing, is what makes a picture. Part 5 returns to this.</p>
+
+<p>The equation insists on a few things worth internalising. Doubling the bandwidth costs about
+3 dB — and not for the reason you'd guess. The wider receiver does admit twice the noise, but pulse
+compression pays that back exactly; the real cost is that a finer range cell is a smaller patch of
+ground, and a smaller patch returns less energy. Sharper pictures are dimmer pictures. Changing the
+pulse repetition frequency, meanwhile, doesn't move the SNR at all — at a fixed duty cycle, more
+pulses just means proportionally shorter ones, and the energy leaving the antenna each second is
+unchanged. And, hidden in the way the terms combine, a bigger antenna is <em>enormously</em>
+favorable: hold everything else fixed and the SNR climbs as the square of the antenna's area. That
+last fact is the seed of the whole surprise waiting at the end: Starlink's largest antenna is very
+big indeed.</p>

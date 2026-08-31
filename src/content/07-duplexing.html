@@ -1,11 +1,13 @@
 <h2>Hearing a whisper next to a scream</h2>
 
 <p>Here is radar's cruelest problem. The pulse you transmit is overwhelmingly louder than the echo
-you hope to hear — for a space radar listening for a faint return, the transmitter can be nearly
-<em>two hundred decibels</em> stronger than the signal. That is a factor of a hundred billion
-billion. Detecting the echo while shouting is like hearing a pin drop during a rocket launch. The art
-of managing this is <span class="t-echo">duplexing</span>, and it comes down to stacking up isolation
-from every trick available.</p>
+you hope to hear — and Part 1's own budget puts numbers on it. A radar-grade burst from orbit is
+tens of kilowatts, about +43 dBW; the raw echo returning from a single −15 dB patch of ground,
+before any processing gain, arrives near 10⁻¹⁵ watts, about −150 dBW. The gap between those two
+numbers is nearly <em>two hundred decibels</em> — a factor of ten billion billion. Detecting the
+echo while shouting is like hearing a pin drop during a rocket launch. The art of managing this is
+<span class="t-echo">duplexing</span>, and it comes down to stacking up isolation from every trick
+available.</p>
 
 <figure class="fig fig--wide" data-figure="isolation-ladder">
   <figcaption>The isolation ladder. Start at the transmit power and climb down toward the echo hiding
@@ -14,11 +16,23 @@ from every trick available.</p>
   isolation add up toward what's required.</figcaption>
 </figure>
 
-<p>One row on that ladder changes everything: <span class="t-target">spatial separation</span>. If
-the transmitter and receiver are on <em>different</em> satellites, the sheer distance between them
-supplies most of the isolation for free. This "bistatic" arrangement — one Starlink illuminating,
-another listening — sidesteps the whole problem, and it is the key that unlocks the most powerful
-modes.</p>
+<p>One row on that ladder changes everything: <span class="t-target">spatial separation</span>. Put
+the transmitter and receiver on <em>different</em> satellites and distance does the heavy lifting:
+at a hundred kilometres of separation, the direct path near 2 GHz already loses about 138 dB in free
+space — the single biggest bite anyone takes out of the ~200 dB requirement, leaving some 50 to
+60 dB for polarization, beam nulling, and active cancellation to mop up. This "bistatic"
+arrangement — one Starlink illuminating, another listening — is the key that unlocks the most
+powerful modes, and its price is the one Part 3 already put on the table: the two spacecraft must
+share a clock and know their baseline to a fraction of a wavelength.</p>
+
+<p>Nor is any of this hypothetical. Researchers have already used Starlink's own downlink as the
+transmitter of a bistatic radar: the first published
+<a href="https://ieeexplore.ieee.org/document/9905046/" target="_blank" rel="noopener">signal
+measurements of Starlink as a radar illuminator</a> appeared in 2022, and
+<a href="https://ieeexplore.ieee.org/document/10620445/" target="_blank" rel="noopener">experimental
+images of the Earth's surface</a> formed from Starlink downlink echoes have followed. The
+satellites were never asked; the ground did the listening. The premise of this part is not
+speculation — it has already been demonstrated.</p>
 
 <p>Why care so much? Because if you can listen and transmit at the same time — full duplex — you
 escape the tyranny of pulses. A normal radar must go quiet to listen, capping how long and how often

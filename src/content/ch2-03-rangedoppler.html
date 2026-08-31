@@ -1,5 +1,13 @@
 <h2>Watching a picture come into focus</h2>
 
+<p>First, a word about what a radar sample actually <em>is</em>. Each echo sample is a complex
+number — picture a little arrow with a length and a direction. The length is the echo's strength;
+the angle is its <span class="t-echo">phase</span>, where in its cycle the wave was when it arrived.
+The radar's clock is steady enough that this angle survives the round trip to the ground and back,
+pulse after pulse — that is all the word <em>coherent</em> means: the radar remembers phase from one
+pulse to the next. Every trick from here on — focusing, interferometry, clutter cancellation — is
+arithmetic on those arrows.</p>
+
 <p>The raw data a SAR collects looks like nothing at all — a smear of noise called the
 <span class="t-noise">phase history</span>, with fast time (range) across the rows and slow time
 (one row per pulse) down the columns. Turning that smear into an image is a sequence of signal-
@@ -21,11 +29,22 @@ compression</span> is a second matched filter, this time along the flight direct
 each target's Doppler history to a point. In between, <em>range-cell-migration correction</em>
 straightens the gentle curve a target traces through the data as the slant range changes.</p>
 
+<p>Why this recipe won is a matter of speed. Each matched filter is a correlation, and the fast
+Fourier transform turns correlation into simple multiplication — roughly <em>N</em> log <em>N</em>
+operations instead of comparing every pixel against every pulse. For a 16-million-pixel image built
+from a few thousand pulses, the brute-force count is around 10¹¹ operations; the FFT route is closer
+to 10⁹ — about a hundredfold cheaper. That hundredfold comes due two sections from now.</p>
+
 <details class="go-deeper">
   <summary>Go deeper: why SAR images look so strange</summary>
   <p>Because one axis of the image is <em>range</em>, not a viewing angle, SAR pictures carry
   artifacts a camera never shows: tall objects "lay over" toward the radar, radar shadows stretch
-  away from it, and bright point scatterers ring with sidelobes. It is also why SAR is shot at
-  grazing angles between about 30° and 60° — look straight down and every scatterer at a given range
-  collapses into one bin, and the scene cannot be resolved at all.</p>
+  away from it, and bright point scatterers ring with sidelobes. There is also the grain. Each
+  resolution cell holds many small scatterers whose arrows add with random phases — sometimes
+  reinforcing, sometimes cancelling — so even a perfectly uniform field comes out salt-and-pepper.
+  This <em>speckle</em> is in every real SAR image; averaging several looks smooths it, at the price
+  of resolution. The "30°–60°" grazing-angle rule has a reason at each end. Look straight down and
+  every scatterer at a given range collapses into one bin, and the scene cannot be resolved at all;
+  look too shallow and the opposite happens — shadows stretch until whole valleys vanish into black,
+  and any slope tilted toward the radar compresses into a bright sliver.</p>
 </details>

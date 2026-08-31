@@ -1,18 +1,30 @@
 <h2>How sharp is the picture?</h2>
 
 <p>Two targets sitting close together only show up as two things if their echoes arrive at
-distinguishably different times. What lets radar separate them is not how much power it uses or how
-big its antenna is — it is the <span class="t-transmit">bandwidth</span> of the pulse. The finest
-distance radar can resolve along its line of sight is</p>
+distinguishably different times. Along the radar's line of sight, what separates them is not power
+and not antenna size — it is the <span class="t-transmit">bandwidth</span> of the pulse. The finest
+distance radar can resolve in that direction is</p>
 
 <p class="eq">δ<sub>r</sub> = c / 2B</p>
 
 <p>where <em>c</em> is the speed of light and <em>B</em> is the bandwidth. More bandwidth, finer
 detail — and, remarkably, this does not depend on range at all. A radar a thousand kilometres away
-resolves detail just as finely as one next door, given the same bandwidth. In the figure, two
-<span class="t-target">targets</span> sit a settable distance apart. Widen the bandwidth and watch
-their blurred returns sharpen and split into two distinct peaks the instant the spacing exceeds the
-resolution cell.</p>
+resolves detail just as finely as one next door, given the same bandwidth. If that seems to
+contradict the fourth-power law of the last section, it doesn't: distance never blurs the picture,
+it only starves it. Resolution doesn't care about range; sensitivity does — and sensitivity is the
+next section's business.</p>
+
+<p>But where does bandwidth come from? Not from shortening the pulse: a 25 cm cell corresponds to a
+pulse 1.7 nanoseconds long, which carries almost no energy — its echo would drown instantly. So the
+radar transmits a <em>long</em> pulse and sweeps its frequency as it goes — a
+<span class="t-transmit">chirp</span> — then, on receive, runs the echo through a matched filter
+that piles the whole sweep up into one sharp spike. The spike behaves exactly as if a crisp
+nanosecond pulse had been sent, but it carries the energy of the long one. This is <em>pulse
+compression</em>, and every imaging radar does it.</p>
+
+<p>In the figure, two <span class="t-target">targets</span> sit a settable distance apart. Widen
+the bandwidth and watch their blurred returns sharpen and split into two distinct peaks the instant
+the spacing exceeds the resolution cell.</p>
 
 <figure class="fig fig--wide" data-figure="pulse-compression">
   <figcaption>Range resolution. Each target returns a compressed pulse whose width is set by the
@@ -27,5 +39,11 @@ ground cell is <em>δ<sub>r</sub></em> / cos(grazing). Push toward looking strai
 up toward infinity. That is why a radar satellite always looks off to the side — and why the
 geometry in the first figure was never pointed at nadir.</p>
 
-<p class="note">For scale: crisp 25 cm imagery — enough to identify a military vehicle — needs about
-600 MHz of bandwidth. That number will come back when we ask what Starlink's antennas can do.</p>
+<p>Everything in this section is one axis of the picture — the <em>across-track</em> axis, distance
+measured along the beam. The other axis, along the satellite's flight path, is a different problem
+entirely: no amount of bandwidth helps there, and the antenna's size owns it. Sharpening that axis
+is the synthetic-aperture trick, and it is Part 2's whole job.</p>
+
+<p class="note">For scale: crisp 25 cm detail in the range direction — enough to identify a
+military vehicle — takes about 600 MHz of bandwidth. That number will come back when we ask what
+Starlink's antennas can do.</p>

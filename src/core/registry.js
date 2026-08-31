@@ -6,6 +6,7 @@
 export const registry = {
   // Ch1
   'starlink-live': () => import('../figures/starlinkLive.js'),
+  'echo-timing': () => import('../figures/echoTiming.js'),
   'starlink-growth': () => import('../figures/starlinkGrowth.js'),
   'starlink-model': () => import('../figures/starlinkModel.js'),
   'sar-geometry': () => import('../figures/sarGeometry.js'),
@@ -28,6 +29,7 @@ export const registry = {
   'matched-filter': () => import('../figures/matchedFilter.js'),
   'ber-curves': () => import('../figures/berCurves.js'),
   'multiple-access': () => import('../figures/multipleAccess.js'),
+  'beamforming-waves': () => import('../figures/beamforming.js'),
   'phased-array': () => import('../figures/phasedArray.js'),
   'beam-lobe-3d': () => import('../figures/beamLobe3D.js'),
   'beam-squint': () => import('../figures/beamSquint.js'),

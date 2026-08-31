@@ -1,6 +1,26 @@
+<h2>One pulse, one echo</h2>
+
+<p>Strip everything else away and radar is a stopwatch. The antenna shouts a short radio pulse; the
+pulse tears outward at the speed of light, strikes something, and a faint
+<span class="t-echo">echo</span> returns. The radar measures one thing — the delay Δt between shout
+and echo. And because the pulse covered the distance twice, out and back, the
+<span class="t-target">target</span> sits at</p>
+
+<p class="eq">R = c·Δt / 2</p>
+
+<p>— half of what the light travelled; the 2 is the round trip. That is the entire trick: distance,
+measured with a clock. Every picture in this essay, however elaborate, is this one measurement made
+millions of times. Drag the target and watch its echo slide along the time axis.</p>
+
+<figure class="fig fig--wide" data-figure="echo-timing">
+  <figcaption>The echo, timed. Drag the target to move it in range; the plot shows the transmitted
+  pulse and its returning echo on a shared time axis, and the readout converts the delay to distance
+  — R = cΔt/2.</figcaption>
+</figure>
+
 <h2>The view from orbit</h2>
 
-<p>Everything starts with geometry. A satellite races along its orbit while it looks
+<p>Now put the stopwatch in orbit. A satellite races along its orbit while it looks
 <em>sideways</em> at the ground — never straight down. The angle between the ground and the line up
 to the satellite is the <span class="t-echo">grazing angle</span>, and the distance the pulse
 travels to reach a <span class="t-target">target</span> is the <span class="t-echo">slant
@@ -16,20 +36,32 @@ changes that slant range — the single most important distance in all of radar.
 <p>Why does the slant range matter so much? Because the pulse spreads out as it travels, weakening
 with the <em>square</em> of the distance on the way out — and, after it bounces, again on the way
 back. The round-trip loss goes as the <em>fourth power</em> of range. Double the distance and the
-returning <span class="t-echo">echo</span> is sixteen times fainter. This single fact will dominate
-everything later.</p>
+returning <span class="t-echo">echo</span> is sixteen times fainter.</p>
+
+<p>Put numbers on it. Across a 500 km slant range the round trip takes about 3.3 milliseconds — the
+stopwatch part is easy. The power is not: transmit a one-kilowatt pulse and the echo comes back at
+around 10⁻¹⁶ watts, nineteen orders of magnitude below what left the antenna. Radar engineering is
+the art of hearing that anyway.</p>
 
 <h2>What makes a target bright</h2>
 
 <p>When the pulse reaches the ground it scatters. How much energy comes back depends on the surface:
 its material, its roughness, and the angle it presents. Radar people fold this into a number called
 <span class="t-target">sigma-zero</span> (σ⁰) — the radar reflectivity per unit area. It is why a
-radar image looks eerily like a photograph even though no light was involved.</p>
+radar image can look eerily like a photograph — a grainy one, speckled by the interference of its
+own echoes — even though no sunlight was involved. The radar brought its own light.</p>
+
+<p class="note">Radar arithmetic runs in <b>decibels</b> (dB) — a ratio on a logarithmic scale.
+3 dB is roughly a factor of two, 10 dB exactly ten, 20 dB a hundred; negative values are fractions.
+So when a figure says the ground's σ⁰ is −15 dB, it means each unit of area returns about 3% of
+what falls on it.</p>
 
 <p>Smooth water is a mirror: it bounces the pulse away from the antenna and looks nearly black.
-A stealth aircraft's skin is engineered to absorb, so it too is dark. But metal with sharp corners
-blazes, and — surprisingly — so do humans and animals, full of salty, conductive water and shaped
-in lumpy, echo-friendly ways. And it all depends on <span class="t-transmit">wavelength</span>:
+A stealth aircraft is dark on purpose: its facets are shaped to fling the pulse anywhere but back
+at the sender, and absorbent coatings mop up what the shaping misses. It is a defence built for one
+geometry — it works because the transmitter and the receiver stand in the same place. But metal
+with sharp corners blazes, and — surprisingly — so do humans and animals, full of salty, conductive
+water and shaped in lumpy, echo-friendly ways. And it all depends on <span class="t-transmit">wavelength</span>:
 short X-band waves scatter off leaves, while longer L-band waves sail through a forest canopy to
 image the ground beneath. Pick a surface and a band, and compare.</p>
 

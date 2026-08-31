@@ -8,9 +8,17 @@ what this part is about.</p>
 
 <p>The angular sharpness of any antenna is set by its size measured in wavelengths: roughly
 <em>λ / D</em>. A camera lens is tens of thousands of wavelengths of visible light across, so it
-resolves millions of angular pixels. A radar antenna is only a handful of wavelengths across, so its
-beam is enormously wide — a single blurry angular pixel. To make an image the old way, a radar would
-have to sweep that fat beam across the scene, one coarse pixel at a time.</p>
+resolves millions of angular pixels. A radar antenna is large by that measure — ICEYE's X-band
+array is about 3 m long, roughly a <em>hundred</em> wavelengths — and it is still nowhere near
+enough: a hundred wavelengths makes a beam about 0.6° wide, and from orbit a 0.6° beam paints a
+footprint kilometres across. Everything inside it echoes at once — a single blurry angular pixel.
+To make an image the old way, a radar would have to sweep that fat beam across the scene, one
+coarse pixel at a time.</p>
+
+<p>Only one axis is blurry, though. Part 1's <em>c / 2B</em> slices the scene finely in
+<em>range</em> — hundreds of crisp distance bins inside that footprint, at any distance. What the
+radar cannot do is tell two echoes apart <em>across</em> the beam: one pixel across the beam,
+hundreds along the range. SAR's job is to invent sharpness in the one direction that lacks it.</p>
 
 <figure class="fig fig--wide" data-figure="one-pixel">
   <figcaption>Real aperture: angular resolution is λ/D. Shrink the antenna or lengthen the
@@ -18,5 +26,7 @@ have to sweep that fat beam across the scene, one coarse pixel at a time.</p>
   of fine pixels) with the radar (one fat one).</figcaption>
 </figure>
 
-<p>To match a camera's sharpness, a radar antenna at X-band would need to be <em>kilometres</em>
-across. You cannot fly a kilometre-wide dish. But — remarkably — you can <em>fake</em> one.</p>
+<p>How big an antenna would fix it? To resolve 1 m from 700 km away, the beam must be
+1 ÷ 700,000 ≈ 1.4 millionths of a radian wide. At X-band's 3 cm wavelength, λ / D run in reverse
+demands D = 0.03 ÷ 0.0000014 — an antenna about <em>21 kilometres</em> across. You cannot fly a
+twenty-one-kilometre dish. But — remarkably — you can <em>fake</em> one.</p>

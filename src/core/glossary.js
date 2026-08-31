@@ -26,7 +26,18 @@ const GLOSSARY = {
   'spread spectrum': 'Smearing a signal across a wide band with a code, so it can be received even below the noise floor — how GPS works.',
   'grating lobe': 'A false second beam that appears when array elements are spaced too far apart in wavelengths.',
   'space-division multiple access': 'Reusing the same frequencies in separate beams pointed at different places — the trick that lets Starlink scale.',
-  'EIRP': 'Effective isotropic radiated power — transmit power multiplied by antenna gain.',
+  'decibel': 'A ratio on a logarithmic scale: 3 dB ≈ 2×, 10 dB = 10×, 20 dB = 100×. Negative values are fractions.',
+  'speckle': 'The salt-and-pepper grain of every raw SAR image, from echoes within one pixel adding with random phases.',
+  'stripmap': 'The default SAR mode: the antenna stares sideways at a fixed angle while the strip of ground scrolls past.',
+  'spotlight': 'A SAR mode that steers the beam to stare at one spot, stretching the dwell for finer azimuth resolution at the cost of coverage.',
+  'pulse compression': 'Transmitting a long frequency-swept pulse and collapsing its echo with a matched filter — the energy of a long pulse, the sharpness of a short one.',
+  'duty cycle': 'The fraction of time a transmitter is actually transmitting.',
+  'noise figure': "How much noise a receiver's own electronics add on top of the unavoidable thermal floor.",
+  'fractional bandwidth': "A signal's bandwidth as a share of its carrier frequency — the number that decides how badly a phased array squints.",
+  'true time delay': 'Delaying each element by actual time rather than phase — frequency-flat, so wideband signals steer without squint.',
+  'forward error correction': 'Spending a fraction of the bits on redundancy so the receiver can repair errors instead of resending.',
+  'minimum detectable velocity': 'The slowest radial motion whose phase signature still rises above the noise — the floor for spotting slow movers.',
+  'Starshield': "SpaceX's classified satellite line for the US National Reconnaissance Office, flown on Starlink-derived buses.",
   'alias': 'Aliasing — when a signal is sampled too slowly, fast variations masquerade as slower ones; a fast target can read as slow, or the scene ghosts.',
   'clutter': 'The strong radar echo from the stationary background — ground, sea, buildings — that a moving target must be picked out from.',
   'swath': 'The strip of ground a radar images in a single pass.',
@@ -49,12 +60,25 @@ import { attachPopClamp } from './popclamp.js';
 
 const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
+let popSeq = 0;
+/** @type {HTMLElement | null} the term whose definition is currently pinned open */
+let openGloss = null;
+
+/** Pin a term's definition open (or close it); at most one is open at a time. */
+function setOpen(span, open) {
+  if (open && openGloss && openGloss !== span) setOpen(openGloss, false);
+  span.classList.toggle('is-open', open);
+  span.setAttribute('aria-expanded', String(open));
+  openGloss = open ? span : (openGloss === span ? null : openGloss);
+}
+
 function makeGloss(text, def) {
   const span = document.createElement('span');
   span.className = 'gloss';
   span.tabIndex = 0;
   span.setAttribute('role', 'button');
-  span.setAttribute('aria-label', `${text}: ${def}`);
+  span.setAttribute('aria-label', text);
+  span.setAttribute('aria-expanded', 'false');
   span.append(document.createTextNode(text));
   const icon = document.createElement('sup');
   icon.className = 'gloss__i';
@@ -62,15 +86,42 @@ function makeGloss(text, def) {
   icon.setAttribute('aria-hidden', 'true');
   const pop = document.createElement('span');
   pop.className = 'gloss__pop';
+  pop.id = `gloss-pop-${++popSeq}`;
   pop.setAttribute('role', 'tooltip');
   pop.textContent = def;
+  span.setAttribute('aria-describedby', pop.id);
   span.append(icon, pop);
   attachPopClamp(span, pop);
+
+  span.addEventListener('click', (e) => {
+    // Clicks inside the popup (e.g. selecting text) shouldn't toggle it.
+    if (/** @type {HTMLElement} */ (e.target).closest('.gloss__pop')) return;
+    setOpen(span, !span.classList.contains('is-open'));
+  });
+  span.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      setOpen(span, !span.classList.contains('is-open'));
+    } else if (e.key === 'Escape') {
+      setOpen(span, false);
+    }
+  });
   return span;
+}
+
+/** Close a pinned-open definition when the reader taps/clicks elsewhere. */
+let outsideCloseBound = false;
+function bindOutsideClose() {
+  if (outsideCloseBound) return;
+  outsideCloseBound = true;
+  document.addEventListener('pointerdown', (e) => {
+    if (openGloss && !openGloss.contains(/** @type {Node} */ (e.target))) setOpen(openGloss, false);
+  });
 }
 
 /** Wrap the first mention of each glossary term inside `root`. */
 export function decorateGlossary(root) {
+  bindOutsideClose();
   const terms = Object.keys(GLOSSARY).sort((a, b) => b.length - a.length); // longest first
   const remaining = new Set(terms);
 
@@ -90,13 +141,14 @@ export function decorateGlossary(root) {
     if (!remaining.size) break;
     for (const term of terms) {
       if (!remaining.has(term)) continue;
-      const re = new RegExp('\\b' + escapeRe(term) + '\\b', 'i');
+      // Also match simple plurals and adverbs ("grating lobes", "coherently").
+      const re = new RegExp('\\b' + escapeRe(term) + '(?:s|ly)?\\b', 'i');
       const m = tn.nodeValue.match(re);
       if (!m) continue;
       const idx = m.index;
       const before = tn.nodeValue.slice(0, idx);
-      const matched = tn.nodeValue.slice(idx, idx + term.length);
-      const after = tn.nodeValue.slice(idx + term.length);
+      const matched = m[0];
+      const after = tn.nodeValue.slice(idx + m[0].length);
       const parent = tn.parentNode;
       parent.insertBefore(document.createTextNode(before), tn);
       parent.insertBefore(makeGloss(matched, GLOSSARY[term]), tn);

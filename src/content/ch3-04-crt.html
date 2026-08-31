@@ -8,9 +8,17 @@ fast movers, and you lose the slow ones.</p>
 
 <p>The escape is beautifully old-fashioned: use <em>several</em> baselines and the
 <span class="t-echo">Chinese Remainder Theorem</span>. Each baseline wraps at a different velocity,
-so the true velocity is the one value consistent with all of their phase readings at once. Set a
-target speed and the baselines below, and watch the ambiguous candidates collapse to a single
-answer.</p>
+so the true velocity is the one value consistent with all of their phase readings at once. The
+theorem itself fits in three lines: a whole number that leaves remainder 2 when divided by 3, and
+remainder 3 when divided by 5, can only be 8 — the next candidate sits a full 3 × 5 = 15 away. Now
+read "remainder" as a wrapped phase reading and 3 and 5 as the speeds at which two baselines wrap:
+the true velocity is the one value both readings agree on, and the ambiguity is pushed out to the
+<em>product</em> of the wrap speeds, not their sum. Set a target speed and the baselines below, and
+watch the ambiguous candidates collapse to a single answer.</p>
+
+<p class="note">This is not exotic: ordinary weather and air-traffic radars have played the same
+trick for decades, alternating between a handful of pulse rates and keeping the velocity consistent
+with all of them.</p>
 
 <figure class="fig fig--wide" data-figure="crt">
   <figcaption>Multi-baseline velocity resolution. Each baseline (top) reports an ambiguous, wrapped
@@ -18,7 +26,10 @@ answer.</p>
   in action. Add baselines to extend the unambiguous range.</figcaption>
 </figure>
 
-<p>With a well-chosen set of baselines you can unambiguously read velocities from a walking pace to
-well past the speed of sound. But interferometry still struggles when the signal is weak and the
+<p>With a well-chosen set of baselines you can, in principle, read velocities unambiguously from a
+walking pace to well past the speed of sound — though that sentence hides two IOUs: the baselines
+must all fit on one spacecraft, and phase noise can shove a reading across a wrap boundary and snap
+the answer to a wildly wrong value, which is why "robust" Chinese-remainder unwrapping is a research
+field of its own. And interferometry still struggles when the signal is weak and the
 clutter broad. For the hardest cases — very slow targets over very wide scenes — you need the
 heavy machinery.</p>

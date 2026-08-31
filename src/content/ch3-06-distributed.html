@@ -3,8 +3,9 @@
 <p>Every technique so far lives on one satellite. The truly radical idea separates the roles: one
 <span class="t-transmit">transmitter</span> illuminates a scene, and a swarm of cheap
 <span class="t-echo">receiver</span> satellites — no high-power transmitter, just a big antenna and a
-laser link — all listen at once. You need only a few hundred transmitters to cover the Earth; after
-that, receivers are almost free, and each one adds a new baseline and a new viewing angle.</p>
+laser link — all listen at once. On the order of a few hundred transmitters is enough to keep the
+whole Earth illuminated; after that, receivers are almost free, and each one adds a new baseline and
+a new viewing angle.</p>
 
 <figure class="fig fig--wide" data-figure="distributed-sar">
   <figcaption>Distributed (multistatic) SAR. One transmitter, many receivers catching bistatic
@@ -13,11 +14,24 @@ that, receivers are almost free, and each one adds a new baseline and a new view
   aircraft that reflect energy away from the transmitter.</figcaption>
 </figure>
 
-<p>The payoffs compound. Twenty satellites can watch one target at once. Baselines in two directions
-enable true 3-D imaging (circular and tomographic SAR). Stealth aircraft, shaped to bounce energy
-<em>away</em> from a monostatic radar, light up for a receiver sitting off to the side. And with
-back-projection's flexibility, all of this feeds video-SAR custodial tracking — a continuous eye on
-any single target.</p>
+<p>The payoffs compound. A dozen or two satellites can watch one target at once. Baselines in two
+directions enable true 3-D imaging (circular and tomographic SAR). Stealth aircraft, shaped to
+bounce energy <em>away</em> from a monostatic radar, light up for a receiver sitting off to the
+side.</p>
+
+<p>None of this is free, and the price is measured in centimetres and nanoseconds. Coherent
+bistatic imaging demands that transmitter and receiver agree on where they are and what time it is
+to a small fraction of a wavelength — centimetre-level ephemerides, clocks aligned to a fraction of
+a nanosecond, held for the whole aperture. Starlink already flies most of that kit: GPS receivers on
+every spacecraft, precise orbit determination, and optical inter-satellite links that could, in
+principle, tie clocks across the fleet. What it lacks is radar-grade oscillator discipline and the
+cross-calibration to prove it — no new physics required, but hard engineering.</p>
+
+<p>And the mode that ties the whole part together is video. Recall
+<span class="t-echo">spotlight</span> from Part 2 — steer the beam to stare at one spot and the
+dwell, and the resolution, stretches as long as you like. Point a swarm's worth of spotlight stares
+at one target, form the frames with back-projection — which never cared whose pulse it was — and you
+get custodial tracking: a continuous eye on any single object.</p>
 
 <figure class="fig fig--wide" data-figure="video-sar">
   <figcaption>Spotlight video-SAR tracking. A moving target is followed frame to frame against the

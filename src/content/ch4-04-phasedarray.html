@@ -1,10 +1,25 @@
 <h2>Steering a beam with phase</h2>
 
 <p>Every Starlink satellite steers its beams electronically with a
-<span class="t-echo">phased array</span>: fire every element together and the waves add up straight
-ahead; delay each element a little more than its neighbour and the wavefront tilts, aiming the beam
-without moving a thing. Drag the steering and watch the pattern respond — and note how energy leaks
-into grating lobes when the elements are spaced wrong or the array is driven off its design
+<span class="t-echo">phased array</span>, and the mechanism fits in a sentence: every element is a
+tiny transmitter radiating the same wave, and the array shines in whichever direction the crests
+happen to line up. Fire every element together and they line up straight ahead. Phase-advance each
+element a little more than its neighbour and the line of reinforcement tilts — the beam steers,
+with nothing moving at all. Watch it happen: slide from one element to many and a shapeless ripple
+organises itself into a beam, then steer it.</p>
+
+<figure class="fig fig--wide" data-figure="beamforming-waves">
+  <figcaption>Beamforming, watched directly. Each dot radiates the same wave; blue is a crest,
+  orange a trough, and the beam is simply where crests keep meeting crests. Add elements to sharpen
+  it; steer it with the phase gradient and the wavefront tilts with no moving parts.</figcaption>
+</figure>
+
+<p>Averaged over time, that interference pattern becomes the array's <em>beam pattern</em> — the
+polar plot below. One spacing rule governs the layout: keep the elements within <em>half a
+wavelength</em> of each other. Space them wider and the maths admits a second angle where all the
+waves also line up — a <span class="t-noise">grating lobe</span>, a false beam pointing somewhere
+you never asked. Drag the steering and watch the pattern respond — and note how energy leaks into
+grating lobes when the elements are spaced wrong or the array is driven off its design
 frequency.</p>
 
 <figure class="fig fig--wide" data-figure="phased-array">
@@ -23,23 +38,33 @@ Drag it around.</p>
 
 <h2>Beam squint: the wideband curse</h2>
 
-<p>Here is the catch that shapes everything. A phase shifter that steers one frequency correctly
-steers a <em>different</em> frequency to a slightly different angle. A radar-grade wideband signal
-contains a whole span of frequencies, so an analog phased array smears them across a range of
-directions — <span class="t-noise">beam squint</span>. The bigger and higher-gain the array, the
-narrower its beam and the more damage squint does. Widen the bandwidth and steer off-boresight to
-watch the beam fall apart by colour.</p>
+<p>Here is the catch that shapes everything. A phase shift is not a true time delay — it steers one
+frequency correctly and every <em>other</em> frequency to a slightly different angle. A radar-grade
+wideband signal contains a whole span of frequencies, so a phase-steered array smears them across a
+range of directions — <span class="t-noise">beam squint</span>. The bigger and higher-gain the
+array, the narrower its beam and the more damage squint does. Run the numbers for Starlink: a
+Ku-band comms channel is about 240 MHz on a ~12 GHz carrier — two percent fractional bandwidth —
+and the squint is manageable. Radar sharp enough for 25 cm detail wants about 600 MHz, five
+percent, where a purely phase-steered array smears badly anywhere off boresight. The gap between a
+comms array and a radar array is that factor of two and a half. Widen the bandwidth and steer
+off-boresight to watch the beam fall apart by colour.</p>
 
 <figure class="fig fig--wide" data-figure="beam-squint">
   <figcaption>Beam squint. Colour marks frequency (red low, blue high). Narrowband, the beam holds;
   widen the bandwidth and steer away from boresight and the frequencies fan out — the beam points
-  everywhere and nowhere. This is why a comms array can't simply become a wideband radar.</figcaption>
+  everywhere and nowhere. This is the wall any comms array must get past to become a wideband
+  radar.</figcaption>
 </figure>
 
-<p>The fix is a <em>hybrid</em> array: group elements into tiles, give each tile a true time delay
-(which is frequency-flat), and let analog phase shifters do the fine steering within a tile. Fewer
-elements per tile means less squint — at the cost of gain and complexity. Slide the tile size to
-trade one against the other.</p>
+<p>There are two ways past the wall, and Starlink's own signal already carries one of them — the
+dodge the last section promised. Because OFDM splits the signal into about a thousand narrow
+subcarriers, each subcarrier is effectively narrowband on its own; apply a slightly different
+digital phase to each one and the squint largely corrects itself, subcarrier by subcarrier. The
+brute-force alternative is
+a <em>hybrid</em> array: group elements into tiles, give each tile a true time delay (which is
+frequency-flat), and let analog phase shifters do the fine steering within a tile. Fewer elements
+per tile means less squint — at the cost of gain and complexity. Slide the tile size to trade one
+against the other.</p>
 
 <figure class="fig fig--wide" data-figure="hybrid-tiling">
   <figcaption>Hybrid tiling. Splitting the array into more, smaller tiles (each with its own time
@@ -52,8 +77,10 @@ trade one against the other.</p>
 <p>One more knob per element: the direction the electric field oscillates, its
 <span class="t-noise">polarization</span>. Feed an element from two perpendicular directions with a
 phase shift between them and the field rotates — circular polarization — which talks cleanly to
-tumbling phones and, as Part 5 will use, hands a radar a free ~30 dB of isolation because a
-circular wave flips its handedness when it reflects.</p>
+tumbling phones and, as Part 5 will use, offers a radar real isolation: transmit one handedness and
+receive the other, and you keep the single-bounce echo (which flips on reflection) while rejecting
+your own leakage (which doesn't). The price is that double-bounce and depolarized returns are
+rejected too, and the ~30 dB figure is the optimistic end for a large steered array.</p>
 
 <figure class="fig fig--wide" data-figure="polarization">
   <figcaption>Polarization from two feeds. Adjust the relative phase to sweep from linear through

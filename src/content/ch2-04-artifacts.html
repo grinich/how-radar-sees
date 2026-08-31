@@ -3,8 +3,15 @@
 <p>The whole range-Doppler machine assumes the scene holds still for the seconds it takes to build
 the synthetic aperture. A <span class="t-target">moving target</span> breaks that assumption, and it
 does so in a very specific, revealing way. Motion along the flight direction smears the target into
-a streak. Motion toward or away from the radar adds a false Doppler shift that <em>displaces</em> the
-target sideways — a moving car can be painted in the grass beside the road it is driving on.</p>
+a streak. Motion toward or away from the radar adds a false Doppler shift — and remember from the
+last section that Doppler <em>is</em> the azimuth axis, so the extra shift <em>displaces</em> the
+target along the flight direction, in azimuth. A moving car gets painted in the grass beside the
+road it is driving on.</p>
+
+<p>The displacement is not subtle. It works out to the target's radial speed times the range,
+divided by the satellite's speed: a car closing at 20 m/s, seen from 700 km by a satellite doing
+7.6 km/s, lands 20 × 700,000 ÷ 7,600 ≈ 1,800 m out of place. Painted nearly two kilometres from
+the road it is on.</p>
 
 <figure class="fig fig--wide" data-figure="motion-artifacts">
   <figcaption>Motion artifacts. Give the target a velocity: along-track motion smears it,
@@ -13,7 +20,10 @@ target sideways — a moving car can be painted in the grass beside the road it 
 </figure>
 
 <p>This looks like a bug, but it is the seed of a superpower. Those artifacts encode the target's
-velocity — if you can measure the sideways displacement, you can recover how fast it was moving
-toward you. Turning that leakage into reliable detection and tracking of every moving vehicle is the
-entire subject of Part 3. First, though, one more way to form the image — the one that makes
-video possible.</p>
+velocity — if you can measure the azimuth displacement, you can recover how fast it was moving
+toward you. The obvious move — measure the offset and slide everything back — fails for a
+frustrating reason: in a single image, a displaced mover and a stationary object that really is
+sitting in the grass look <em>identical</em>. Breaking that tie takes a second measurement, and that
+is exactly why Part 3 will end up splitting the antenna into two. Turning this leakage into
+reliable detection and tracking of every moving vehicle is the entire subject of that part. First,
+though, one more way to form the image — the one that makes video possible.</p>

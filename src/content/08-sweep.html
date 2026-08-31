@@ -2,24 +2,56 @@
 
 <p>We now have everything we need. A validated calculator; an understanding of resolution, power,
 beamforming, and duplexing. So we can finally ask the question everything so far has been building
-toward: take every antenna Starlink flies and ask, one by one, whether it could form a radar image. The verdict is a single
-number — is the SNR above zero for a realistic ground target? Green means yes.</p>
+toward: take every antenna Starlink flies and ask, one by one, whether it could form a radar image.
+The model is exactly what you would build by hand from the table that closed Part 4: each antenna
+enters with its aperture, its gain, its bandwidth, and two power levels — everyday operation and a
+radar-optimised burst — with the V2 Mini fleet at 500 km and V3 at 350 km. Every bar is an antenna
+you have already met. The verdict is a single number — is the SNR above zero for a realistic ground
+target? Green means yes.</p>
 
 <figure class="fig fig--wide" data-figure="antenna-sweep">
   <figcaption>Every Starlink antenna as a radar. Each bar is the SNR the engine predicts for that
-  antenna imaging a typical −15 dB target. Switch between the current V2 fleet and the coming V3,
-  and between everyday power and a radar-optimised burst. Watch the bars cross zero.</figcaption>
+  antenna imaging a typical −15 dB target. Switch between the current V2 fleet and the newly
+  launching V3, and between everyday power and a radar-optimised burst. Watch the bars cross zero.</figcaption>
 </figure>
 
-<p>The current <span class="t-echo">V2 Mini</span> fleet is marginal. Its high-frequency dishes have
-too little power for their bandwidth; its Ku-band antennas could, in theory, just barely form an
-image — but the hardware is wired for communications, there is no evidence anyone has tried, and to
-do it covertly is impossible: a radar has to blast far more power than a phone call, and anyone with
-an antenna would see it. Today, Starlink is not secretly imaging you.</p>
+<p class="note">The chart flies V2 Mini at 500 km and V3 at 350 km. Hundreds of V2 Mini
+direct-to-cell satellites already orbit in ~350 km shells, so part of the V2-to-V3 improvement you
+see is an altitude assumption — several decibels of fourth-power range loss — and not hardware at
+all.</p>
 
-<p><span class="t-echo">Version 3</span> is a different story. Every one of its five downlink
-antennas grows in size and gain, and drops to a lower orbit. Now the Ku-band antenna is genuinely
-capable, the higher bands hover at the edge of usefulness in clear skies, and — because each band
-reflects differently off each material — imaging several at once would yield false-colour radar that
-could tell aluminium from steel from flesh. But one V3 antenna stands apart from all the others, off
-the chart entirely.</p>
+<p>The current <span class="t-echo">V2 Mini</span> fleet is nearly all red. Its high-frequency
+phased arrays have too little power for their bandwidth; even the Ku-band antenna, driven in a
+burst, stays a few decibels underwater. (One bar is already green — we will come back to it.) And
+whatever the bars say, doing radar <em>covertly</em> with this fleet is impossible: a
+radar burst in the Ku or Ka bands would be a loud, out-of-allocation transmission in spectrum every
+regulator, defence monitor, and radio amateur can watch, and flagging exactly that kind of anomaly
+is what they do. Today, Starlink is not secretly imaging you.</p>
+
+<p><span class="t-echo">Version 3</span> is a different story. Its Ku, Ka, and E-band antennas all
+grow in size and gain, it adds a V-band antenna V2 never carried, and the whole spacecraft drops to
+a lower orbit. Not all of these face customers — E-band is a gateway feeder and Ka mostly serves
+gateways too — but the physics doesn't care who the beam was sold to. Now the Ku-band antenna is
+genuinely capable, the higher bands hover at the edge of usefulness in clear skies, and — because
+each band reflects differently off each material — imaging several at once would yield false-colour
+radar that could tell aluminium from steel from flesh.</p>
+
+<p>Part 4 left an objection standing: beam squint. Radar-grade bandwidth is a few percent of the
+carrier for most of these antennas — 500 MHz
+on the Ku carrier is about four percent — and a purely phase-steered array smears exactly such
+signals when steered far off boresight. The outs are the two from Part 4: OFDM-style processing
+that applies its own digital phase per narrow subcarrier, and true-time-delay tiling in the
+hardware. Starlink's arrays already run versions of both for communications; radar would push them
+harder — hardest of all on the direct-to-cell antenna, where 500 MHz is a full quarter of the
+2 GHz carrier. The bars assume the steering problem is solved. It is solvable with machinery
+Starlink already flies; it is not free.</p>
+
+<p class="note">The bars also judge success as "SNR above zero", the permissive floor Part 1
+flagged; real designs want 10–20 dB of margin. Hold the chart to +10 dB and only V3's Ku-band
+antenna and the direct-to-cell antennas stay green; demand 20 dB and the direct-to-cell antennas
+stand alone.</p>
+
+<p>Every claim in the covertness paragraph leaned on one word: <em>loud</em>. A hidden radar fails
+because it must shout, and shouting is visible. Now hold that logic against the last bar on the V3
+chart — the one antenna that reaches a usable image while barely raising its voice above a phone
+call. It gets its own section.</p>

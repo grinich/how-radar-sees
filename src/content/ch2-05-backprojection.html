@@ -14,8 +14,10 @@ that cancel.</p>
   domain method, but it can follow any trajectory — including a moving one.</figcaption>
 </figure>
 
-<p>The algorithm is famously compute-hungry — it is why you rarely see live SAR back-projection. But a
-graphics processor (GPU) can run it for every pixel at once. The figure below is the <em>real</em> algorithm in a fragment
+<p>The algorithm is famously compute-hungry, and now we can say how hungry: every pixel visits every
+pulse, so the 16-million-pixel image that cost the range-Doppler recipe about 10⁹ operations costs
+back-projection pixels-times-pulses — around 10¹¹, a hundred times more. It is why you rarely see
+live SAR back-projection. But a graphics processor (GPU) can run it for every pixel at once. The figure below is the <em>real</em> algorithm in a fragment
 shader: a hundred pulses, back-projected across the whole image in real time. Watch the aperture build
 and the point targets snap into focus; sharpen them with more bandwidth.</p>
 
@@ -25,11 +27,18 @@ and the point targets snap into focus; sharpen them with more bandwidth.</p>
   This runs entirely in a WebGL shader.</figcaption>
 </figure>
 
-<p>Because back-projection places energy by geometry rather than by frequency, it sidesteps the
-Doppler ambiguities that plague fast movers, and you can point the same math at a <em>moving</em>
-grid to freeze a target that would otherwise smear. Split a long collection into overlapping
-intervals and you get a series of frames — <span class="t-target">video SAR</span>. This is the
-engine behind custodial tracking: keeping a continuous radar eye on one jet, one ship, one missile.
-We will put it to work in the next part.</p>
+<p>That flexibility does not repeal ambiguity, though: how often the radar pulses sets a hard
+sampling limit, and data undersampled in one domain is undersampled in every domain — no algorithm
+conjures the missing samples back (the next part opens with exactly that wall). What back-projection
+buys is freedom of <em>geometry</em>: it follows any trajectory, however curved, with no
+straightening approximations — and, best of all, you
+can point the same math at a <em>moving</em> grid to freeze a target that would otherwise smear.
+Split a long collection into overlapping intervals and you get a series of frames —
+<span class="t-target">video SAR</span>. This is the engine behind custodial tracking: keeping a
+continuous radar eye on one jet, one ship, one missile. We will put it to work in the next part.</p>
+
+<p class="note">Nothing in back-projection cares whether the pulse was transmitted by the satellite
+that receives the echo — or by a different one entirely. That freedom is the geometry the endgame
+turns on.</p>
 
 <div class="prevnext-note"></div>

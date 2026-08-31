@@ -1,10 +1,13 @@
-<p class="lead">A still image misplaces everything that moves — which means a radar that can
+<p class="lead">Set Starlink aside for a moment. To judge whether it could ever do <em>this</em>, we
+first need to know what "this" is — and nobody has wanted it longer than the US military. A still
+image misplaces everything that moves — which means a radar that can
 <em>correctly</em> place moving things can track them. Doing that over wide areas, for targets from
 walking soldiers to Mach-8 warheads, is the hardest problem in the field — a persistent, all-weather
 tracking capability the Pentagon has pursued for decades, and that defence reporting calls a
 <a href="https://www.twz.com/space/tracking-ground-air-targets-via-space-force-by-2030-but-aircraft-will-still-play-a-part" target="_blank" rel="noopener">"holy grail" of surveillance</a>. The US is now
 building exactly this — a Space Force / NRO constellation of ground-moving-target radar satellites,
-with launches slated from 2028. This part builds the tools, one tension at a time.</p>
+with launches slated (as of 2024–25 reporting) from 2028. This part builds the tools, one tension at
+a time.</p>
 
 <h2>The Doppler dilemma</h2>
 
@@ -22,6 +25,14 @@ walls close in.</p>
   as you demand finer resolution or a wider swath — and for fast movers it can vanish entirely.</figcaption>
 </figure>
 
-<p>For a 25 cm image the Doppler floor alone can demand a 30,000 Hz PRF, while range ambiguity caps
-existing satellites near 6,000 Hz. Those two numbers do not fit. Resolving that squeeze is what the
-rest of this part's machinery is for.</p>
+<p>Run the two numbers yourself to feel the squeeze. The Doppler floor: at 7.6 km/s, azimuth
+resolution δ demands a PRF of at least v/δ, so a 25 cm image needs 7,600 ÷ 0.25 ≈ 30,000 Hz. The
+range ceiling: the far edge of one pulse's swath must echo back before the near edge of the next,
+PRF ≤ c/(2·swath) — for even a modest 25 km swath, 300,000 ÷ 50 ≈ 6,000 Hz. Thirty thousand and six
+thousand do not fit. Resolving that squeeze is what the rest of this part's machinery is for.</p>
+
+<p class="note">A wrinkle: real radars keep several pulses in flight at once — from 700 km the
+round trip takes nearly 5 ms, dozens of pulse intervals — so the ceiling is not literally
+one-pulse-at-a-time. It is about sorting echo windows: each pulse's returns must land in a window
+no other pulse's returns can reach. The squeeze is the same; the loopholes in it are where the next
+section lives.</p>

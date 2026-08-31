@@ -15,9 +15,15 @@ inside the clutter.</p>
   the target's velocity.</figcaption>
 </figure>
 
-<p>STAP is compute-hungry — it inverts a covariance matrix per range cell — but it is the only thing
-that reliably finds a person walking across a wide, Earth-rotation-smeared scene. "Knowledge-aided"
-variants seed it with terrain maps and known road networks, which a giant always-on constellation
+<p>STAP is compute-hungry — it inverts a covariance matrix per range cell — but for the hardest
+case, something person-slow somewhere in a wide, Earth-rotation-smeared scene, it is the closest
+thing the field has to a reliable answer. Its real-world catch is that it must <em>learn</em> the
+ridge before it can null it, and it learns from training data: the range cells surrounding the one
+under test. The rule of thumb is brutal — several times more clean, statistically-alike training
+cells than adaptive degrees of freedom — and real terrain is not statistically alike: fields give
+way to towns, roads, shorelines, and the estimate sours. That is the problem "knowledge-aided"
+variants exist to solve: seed the filter with terrain maps and known road networks, so it starts
+near the answer instead of learning the world from scratch — priors a giant always-on constellation
 could supply for free. It behaves less like a camera and more like a wide-area early-warning radar,
 running alongside the imaging modes.</p>
 
@@ -29,3 +35,7 @@ running alongside the imaging modes.</p>
   signal-to-interference-plus-noise ratio for each candidate target while suppressing the ridge. A
   simple threshold on the filtered output then declares detections.</p>
 </details>
+
+<p>There is a pattern in this part. Every step wanted more phase centres: two for interferometry,
+several baselines for the velocity unwrap, more still for STAP's degrees of freedom. A single
+spacecraft runs out of room for them fast.</p>

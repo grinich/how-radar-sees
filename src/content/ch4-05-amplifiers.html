@@ -12,6 +12,13 @@ this into software-defined radio on a chip — flexible, but power-hungry.</p>
   through the low-noise amplifier and analog-to-digital converter. Toggle transmit and receive.</figcaption>
 </figure>
 
+<p>The receive side sets limits of its own. The low-noise amplifier's <em>noise figure</em> feeds
+straight into the kTB noise floor of Part 1's SNR equation — a decibel lost there costs a decibel
+of transmit power everywhere else. And the analog-to-digital converter has finite dynamic range: it
+must digitise a faint echo without being blinded by whatever loud signal arrives at the same
+instant. That is the real "hear a whisper next to a scream" constraint, and the one Part 5's
+isolation ladder exists to solve.</p>
+
 <h2>The amplifier's compromise</h2>
 
 <p>The <span class="t-transmit">power amplifier</span> forces the compromise that decides what
@@ -33,12 +40,24 @@ efficiency.</p>
 </figure>
 
 <p>What decides how hard you must back off is the <span class="t-noise">peak-to-average power
-ratio</span>. A clean radar chirp barely varies, so the amplifier runs flat-out and efficient;
-Starlink's dense, many-beam OFDM signals have violent peaks, forcing wasteful headroom — but a
-radar-optimised waveform run in short bursts could briefly pour several times the normal power into a
-beam. Hold that thought for Part 5.</p>
+ratio</span>. A clean radar chirp barely varies — its peak-to-average ratio is essentially 0 dB —
+while OFDM's violent peaks run 8 to 12 dB above the average, forcing the amplifiers to idle far
+below their limits. Hand those same amplifiers a chirp and they can run roughly ten times harder
+without clipping. That is the small lever. The big one is beam count: a comms array normally splits
+its total radio-frequency capacity across thousands of simultaneous beams, each serving a user at
+low power. Concentrate the entire array into <em>one</em> beam for a brief burst and the per-beam
+power scales by the beam count — the two levers together are worth orders of magnitude, for seconds
+at a time. The limit is not the transistors: bursts draw down batteries and dump waste heat
+faster than the radiators can shed it, so the duty cycle — how often you can shout — is capped by
+the power system, not by the physics of shouting. Hold that thought for Part 5.</p>
 
 <figure class="fig fig--wide" data-figure="waveforms">
   <figcaption>Waveforms and their PAPR. Switch between a communications signal and a radar chirp and
   watch the peak-to-average ratio — and therefore the amplifier headroom you must sacrifice — change.</figcaption>
 </figure>
+
+<p>That is the machinery: waveforms matched to signal-to-noise, spectrum shared by beams, arrays
+steered with phase, amplifiers biased against their own physics — every piece designed to sell
+internet, and every piece something a radar engineer would recognise on sight. One section remains
+in Part 4: the actual antennas flying today. Then Part 5 asks whether they can be turned
+around.</p>

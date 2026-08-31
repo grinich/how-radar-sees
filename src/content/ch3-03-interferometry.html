@@ -1,10 +1,11 @@
 <h2>Two eyes see motion</h2>
 
 <p>Split the antenna into two phase centres a short distance apart and you get two nearly-identical
-images. Multiply one by the complex conjugate of the other and the stationary world vanishes:
-motionless clutter produces no phase difference between the two looks, but a
-<span class="t-target">moving target</span> does, and that phase difference is a direct measure of
-its radial velocity. This is <span class="t-echo">along-track interferometry</span>.</p>
+images. Now recall the arrows from Part 2: in each pixel, take one image's arrow and rotate it back
+by the other's angle — that is all "multiply by the complex conjugate" means — and the stationary
+world vanishes: whatever didn't move between the two looks cancels to zero phase, but a
+<span class="t-target">moving target</span> is left standing at an angle, and that angle is a direct
+measure of its radial velocity. This is <span class="t-echo">along-track interferometry</span>.</p>
 
 <figure class="fig fig--wide" data-figure="ati">
   <figcaption>Along-track interferometry. Two phase centres, one interferogram. Stationary clutter
@@ -13,14 +14,28 @@ its radial velocity. This is <span class="t-echo">along-track interferometry</sp
   next).</figcaption>
 </figure>
 
+<p>How big is the angle? Between the two looks the mover closes some distance toward the radar, and
+the phase turns a full circle for every half-wavelength closed: Δφ = 4π·v<sub>r</sub>·Δt/λ. Put in
+the essay's numbers — phase centres 4 m apart on a satellite at 7.6 km/s see the scene
+Δt = 4 ÷ (2 × 7,600) ≈ 260 microseconds apart — and at X-band's 3 cm wavelength a car closing at
+20 m/s turns the phase by about 2.2 radians, near 130°: unmissable. Run it backwards and you get the <em>minimum detectable
+velocity</em>: if noise lets you trust the phase only to a few degrees, the slowest mover you can
+call real is somewhere under a metre per second. A person walking at 1.4 m/s clears that floor —
+but not by much, and a stroller or a drifting boat can sink below it.</p>
+
 <p>A close cousin, <em>displaced phase-center antenna</em> (DPCA), spaces the two looks by exactly
 the distance the satellite travels in one pulse. Then the second antenna sees precisely the clutter
 the first saw a pulse earlier, and subtracting the two cancels the stationary world outright,
-leaving only movers. The catch is Earth's rotation: it smears the clutter into a broad ridge that
-DPCA alone cannot fully cancel across a wide swath.</p>
+leaving only movers. The catch is that across a wide swath the stationary ground is not one thing:
+points at different look angles close on the radar at different rates, so the geometry alone smears
+the clutter into a band of apparent velocity — and Earth's rotation shifts and broadens that band
+further. DPCA alone cannot cancel the whole smear edge to edge. (STAP, two sections on, fights a
+different beast — a sharp diagonal <em>ridge</em> in angle-Doppler space. What we have here is just
+a swath-wide smear.)</p>
 
 <figure class="fig fig--wide" data-figure="clutter-dpca">
-  <figcaption>The clutter ridge. Earth's rotation spreads stationary ground into a band of apparent
-  velocity. Widen the swath and it broadens, swallowing slow movers; the DPCA spacing (2v/PRF) is the
-  antidote. Toggle it to collapse the ridge and reveal the hidden mover.</figcaption>
+  <figcaption>The clutter smear. Wide-swath geometry spreads stationary ground into a band of
+  apparent velocity, and Earth's rotation broadens it further. Widen the swath and the band swallows
+  slow movers; the DPCA spacing (2v/PRF) is the antidote. Toggle it to collapse the smear and reveal
+  the hidden mover.</figcaption>
 </figure>

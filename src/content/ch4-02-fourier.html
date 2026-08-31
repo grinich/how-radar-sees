@@ -16,8 +16,17 @@ breathe.</p>
 <p>This same Fourier thinking powers the radar trick from Part 2. A <span class="t-transmit">chirp
 </span> spreads its energy across a wide band and a long time; a <em>matched filter</em> correlates
 the echo against that exact chirp and collapses it into a sharp spike, lifting a signal from beneath
-the noise. Communications calls the wide-band version of this idea <em>spread spectrum</em> — it is
-how a 25-watt GPS satellite reaches a phone from twenty thousand kilometres away.</p>
+the noise. The (τB) term parked in Part 1's SNR equation is exactly this processing gain — the
+time-bandwidth product. A 20 µs chirp swept across 300 MHz compresses 6,000-fold, and 6,000× is
+about 38 dB of signal-to-noise earned by waveform design rather than watts.</p>
+
+<p>Communications has the same trick under different names, and they are worth keeping straight:
+<em>spread spectrum</em> is the transmitter's half — deliberately smearing a signal across far more
+bandwidth than its data needs by stamping it with a fast code — while matched filtering is the
+receiver's half, correlating against the known pattern to snap the smeared energy back into a
+spike; radar's chirp compression is one instance of that receiver-side trick. Together they are how
+a 25-watt GPS satellite reaches a phone from twenty thousand kilometres away — the same
+below-the-noise-floor trick we met in Part 2's processing chain.</p>
 
 <figure class="fig fig--wide" data-figure="matched-filter">
   <figcaption>Pulse compression by matched filtering. A long, faint, noisy chirp (top) correlated

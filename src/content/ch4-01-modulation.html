@@ -7,10 +7,15 @@ in Part 5 we can ask what it could do if pointed at the ground as a radar.</p>
 
 <p>To send ones and zeros through space, you stamp them onto an oscillating carrier by nudging its
 amplitude and phase. Plot each symbol as a point whose distance from the origin is amplitude and
-whose angle is phase, and you get a <span class="t-echo">constellation diagram</span>. Two points
-(BPSK) carry one bit each; four (QPSK) carry two; Starlink's 256-QAM packs eight bits into 256
-points. More points mean more data — but they crowd closer together, so
-<span class="t-noise">noise</span> starts flipping bits. Add noise and watch the symbols smear.</p>
+whose angle is phase, and you get a <span class="t-echo">constellation diagram</span>. That angle is
+the same phase that focuses SAR images, cancels clutter, and steers beams — one piece of physics,
+four uses. Two points (BPSK) carry one bit each; four (QPSK) carry two; Starlink's 256-QAM packs
+eight bits into 256 points — known not because SpaceX said so, but because
+<a href="https://arxiv.org/abs/2210.11578" target="_blank" rel="noopener">Humphreys and
+colleagues</a> reverse-engineered the Ku-band downlink off the air: OFDM channels about 240 MHz
+wide, each carved into 1,024 subcarriers. More points mean more data — but they crowd closer
+together, so <span class="t-noise">noise</span> starts flipping bits. Add noise and watch the
+symbols smear.</p>
 
 <figure class="fig fig--wide" data-figure="iq-constellation">
   <figcaption>The I/Q constellation. Pick a scheme (BPSK → 256-QAM) and add channel noise; each
@@ -19,7 +24,20 @@ points. More points mean more data — but they crowd closer together, so
 </figure>
 
 <p>So there is an optimal modulation for every signal-to-noise ratio: use the densest constellation
-whose clouds still stay apart. A modern system re-chooses it, per user, many times a second.</p>
+whose clouds still stay apart. A modern system re-chooses it, per user, many times a second — and
+layers <em>forward error correction</em> on top, spending a fraction of the bits on redundancy so
+the link can run just below the raw bit-error cliff without falling off it.</p>
+
+<p>Behind that adaptation is a hard law — the communications twin of Part 1's radar link budget.
+Shannon's channel capacity,</p>
+
+<p class="eq">C = B log₂(1 + SNR)</p>
+
+<p>caps the bits per second any link can carry at bandwidth <em>B</em> and a given signal-to-noise
+ratio — the same two currencies the radar equation trades in. Adaptive modulation is simply a
+system climbing as close to that ceiling as its constellation clouds allow. No cleverness gets
+above it; the only ways up are more bandwidth or more SNR, which is exactly the bargain radar
+strikes too.</p>
 
 <figure class="fig fig--wide" data-figure="ber-curves">
   <figcaption>Bit-error rate versus signal-to-noise. Each scheme has its own curve; the best choice

@@ -1,35 +1,56 @@
 <h2>Why space datacenters — and what it all means</h2>
 
 <p>There is a bottleneck hiding behind every capability in this essay: <span class="t-noise">data</span>.
-A single wide radar swath, recorded for a few seconds, is a hundred gigabytes. Forming an image of
-the whole Earth would take tens to hundreds of exaflops — more compute than exists to spare, and far
-more data than even laser links can carry to the ground. The only way to use this firehose is to
-process it where it is collected: in orbit.</p>
+Run the chain once: 500 MHz of bandwidth means five hundred million complex samples every second;
+at a few bytes per sample that is roughly two gigabytes per second of raw phase history; so a
+single wide swath, recorded for a few tens of seconds, is a hundred gigabytes. Forming an image of
+the whole Earth would take tens to hundreds of exaflops — compute comparable to the largest
+datacenters on Earth, applied continuously — and far more data than even laser links can carry to
+the ground. The only way to use this firehose is to process it where it is collected: in orbit.</p>
 
 <figure class="fig fig--wide" data-figure="data-scale">
   <figcaption>The data problem. One swath against a laser link's capacity; whole-Earth imaging
   against the compute of a large datacenter. The gap is why on-orbit processing — not ground
-  stations — is the real purpose of the space datacenters SpaceX has announced.</figcaption>
+  stations — is one reading of the space datacenters SpaceX has announced.</figcaption>
 </figure>
 
-<p>Which reframes those announced orbital datacenters entirely. They will not out-compete ground-based
-GPU farms at serving chatbots. But as the brain that turns a planet-scale radar and signals-intelligence
-firehose into finished intelligence, they make sense — and the customers who would pay for that
-capability have budgets measured in the trillions.</p>
+<p>Which suggests one reading of those announced orbital datacenters — an inference, not a fact.
+Serving chatbots from orbit will not out-compete ground-based GPU farms. But as the brain that
+turns a planet-scale radar and signals-intelligence firehose into finished intelligence, they make
+sense — and the customers for that capability have budgets measured in the hundreds of
+billions.</p>
 
 <h2>Final words</h2>
 
 <p>We started with a simple echo and built, step by step, to an uncomfortable conclusion. Nothing in
 this essay requires exotic new physics; it is the same radar equation we met at the beginning, applied
 to hardware that is already flying or announced. Starlink version 3 has the latent potential to be the
-most capable imaging and signals-intelligence constellation ever built, with only modest modification.</p>
+most capable imaging and signals-intelligence constellation ever built.</p>
+
+<p>"Latent" deserves a scorecard, because what separates potential from capability is a short
+list. Wideband steering — true time delay, or digital phase per OFDM subcarrier — is hard,
+and it is on the public phased-array roadmap. Inter-satellite phase synchronisation at radar grade
+is hard; the laser links already flying are most of the answer. On-orbit processing at the needed
+scale has been announced outright. And spectrum authority — a licence to emit radar waveforms, or
+the willingness to do it anyway — is not an engineering item at all; it is the tell to watch for.
+The unsettling part is not that the list is long. It is that most of it is already on the public
+roadmap.</p>
+
+<p>One question remains: what would give it away? Radar bursts in comms bands
+would be out-of-allocation emissions that any spectrum monitor — state or amateur — could flag;
+radio amateurs already
+<a href="https://www.npr.org/2025/10/17/nx-s1-5575254/spacex-starshield-starlink-signal"
+target="_blank" rel="noopener">fingerprint the signals of Starshield</a>, SpaceX's classified
+constellation for the National Reconnaissance Office. A chirp looks nothing like OFDM to anyone who
+records one. Burst duty cycles leave thermal and power signatures. Licence filings are public. A
+planet that knows what to listen for is a hard planet to image in secret.</p>
 
 <p>That is worth sitting with. A capability like this in the hands of any single actor — private or
 government — raises hard questions about surveillance, warfare, and the concentration of power, and
 about the legal loopholes that let commercial imagery be sold back to states that could not collect
-it directly. This essay's aim is not alarm but literacy: the physics is knowable, the tradeoffs are
-computable, and an informed public is in a far better position to decide what should and shouldn't be
-built. Now you can compute the tradeoffs yourself. Scroll back up, and experiment.</p>
+it directly. The physics is knowable, and an informed public is in a far better position to decide
+what should and shouldn't be built. Now you can compute the tradeoffs yourself. Scroll back up, and
+experiment.</p>
 
 <h2>Sources &amp; further reading</h2>
 
@@ -47,6 +68,24 @@ below are where to go deeper.</p>
   <li><a href="https://www.twz.com/space/tracking-ground-air-targets-via-space-force-by-2030-but-aircraft-will-still-play-a-part" target="_blank" rel="noopener">The
   War Zone — tracking ground and air targets from space</a>: the defence reporting behind the
   "holy grail" surveillance claim in Part 3.</li>
+  <li><a href="https://arxiv.org/abs/2210.11578" target="_blank" rel="noopener">Humphreys et al.,
+  "Signal Structure of the Starlink Ku-Band Downlink"</a>: the reverse-engineered downlink — OFDM,
+  ~240 MHz channels, 1,024 subcarriers — behind Part 4's numbers.</li>
+  <li><a href="https://ieeexplore.ieee.org/document/9905046/" target="_blank" rel="noopener">Starlink
+  as a passive-radar illuminator (IEEE, 2022)</a>: the preliminary study and first signal
+  measurements using Starlink downlinks for bistatic radar.</li>
+  <li><a href="https://ieeexplore.ieee.org/document/10620445/" target="_blank" rel="noopener">First
+  imaging results with Starlink illumination (IEEE)</a>: experimental Earth-surface images formed
+  from Starlink downlink echoes — the demonstration cited in Part 5.</li>
+  <li><a href="https://www.npr.org/2025/10/17/nx-s1-5575254/spacex-starshield-starlink-signal" target="_blank" rel="noopener">NPR
+  — Starshield's signals</a>: reporting on SpaceX's classified NRO constellation and the radio
+  amateurs fingerprinting it.</li>
+  <li><a href="https://www.twz.com/space/if-spacexs-secret-constellation-is-what-we-think-it-is-its-game-changing" target="_blank" rel="noopener">The
+  War Zone — SpaceX's secret constellation</a>: analysis of what Starshield may be and why it would
+  matter.</li>
+  <li><a href="https://en.wikipedia.org/wiki/NRO_Proliferated_Architecture_Mission" target="_blank" rel="noopener">NRO
+  Proliferated Architecture (Wikipedia)</a>: the public record of the classified constellation's
+  launches.</li>
   <li><a href="https://en.wikipedia.org/wiki/Synthetic-aperture_radar" target="_blank" rel="noopener">Synthetic-aperture
   radar (Wikipedia)</a>: how a moving antenna synthesises a large aperture for fine azimuth resolution.</li>
   <li><a href="https://en.wikipedia.org/wiki/Radar" target="_blank" rel="noopener">Radar (Wikipedia)</a>:
@@ -56,7 +95,7 @@ below are where to go deeper.</p>
   <li><a href="https://sentiwiki.copernicus.eu/web/s1-mission" target="_blank" rel="noopener">ESA Sentinel-1
   mission (SentiWiki)</a>: a canonical, well-documented operational C-band SAR constellation.</li>
   <li><a href="https://nisar.jpl.nasa.gov/" target="_blank" rel="noopener">NASA–ISRO NISAR mission</a>:
-  the L/S-band SAR giant used as a validation benchmark in Part 1.</li>
+  the L/S-band SAR giant, operational since 2025, used as a validation benchmark in Part 1.</li>
   <li><a href="https://www.iceye.com/" target="_blank" rel="noopener">ICEYE</a>: the commercial X-band
   SAR constellation used as the other validation benchmark.</li>
 </ul>
