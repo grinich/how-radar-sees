@@ -30,6 +30,9 @@ interaction and physics of the demos in the AMTIGMTI and Starlink-V3 repositorie
 
 ## Assets
 
-- Earth texture (when added): NASA Blue Marble, public domain
-  (<https://visibleearth.nasa.gov/collection/1484/blue-marble>). We source our own; the
-  creator's repo does not redistribute a texture.
+- **Starlink satellite 3D model** — "Starlink Spacex Satellite" by **Malacodart**, licensed
+  **CC Attribution (CC BY 4.0)**, via Sketchfab
+  (<https://sketchfab.com/3d-models/starlink-spacex-satellite-0a60f6720c5141c9a1c6d71aac108b31>).
+  Used in the hero graphic.
+- **Coastlines** — Natural Earth (`ne_110m_coastline`), public domain
+  (<https://www.naturalearthdata.com/>). Rendered as the globe's continent outlines.

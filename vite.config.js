@@ -4,6 +4,7 @@ import { defineConfig } from 'vite';
 // chunk, lazy-loaded only by the 3D figures.
 export default defineConfig({
   base: './',
+  assetsInclude: ['**/*.glb'],
   build: {
     target: 'es2020',
     assetsInlineLimit: 4096,

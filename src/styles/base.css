@@ -18,6 +18,9 @@ body {
   padding: clamp(2.4rem, 6vw, 3.6rem) 1.25rem clamp(2.2rem, 5vw, 3rem);
 }
 .site-header__scene { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -2; }
+/* Real 3D Starlink model, lazy-loaded and aligned over the scene's beam origin. */
+.site-header__sat { position: absolute; z-index: 0; pointer-events: none; opacity: 0; transition: opacity 0.8s ease; }
+.site-header__sat.is-ready { opacity: 1; }
 /* darken the lower band so the title stays legible over the scene */
 .site-header::after {
   content: ""; position: absolute; inset: 0; z-index: -1;

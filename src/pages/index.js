@@ -2,6 +2,7 @@
 // The whole essay as one long page (Ciechanowski-style), with part dividers and a
 // long table of contents on the right.
 import { bootPage } from '../core/page.js';
+import { initHeroSat } from '../hero3d.js';
 
 import intro from '../content/00-intro.html?raw';
 import introStarlink from '../content/00b-starlink.html?raw';
@@ -48,3 +49,6 @@ bootPage([
   part(4, 'How Starlink Talks'), p4a, p4b, p4c, p4d, p4e,
   part(5, 'Is Starlink a Secret Radar?'), p5a, p5b, p5c, p5d, p5e,
 ]);
+
+// Upgrade the hero satellite to the real 3D model after first paint.
+initHeroSat();
