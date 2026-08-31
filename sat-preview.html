@@ -1,0 +1,51 @@
+<!doctype html>
+<!-- Standalone workbench for the procedural Starlink models (not linked from the
+     essay). Open /sat-preview.html on the dev server to iterate on the models
+     without loading the whole page. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Starlink model workbench</title>
+  <style>
+    body { margin: 0; background: #0f1115; color: #dfe6ef; font: 14px system-ui; }
+    .row { display: grid; grid-template-columns: 1fr; gap: 12px; max-width: 1100px; margin: 20px auto; padding: 0 16px; }
+    figure.fig { margin: 0; }
+    .fig canvas { width: 100%; height: 480px; display: block; background: #0c0f14; border-radius: 8px; }
+    h2 { font-weight: 600; margin: 8px 4px; }
+    .fig__readout { display: flex; gap: 18px; padding: 8px 4px; color: #9db4d4; }
+  </style>
+</head>
+<body>
+  <div class="row">
+    <h2>Scale figure (StarlinkModel)</h2>
+    <figure class="fig" id="scalefig"></figure>
+  </div>
+  <script type="module">
+    import StarlinkModel from '/src/figures/starlinkModel.js';
+    const scheduler = {
+      _set: new Set(),
+      add(f) { this._set.add(f); this._start(); },
+      remove(f) { this._set.delete(f); },
+      requestDraw(f) { f.draw?.(); },
+      setPaused(f, p) { f._paused = p; },
+      _raf: 0,
+      _start() {
+        if (this._raf) return;
+        let last = performance.now();
+        const tick = (now) => {
+          const dt = Math.min((now - last) / 1000, 0.05); last = now;
+          for (const f of this._set) { f.update?.(dt); f.draw?.(); }
+          this._raf = requestAnimationFrame(tick);
+        };
+        this._raf = requestAnimationFrame(tick);
+      },
+    };
+    const el = document.getElementById('scalefig');
+    const fig = new StarlinkModel(el, { scheduler, makeControls: () => document.createElement('div'), palette: {} });
+    await fig.init();
+    scheduler.add(fig);
+    window.__fig = fig;
+  </script>
+</body>
+</html>

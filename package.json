@@ -8,7 +8,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "fetch:tle": "node scripts/fetch-tle.mjs"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",
@@ -17,6 +18,7 @@
     "wrangler": "^4.127.1"
   },
   "dependencies": {
+    "satellite.js": "^7.1.0",
     "three": "^0.160.0"
   }
 }

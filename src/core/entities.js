@@ -29,7 +29,7 @@ const ORG_ICON = `<svg viewBox="0 0 48 48" width="46" height="46" aria-hidden="t
 const ENTITIES = {
   'ICEYE': { blurb: 'Finnish company flying the largest fleet of small X-band SAR satellites (40+).', wiki: 'https://en.wikipedia.org/wiki/ICEYE' },
   'NISAR': { blurb: 'NASA–ISRO L/S-band radar satellite with a 12-metre deployable dish; launched 2025.', wiki: 'https://en.wikipedia.org/wiki/NISAR_(satellite)' },
-  'Starlink': { blurb: "SpaceX's ~9,000-satellite low-Earth-orbit internet constellation.", wiki: 'https://en.wikipedia.org/wiki/Starlink' },
+  'Starlink': { blurb: "SpaceX's ~10,000-satellite low-Earth-orbit internet constellation.", wiki: 'https://en.wikipedia.org/wiki/Starlink' },
   'Umbra': { blurb: 'US company flying high-resolution commercial X-band SAR satellites.', wiki: 'https://en.wikipedia.org/wiki/Umbra_(company)' },
   'Maxar': { blurb: 'US operator of very-high-resolution optical imaging satellites.', wiki: 'https://en.wikipedia.org/wiki/Maxar_Technologies' },
   'AST SpaceMobile': { blurb: 'Building very large phased-array satellites for direct-to-phone service.', wiki: 'https://en.wikipedia.org/wiki/AST_SpaceMobile' },

@@ -5,12 +5,13 @@
 import { Canvas2DFigure } from '../core/Canvas2DFigure.js';
 import { clearBg, rgba, FONT } from '../core/draw.js';
 
-// Approximate satellites in orbit at year-end (mid-year for 2026).
+// Approximate satellites in orbit at year-end (mid-year for 2026; the 2026
+// figure matches the public element sets the live tracker downloads).
 const DATA = [
   { y: 2019, n: 120 }, { y: 2020, n: 1000 }, { y: 2021, n: 1900 }, { y: 2022, n: 3300 },
-  { y: 2023, n: 5000 }, { y: 2024, n: 6900 }, { y: 2025, n: 8000 }, { y: 2026, n: 8600 },
+  { y: 2023, n: 5000 }, { y: 2024, n: 6900 }, { y: 2025, n: 8000 }, { y: 2026, n: 10700 },
 ];
-const YR0 = 2019, YR1 = 2026, NMAX = 10000;
+const YR0 = 2019, YR1 = 2026, NMAX = 12000;
 
 export default class StarlinkGrowth extends Canvas2DFigure {
   controlsSchema = [

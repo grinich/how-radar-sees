@@ -13,7 +13,7 @@ body {
 .site-header {
   position: relative; overflow: hidden; isolation: isolate;
   background: #05070d; color: #fff;
-  min-height: clamp(340px, 60vh, 560px);
+  min-height: clamp(380px, 62vh, 600px);
   display: flex; align-items: flex-end;
   padding: clamp(2.4rem, 6vw, 3.6rem) 1.25rem clamp(2.2rem, 5vw, 3rem);
 }

@@ -27,12 +27,25 @@ interaction and physics of the demos in the AMTIGMTI and Starlink-V3 repositorie
 ## Third-party libraries
 
 - **three.js** — © 2010–present three.js authors, MIT License (<https://threejs.org>)
+- **satellite.js** — © Shashwat Kandadai & UCSC, MIT License
+  (<https://github.com/shashwatak/satellite-js>). SGP4 propagation for the live
+  constellation figure.
+
+## Data
+
+- **Starlink orbital elements (TLEs)** — courtesy of **CelesTrak**
+  (<https://celestrak.org>), Dr. T.S. Kelso. Fetched live (edge-cached for two
+  hours to respect CelesTrak's update cadence); `public/data/starlink-snapshot.tle`
+  is a bundled fallback copy of the same data.
 
 ## Assets
 
-- **Starlink satellite 3D model** — "Starlink Spacex Satellite" by **Malacodart**, licensed
-  **CC Attribution (CC BY 4.0)**, via Sketchfab
-  (<https://sketchfab.com/3d-models/starlink-spacex-satellite-0a60f6720c5141c9a1c6d71aac108b31>).
-  Used in the hero graphic.
+- **Starlink satellite 3D models** — built procedurally in `src/core/starlinkSats.js`
+  (no third-party assets). Dimensions and component layout follow SpaceX-published
+  material: the Oct 2022 FCC filing dimensions, the "Brightness Mitigation Best
+  Practices for Satellite Operators" paper (2022), the Starlink V3 update
+  (<https://starlink.com/updates/starlink-version-3-satellites>), the S-1
+  registration statement renders (SEC, May 2026), and the Starship Flight-11
+  webcast generation-comparison graphic.
 - **Coastlines** — Natural Earth (`ne_110m_coastline`), public domain
   (<https://www.naturalearthdata.com/>). Rendered as the globe's continent outlines.

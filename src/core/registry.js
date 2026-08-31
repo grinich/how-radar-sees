@@ -5,7 +5,7 @@
 
 export const registry = {
   // Ch1
-  'constellation': () => import('../figures/constellation.js'),
+  'starlink-live': () => import('../figures/starlinkLive.js'),
   'starlink-growth': () => import('../figures/starlinkGrowth.js'),
   'starlink-model': () => import('../figures/starlinkModel.js'),
   'sar-geometry': () => import('../figures/sarGeometry.js'),
