@@ -1,0 +1,100 @@
+/* Header subtitle */
+.site-header__sub {
+  margin: 0.85rem 0 0; font-size: clamp(1.05rem, 2.4vw, 1.28rem);
+  font-weight: 400; line-height: 1.35; opacity: 0.86; letter-spacing: -0.005em;
+  max-width: 34rem;
+}
+
+/* Part dividers (big Ciechanowski-style section titles) */
+.prose h1.part-divider {
+  font-size: var(--step-3); font-weight: 600; line-height: 1.1; letter-spacing: -0.02em;
+  margin: 3.4rem 0 1.2rem; padding-top: 1.6rem; border-top: 1px solid var(--rule);
+}
+.prose h1.part-divider:first-child { border-top: 0; padding-top: 0; }
+.part-divider__num {
+  display: block; font-size: 0.9rem; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 0.35rem;
+}
+
+/* Long table of contents, fixed on the right, scrollable. It only appears once
+   the header has scrolled off (see the IntersectionObserver in page.js), so it
+   can use the full viewport height — starting near the top, not below a header. */
+.toc {
+  position: fixed; top: 1.75rem; right: 1rem; bottom: 1.5rem; width: 12.5rem;
+  overflow-y: auto; overscroll-behavior: contain; z-index: 15;
+  padding-right: 0.4rem;
+  transition: opacity 0.25s ease;
+}
+.toc.is-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.toc__list { display: flex; flex-direction: column; gap: 0.18rem; }
+.toc__item {
+  text-decoration: none; line-height: 1.3; border-right: 2px solid transparent;
+  padding: 0.05rem 0.6rem 0.05rem 0; text-align: right; transition: color 0.15s, opacity 0.15s;
+}
+.toc__item--part { font-size: 0.8rem; font-weight: 600; color: var(--ink); margin-top: 0.55rem; }
+.toc__item--part:first-child { margin-top: 0; }
+.toc__item--sec { font-size: 0.73rem; color: var(--muted); opacity: 0.72; }
+.toc__item:hover { color: var(--accent); opacity: 1; }
+.toc__item.is-active { color: var(--accent); opacity: 1; border-right-color: var(--accent); font-weight: 600; }
+.toc::-webkit-scrollbar { width: 5px; }
+.toc::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 3px; }
+
+@media (max-width: 1180px) { .toc { display: none; } }
+
+/* Glossary term with hover/focus definition popup */
+.gloss { position: relative; border-bottom: 1px dotted var(--muted); cursor: help; }
+.gloss__i { font-size: 0.6em; color: var(--accent); font-weight: 700; font-style: normal; margin-left: 1px; vertical-align: super; }
+.gloss__pop {
+  position: absolute; bottom: calc(100% + 9px); left: 50%; transform: translateX(-50%);
+  width: max-content; max-width: 17rem; padding: 0.6rem 0.75rem; border-radius: 8px;
+  background: var(--ink); color: var(--bg);
+  font-size: 0.8rem; font-weight: 400; line-height: 1.42; text-align: left; white-space: normal;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28); z-index: 30;
+  opacity: 0; visibility: hidden; transition: opacity 0.12s ease; pointer-events: none;
+}
+.gloss__pop::after {
+  content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  border: 6px solid transparent; border-top-color: var(--ink);
+}
+.gloss:hover .gloss__pop, .gloss:focus .gloss__pop, .gloss:focus-within .gloss__pop { opacity: 1; visibility: visible; }
+.gloss:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 2px; }
+
+/* Named-entity info card (satellites / operators) */
+.entity { position: relative; border-bottom: 1px dotted var(--accent); color: var(--accent); font-weight: 600; cursor: help; }
+.entity__card {
+  position: absolute; top: calc(100% + 10px); left: 0;
+  display: flex; gap: 0.7rem; align-items: flex-start;
+  width: max-content; max-width: 20rem; padding: 0.75rem 0.85rem; border-radius: 10px;
+  background: var(--bg); color: var(--ink); border: 1px solid var(--rule);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22); z-index: 40;
+  opacity: 0; visibility: hidden; transform: translateY(-4px);
+  transition: opacity 0.14s ease, transform 0.14s ease; pointer-events: none;
+  text-align: left; font-weight: 400;
+}
+.entity__card::before { content: ''; position: absolute; top: -12px; left: 0; right: 0; height: 12px; } /* hover bridge */
+.entity:hover .entity__card, .entity:focus .entity__card, .entity:focus-within .entity__card {
+  opacity: 1; visibility: visible; transform: translateY(0); pointer-events: auto;
+}
+.entity__thumb { flex: 0 0 46px; width: 46px; height: 46px; border-radius: 8px; background: var(--fig-bg); display: grid; place-items: center; }
+.entity__body { display: flex; flex-direction: column; gap: 0.15rem; }
+.entity__name { font-size: 0.95rem; color: var(--ink); }
+.entity__blurb { font-size: 0.8rem; color: var(--muted); line-height: 1.35; }
+.entity__link { font-size: 0.8rem; color: var(--accent); text-decoration: none; margin-top: 0.25rem; font-weight: 600; }
+.entity__link:hover { text-decoration: underline; }
+.entity:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 2px; }
+
+/* "Go deeper" collapsible (native <details>) */
+.prose details.go-deeper {
+  margin: 1.4rem 0; border: 1px solid var(--rule); border-radius: 10px;
+  background: var(--fig-bg); padding: 0 1rem;
+}
+.prose details.go-deeper > summary {
+  cursor: pointer; padding: 0.8rem 0; font-weight: 600; color: var(--accent);
+  list-style: none; display: flex; align-items: center; gap: 0.5rem;
+}
+.prose details.go-deeper > summary::-webkit-details-marker { display: none; }
+.prose details.go-deeper > summary::before { content: "▸"; transition: transform 0.15s; font-size: 0.85em; }
+.prose details.go-deeper[open] > summary::before { transform: rotate(90deg); }
+.prose details.go-deeper > summary:hover { color: var(--ink); }
+.prose details.go-deeper > *:not(summary) { margin-bottom: 1rem; }
+.prose details.go-deeper p:first-of-type { margin-top: 0.2rem; }

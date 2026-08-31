@@ -1,0 +1,26 @@
+<h2>Symbols, bandwidth, and the matched filter</h2>
+
+<p>How much spectrum does a signal need? Any waveform can be built from sine waves, and the
+<span class="t-echo">Fourier transform</span> is the prism that splits it back into them. A single
+digital symbol is a little rectangular pulse, and the Fourier transform of a rectangle is a
+<em>sinc</em> — so the faster you send symbols, the wider the band they occupy. In the ideal case the
+symbol rate simply <em>equals</em> the bandwidth. Drag the symbol rate and watch the spectrum
+breathe.</p>
+
+<figure class="fig fig--wide" data-figure="symbol-rate">
+  <figcaption>Symbol rate is bandwidth. A stream of symbols in time (top) and its spectrum (bottom).
+  Send symbols faster and the occupied band widens in proportion; change the modulation and the band
+  stays put — only the data rate changes.</figcaption>
+</figure>
+
+<p>This same Fourier thinking powers the radar trick from Part 2. A <span class="t-transmit">chirp
+</span> spreads its energy across a wide band and a long time; a <em>matched filter</em> correlates
+the echo against that exact chirp and collapses it into a sharp spike, lifting a signal from beneath
+the noise. Communications calls the wide-band version of this idea <em>spread spectrum</em> — it is
+how a 25-watt GPS satellite reaches a phone from twenty thousand kilometres away.</p>
+
+<figure class="fig fig--wide" data-figure="matched-filter">
+  <figcaption>Pulse compression by matched filtering. A long, faint, noisy chirp (top) correlated
+  against a copy of itself collapses to a bright, narrow spike (bottom) — more bandwidth makes the
+  spike sharper. The processing gain is the time-bandwidth product.</figcaption>
+</figure>

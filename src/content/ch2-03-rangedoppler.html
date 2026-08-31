@@ -1,0 +1,31 @@
+<h2>Watching a picture come into focus</h2>
+
+<p>The raw data a SAR collects looks like nothing at all — a smear of noise called the
+<span class="t-noise">phase history</span>, with fast time (range) across the rows and slow time
+(one row per pulse) down the columns. Turning that smear into an image is a sequence of signal-
+processing steps. The classic recipe is the <em>range-Doppler algorithm</em>, and the figure below
+walks through it stage by stage. Step through it and watch a blur resolve into a ship.</p>
+
+<figure class="fig fig--wide" data-figure="range-doppler">
+  <figcaption>The range-Doppler algorithm. Step through: raw phase history → range (pulse)
+  compression with a matched filter → an azimuth Fourier transform → range-cell-migration correction
+  to straighten the curved returns → azimuth compression → the focused image. The target is a
+  destroyer built from point scatterers.</figcaption>
+</figure>
+
+<p>Two of these steps deserve a name. <span class="t-transmit">Pulse compression</span> is a
+matched filter: it correlates the noisy return against the exact chirp that was transmitted,
+collapsing a long faint pulse into a sharp bright spike and lifting the signal out of the noise —
+the same trick that lets GPS work below the noise floor. <span class="t-echo">Azimuth
+compression</span> is a second matched filter, this time along the flight direction, that focuses
+each target's Doppler history to a point. In between, <em>range-cell-migration correction</em>
+straightens the gentle curve a target traces through the data as the slant range changes.</p>
+
+<details class="go-deeper">
+  <summary>Go deeper: why SAR images look so strange</summary>
+  <p>Because one axis of the image is <em>range</em>, not a viewing angle, SAR pictures carry
+  artifacts a camera never shows: tall objects "lay over" toward the radar, radar shadows stretch
+  away from it, and bright point scatterers ring with sidelobes. It is also why SAR is shot at
+  grazing angles between about 30° and 60° — look straight down and every scatterer at a given range
+  collapses into one bin, and the scene cannot be resolved at all.</p>
+</details>

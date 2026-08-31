@@ -1,0 +1,31 @@
+<h2>How sharp is the picture?</h2>
+
+<p>Two targets sitting close together only show up as two things if their echoes arrive at
+distinguishably different times. What lets radar separate them is not how much power it uses or how
+big its antenna is — it is the <span class="t-transmit">bandwidth</span> of the pulse. The finest
+distance radar can resolve along its line of sight is</p>
+
+<p class="eq">δ<sub>r</sub> = c / 2B</p>
+
+<p>where <em>c</em> is the speed of light and <em>B</em> is the bandwidth. More bandwidth, finer
+detail — and, remarkably, this does not depend on range at all. A radar a thousand kilometres away
+resolves detail just as finely as one next door, given the same bandwidth. In the figure, two
+<span class="t-target">targets</span> sit a settable distance apart. Widen the bandwidth and watch
+their blurred returns sharpen and split into two distinct peaks the instant the spacing exceeds the
+resolution cell.</p>
+
+<figure class="fig fig--wide" data-figure="pulse-compression">
+  <figcaption>Range resolution. Each target returns a compressed pulse whose width is set by the
+  bandwidth. When the two are closer than c/2B they merge into a single blob. The grazing-angle
+  slider projects the spacing into the slant direction — notice how detail collapses as you
+  approach straight-down.</figcaption>
+</figure>
+
+<p>That last slider hides a subtlety. Resolution along the slant direction is fixed by bandwidth,
+but what we care about is resolution <em>on the ground</em>, which depends on the grazing angle: the
+ground cell is <em>δ<sub>r</sub></em> / cos(grazing). Push toward looking straight down and it blows
+up toward infinity. That is why a radar satellite always looks off to the side — and why the
+geometry in the first figure was never pointed at nadir.</p>
+
+<p class="note">For scale: crisp 25 cm imagery — enough to identify a military vehicle — needs about
+600 MHz of bandwidth. That number will come back when we ask what Starlink's antennas can do.</p>

@@ -1,0 +1,35 @@
+<h2>Back-projection, and radar video</h2>
+
+<p>The range-Doppler algorithm is fast but rigid. A more brute-force method,
+<span class="t-echo">time-domain back-projection</span>, is slower but wonderfully flexible — and it
+is what makes moving-target tracking work. The idea is disarmingly simple: lay down a grid of pixels
+on the ground, and for every pixel, for every pulse, look up how far the radar was from that pixel,
+grab the echo that arrived at exactly that delay, and add it in. A pixel with a real scatterer sees
+the same strong return align pulse after pulse and sums up bright; an empty pixel sees random phases
+that cancel.</p>
+
+<figure class="fig fig--wide" data-figure="back-projection">
+  <figcaption>Time-domain back-projection. Each pulse contributes to every pixel according to its
+  range; matched returns add coherently (bright), mismatched ones cancel. Slower than the frequency-
+  domain method, but it can follow any trajectory — including a moving one.</figcaption>
+</figure>
+
+<p>The algorithm is famously compute-hungry — it is why you rarely see live SAR back-projection. But a
+graphics processor (GPU) can run it for every pixel at once. The figure below is the <em>real</em> algorithm in a fragment
+shader: a hundred pulses, back-projected across the whole image in real time. Watch the aperture build
+and the point targets snap into focus; sharpen them with more bandwidth.</p>
+
+<figure class="fig fig--wide" data-figure="shader-backprojection">
+  <figcaption>Back-projection, live on the GPU. Each pixel sums the echo from all pulses at its own
+  range; the point targets emerge as the synthetic aperture grows. More bandwidth → tighter points.
+  This runs entirely in a WebGL shader.</figcaption>
+</figure>
+
+<p>Because back-projection places energy by geometry rather than by frequency, it sidesteps the
+Doppler ambiguities that plague fast movers, and you can point the same math at a <em>moving</em>
+grid to freeze a target that would otherwise smear. Split a long collection into overlapping
+intervals and you get a series of frames — <span class="t-target">video SAR</span>. This is the
+engine behind custodial tracking: keeping a continuous radar eye on one jet, one ship, one missile.
+We will put it to work in the next part.</p>
+
+<div class="prevnext-note"></div>

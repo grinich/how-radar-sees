@@ -1,0 +1,19 @@
+<h2>When things move, they lie</h2>
+
+<p>The whole range-Doppler machine assumes the scene holds still for the seconds it takes to build
+the synthetic aperture. A <span class="t-target">moving target</span> breaks that assumption, and it
+does so in a very specific, revealing way. Motion along the flight direction smears the target into
+a streak. Motion toward or away from the radar adds a false Doppler shift that <em>displaces</em> the
+target sideways — a moving car can be painted in the grass beside the road it is driving on.</p>
+
+<figure class="fig fig--wide" data-figure="motion-artifacts">
+  <figcaption>Motion artifacts. Give the target a velocity: along-track motion smears it,
+  across-track (radial) motion shifts it in azimuth away from its true position. A radar image is a
+  snapshot that quietly misplaces everything that moves.</figcaption>
+</figure>
+
+<p>This looks like a bug, but it is the seed of a superpower. Those artifacts encode the target's
+velocity — if you can measure the sideways displacement, you can recover how fast it was moving
+toward you. Turning that leakage into reliable detection and tracking of every moving vehicle is the
+entire subject of Part 3. First, though, one more way to form the image — the one that makes
+video possible.</p>

@@ -1,0 +1,44 @@
+<h2>From bits to radiated power: the RF chain</h2>
+
+<p>Behind every antenna element is a <span class="t-echo">radio-frequency chain</span>. Transmitting,
+it turns digital samples into an analog wave, up-converts to the carrier frequency, and amplifies;
+receiving, it runs the same steps in reverse, with a low-noise amplifier coddling an impossibly faint
+signal before an analog-to-digital converter hands it to the processor. Modern arrays push more of
+this into software-defined radio on a chip — flexible, but power-hungry.</p>
+
+<figure class="fig fig--wide" data-figure="rf-chain">
+  <figcaption>The transmit and receive RF chains. Follow a signal from bits, through the
+  digital-to-analog converter, up-conversion and amplification, out of the antenna — and back in
+  through the low-noise amplifier and analog-to-digital converter. Toggle transmit and receive.</figcaption>
+</figure>
+
+<h2>The amplifier's compromise</h2>
+
+<p>The <span class="t-transmit">power amplifier</span> forces the compromise that decides what
+Starlink could do as a radar. A transistor is a valve, faithful only in its middle range: drive it
+too hard and the peaks clip; let it idle in the linear zone and it wastes power as heat.</p>
+
+<figure class="fig fig--wide" data-figure="transistor">
+  <figcaption>An amplifier's transfer curve. The output follows the input only in the central linear
+  band; beyond it the signal saturates and clips. Push the drive up and watch the peaks flatten.</figcaption>
+</figure>
+
+<p>How you bias that valve sets the amplifier's <em>class</em> — the trade of linearity for
+efficiency.</p>
+
+<figure class="fig fig--wide" data-figure="amp-classes">
+  <figcaption>Amplifier classes. The shaded portion of each cycle is where the transistor conducts —
+  and burns power. Class A conducts the whole cycle at low efficiency; the others trade linearity for
+  efficiency by conducting less.</figcaption>
+</figure>
+
+<p>What decides how hard you must back off is the <span class="t-noise">peak-to-average power
+ratio</span>. A clean radar chirp barely varies, so the amplifier runs flat-out and efficient;
+Starlink's dense, many-beam OFDM signals have violent peaks, forcing wasteful headroom — but a
+radar-optimised waveform run in short bursts could briefly pour several times the normal power into a
+beam. Hold that thought for Part 5.</p>
+
+<figure class="fig fig--wide" data-figure="waveforms">
+  <figcaption>Waveforms and their PAPR. Switch between a communications signal and a radar chirp and
+  watch the peak-to-average ratio — and therefore the amplifier headroom you must sacrifice — change.</figcaption>
+</figure>

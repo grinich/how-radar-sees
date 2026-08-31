@@ -1,0 +1,33 @@
+<h2>Hearing a whisper next to a scream</h2>
+
+<p>Here is radar's cruelest problem. The pulse you transmit is overwhelmingly louder than the echo
+you hope to hear — for a space radar listening for a faint return, the transmitter can be nearly
+<em>two hundred decibels</em> stronger than the signal. That is a factor of a hundred billion
+billion. Detecting the echo while shouting is like hearing a pin drop during a rocket launch. The art
+of managing this is <span class="t-echo">duplexing</span>, and it comes down to stacking up isolation
+from every trick available.</p>
+
+<figure class="fig fig--wide" data-figure="isolation-ladder">
+  <figcaption>The isolation ladder. Start at the transmit power and climb down toward the echo hiding
+  in the noise floor. Toggle each mechanism — switching off during listening, separating frequencies,
+  polarization, a circulator, spatial separation, beam nulling, active cancellation — and watch the
+  isolation add up toward what's required.</figcaption>
+</figure>
+
+<p>One row on that ladder changes everything: <span class="t-target">spatial separation</span>. If
+the transmitter and receiver are on <em>different</em> satellites, the sheer distance between them
+supplies most of the isolation for free. This "bistatic" arrangement — one Starlink illuminating,
+another listening — sidesteps the whole problem, and it is the key that unlocks the most powerful
+modes.</p>
+
+<p>Why care so much? Because if you can listen and transmit at the same time — full duplex — you
+escape the tyranny of pulses. A normal radar must go quiet to listen, capping how long and how often
+it can shout. Break that limit and you can run a continuous wave, pour in far more energy, sample
+motion far faster, and see a much wider swath at once. The figure below shows what that constraint
+costs, and what lifting it buys.</p>
+
+<figure class="fig fig--wide" data-figure="duplex-timeline">
+  <figcaption>Transmit-and-listen timing. In half-duplex the receiver goes deaf whenever the
+  transmitter fires, so echoes that arrive during a pulse are lost (eclipsed). Full duplex removes
+  the gaps entirely. Adjust the pulse timing and watch which echoes survive.</figcaption>
+</figure>

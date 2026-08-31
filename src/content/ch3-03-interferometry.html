@@ -1,0 +1,26 @@
+<h2>Two eyes see motion</h2>
+
+<p>Split the antenna into two phase centres a short distance apart and you get two nearly-identical
+images. Multiply one by the complex conjugate of the other and the stationary world vanishes:
+motionless clutter produces no phase difference between the two looks, but a
+<span class="t-target">moving target</span> does, and that phase difference is a direct measure of
+its radial velocity. This is <span class="t-echo">along-track interferometry</span>.</p>
+
+<figure class="fig fig--wide" data-figure="ati">
+  <figcaption>Along-track interferometry. Two phase centres, one interferogram. Stationary clutter
+  sits at zero phase; movers acquire a phase proportional to radial velocity. Too slow and the phase
+  drowns in noise (minimum detectable velocity); too fast and it wraps (the ambiguity we tackle
+  next).</figcaption>
+</figure>
+
+<p>A close cousin, <em>displaced phase-center antenna</em> (DPCA), spaces the two looks by exactly
+the distance the satellite travels in one pulse. Then the second antenna sees precisely the clutter
+the first saw a pulse earlier, and subtracting the two cancels the stationary world outright,
+leaving only movers. The catch is Earth's rotation: it smears the clutter into a broad ridge that
+DPCA alone cannot fully cancel across a wide swath.</p>
+
+<figure class="fig fig--wide" data-figure="clutter-dpca">
+  <figcaption>The clutter ridge. Earth's rotation spreads stationary ground into a band of apparent
+  velocity. Widen the swath and it broadens, swallowing slow movers; the DPCA spacing (2v/PRF) is the
+  antidote. Toggle it to collapse the ridge and reveal the hidden mover.</figcaption>
+</figure>

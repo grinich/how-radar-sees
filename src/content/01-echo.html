@@ -1,0 +1,40 @@
+<h2>The view from orbit</h2>
+
+<p>Everything starts with geometry. A satellite races along its orbit while it looks
+<em>sideways</em> at the ground — never straight down. The angle between the ground and the line up
+to the satellite is the <span class="t-echo">grazing angle</span>, and the distance the pulse
+travels to reach a <span class="t-target">target</span> is the <span class="t-echo">slant
+range</span>. Drag the scene, and notice how lowering the satellite or flattening the grazing angle
+changes that slant range — the single most important distance in all of radar.</p>
+
+<figure class="fig fig--wide" data-figure="sar-geometry">
+  <figcaption>The imaging geometry. A satellite views a ground target at a chosen altitude and
+  grazing angle; the blue line is the slant range the pulse must travel each way. Drag to
+  rotate.</figcaption>
+</figure>
+
+<p>Why does the slant range matter so much? Because the pulse spreads out as it travels, weakening
+with the <em>square</em> of the distance on the way out — and, after it bounces, again on the way
+back. The round-trip loss goes as the <em>fourth power</em> of range. Double the distance and the
+returning <span class="t-echo">echo</span> is sixteen times fainter. This single fact will dominate
+everything later.</p>
+
+<h2>What makes a target bright</h2>
+
+<p>When the pulse reaches the ground it scatters. How much energy comes back depends on the surface:
+its material, its roughness, and the angle it presents. Radar people fold this into a number called
+<span class="t-target">sigma-zero</span> (σ⁰) — the radar reflectivity per unit area. It is why a
+radar image looks eerily like a photograph even though no light was involved.</p>
+
+<p>Smooth water is a mirror: it bounces the pulse away from the antenna and looks nearly black.
+A stealth aircraft's skin is engineered to absorb, so it too is dark. But metal with sharp corners
+blazes, and — surprisingly — so do humans and animals, full of salty, conductive water and shaped
+in lumpy, echo-friendly ways. And it all depends on <span class="t-transmit">wavelength</span>:
+short X-band waves scatter off leaves, while longer L-band waves sail through a forest canopy to
+image the ground beneath. Pick a surface and a band, and compare.</p>
+
+<figure class="fig fig--wide" data-figure="material-explorer">
+  <figcaption>Radar reflectivity by material and band. σ⁰ is given in decibels (a typical mixed
+  ground pixel sits near −15 dB). Notice how the same scene changes character between bands — and
+  why foliage is transparent to long wavelengths.</figcaption>
+</figure>

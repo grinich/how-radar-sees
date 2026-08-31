@@ -1,0 +1,32 @@
+<h2>How strong is the echo?</h2>
+
+<p>Sharpness is worthless if the echo is drowned in <span class="t-noise">noise</span>. A radar's
+whole performance collapses into one number: the <span class="t-echo">signal-to-noise ratio</span>
+(SNR).
+It gathers up every effect we have met — transmit power, antenna gain, wavelength, the target's
+reflectivity, the fourth-power range loss, the receiver's thermal noise — plus the processing gains
+radar earns back by being clever about its pulses. The result is a budget you can actually
+compute:</p>
+
+<p class="eq">SNR = P<sub>t</sub> G<sub>t</sub> G<sub>r</sub> λ² σ⁰ δ<sub>az</sub> δ<sub>rg</sub> · (τB) · N<sub>p</sub> ⁄ [ (4π)³ R⁴ · kTB · L ]</p>
+
+<p>Don't be alarmed by it — the interactive figure <em>is</em> this equation. It is the engine the
+rest of this essay runs on: later we will drop in the numbers for real satellites, and eventually
+for Starlink's own antennas, and simply read the SNR off this same panel. For now, explore. Sweep
+the <span class="t-transmit">bandwidth</span> and watch SNR fall as detail improves — the two
+genuinely trade against each other. Drop from 500 km to 350 km and the two-way path loss eases,
+lifting the echo by several decibels. Switch bands, and turn on rain to see who suffers.</p>
+
+<figure class="fig fig--wide" data-figure="snr-explorer">
+  <figcaption>The radar link budget. The curve sweeps SNR against bandwidth for the current scenario;
+  the dot is where your bandwidth slider sits. Green means a usable image (SNR above 0 dB). NESZ —
+  the noise-equivalent σ⁰ — is the faintest surface the radar could still detect. These numbers
+  reproduce the source video's validated engine.</figcaption>
+</figure>
+
+<p>The equation insists on a few things worth internalising. Changing the pulse repetition
+frequency doesn't move the SNR at all — the gains and losses cancel exactly. Doubling the bandwidth
+costs about 3 dB. And, hidden in the way the terms combine, a bigger antenna is <em>enormously</em>
+favorable: hold the antenna area fixed and the SNR climbs as the square of that area. That last fact
+is the seed of the whole surprise waiting at the end: Starlink's largest antenna is very big
+indeed.</p>

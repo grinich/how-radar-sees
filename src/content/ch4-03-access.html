@@ -1,0 +1,19 @@
+<h2>Sharing the sky</h2>
+
+<p>One satellite serves thousands of users, so it must divide its spectrum among them. It can split
+<span class="t-transmit">time</span> (take turns), split <span class="t-echo">frequency</span> (give
+each a channel), or — the trick that makes Starlink scale — split <span class="t-target">space</span>.
+With <em>space-division multiple access</em>, tightly focused beams point at different patches of
+ground, so the very same frequencies can be reused over and over as long as the beams do not overlap.
+Drag the users and watch beams reuse the band.</p>
+
+<figure class="fig fig--wide" data-figure="multiple-access">
+  <figcaption>Multiple access. Toggle between time, frequency, and space division. Space division is
+  the powerful one: separate beams reuse the same frequencies, multiplying total capacity — the
+  reason a phased array with many beams is worth its complexity.</figcaption>
+</figure>
+
+<p>Starlink also uses <em>OFDM</em>, slicing each channel into hundreds of narrow sub-carriers, which
+resists interference and — as we will see — dodges a problem that would otherwise cripple a
+wide-band phased array. That problem is the subject of the next section, and it is the single biggest
+obstacle to reusing these antennas as radar.</p>

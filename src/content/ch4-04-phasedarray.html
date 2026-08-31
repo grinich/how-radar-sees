@@ -1,0 +1,62 @@
+<h2>Steering a beam with phase</h2>
+
+<p>Every Starlink satellite steers its beams electronically with a
+<span class="t-echo">phased array</span>: fire every element together and the waves add up straight
+ahead; delay each element a little more than its neighbour and the wavefront tilts, aiming the beam
+without moving a thing. Drag the steering and watch the pattern respond — and note how energy leaks
+into grating lobes when the elements are spaced wrong or the array is driven off its design
+frequency.</p>
+
+<figure class="fig fig--wide" data-figure="phased-array">
+  <figcaption>A phased array. The phase gradient across the elements steers the combined beam. Steer
+  too far, or drive the array at the wrong frequency, and energy leaks into grating and side lobes.</figcaption>
+</figure>
+
+<p>That flat polar plot is really a slice through a three-dimensional shape. The beam is a
+<em>lobe</em> — a narrow finger of energy pointing where you steer it, wrapped in smaller side lobes.
+Drag it around.</p>
+
+<figure class="fig fig--wide" data-figure="beam-lobe-3d">
+  <figcaption>The beam as a 3-D lobe. The surface's reach in each direction is the array's gain there.
+  Steer it, and add elements to watch the main lobe tighten. Drag to rotate.</figcaption>
+</figure>
+
+<h2>Beam squint: the wideband curse</h2>
+
+<p>Here is the catch that shapes everything. A phase shifter that steers one frequency correctly
+steers a <em>different</em> frequency to a slightly different angle. A radar-grade wideband signal
+contains a whole span of frequencies, so an analog phased array smears them across a range of
+directions — <span class="t-noise">beam squint</span>. The bigger and higher-gain the array, the
+narrower its beam and the more damage squint does. Widen the bandwidth and steer off-boresight to
+watch the beam fall apart by colour.</p>
+
+<figure class="fig fig--wide" data-figure="beam-squint">
+  <figcaption>Beam squint. Colour marks frequency (red low, blue high). Narrowband, the beam holds;
+  widen the bandwidth and steer away from boresight and the frequencies fan out — the beam points
+  everywhere and nowhere. This is why a comms array can't simply become a wideband radar.</figcaption>
+</figure>
+
+<p>The fix is a <em>hybrid</em> array: group elements into tiles, give each tile a true time delay
+(which is frequency-flat), and let analog phase shifters do the fine steering within a tile. Fewer
+elements per tile means less squint — at the cost of gain and complexity. Slide the tile size to
+trade one against the other.</p>
+
+<figure class="fig fig--wide" data-figure="hybrid-tiling">
+  <figcaption>Hybrid tiling. Splitting the array into more, smaller tiles (each with its own time
+  delay) shrinks the squint within each tile until it nearly matches a fully digital array — the
+  design Starlink actually uses.</figcaption>
+</figure>
+
+<h2>A quarter-turn of polarization</h2>
+
+<p>One more knob per element: the direction the electric field oscillates, its
+<span class="t-noise">polarization</span>. Feed an element from two perpendicular directions with a
+phase shift between them and the field rotates — circular polarization — which talks cleanly to
+tumbling phones and, as Part 5 will use, hands a radar a free ~30 dB of isolation because a
+circular wave flips its handedness when it reflects.</p>
+
+<figure class="fig fig--wide" data-figure="polarization">
+  <figcaption>Polarization from two feeds. Adjust the relative phase to sweep from linear through
+  elliptical to circular. The traced curve is the tip of the electric-field vector over one
+  cycle.</figcaption>
+</figure>

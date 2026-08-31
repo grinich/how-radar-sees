@@ -1,0 +1,31 @@
+<h2>Space-time adaptive processing</h2>
+
+<p>The most powerful clutter-suppression technique treats space and time together. With three or
+more phase centres, each pulse-and-antenna pair becomes a dimension in a data cube. Stationary
+clutter is highly correlated across adjacent antennas and adjacent pulses, so it collects along a
+tight diagonal <span class="t-target">clutter ridge</span>. <span class="t-echo">Space-time adaptive
+processing</span> (STAP) learns that ridge from the surrounding data, then builds a filter that nulls
+exactly those correlations while passing everything else — digging out targets that were buried far
+inside the clutter.</p>
+
+<figure class="fig fig--wide" data-figure="stap-cube">
+  <figcaption>The angle–Doppler plane of STAP. Stationary clutter lies along the diagonal ridge;
+  the adaptive filter (from the inverse covariance of the training data) carves a null along it. A
+  slow mover sitting just off the ridge survives the null and is detected. Steer the filter and set
+  the target's velocity.</figcaption>
+</figure>
+
+<p>STAP is compute-hungry — it inverts a covariance matrix per range cell — but it is the only thing
+that reliably finds a person walking across a wide, Earth-rotation-smeared scene. "Knowledge-aided"
+variants seed it with terrain maps and known road networks, which a giant always-on constellation
+could supply for free. It behaves less like a camera and more like a wide-area early-warning radar,
+running alongside the imaging modes.</p>
+
+<details class="go-deeper">
+  <summary>Go deeper: the covariance null</summary>
+  <p>For a cell under test, the surrounding range cells are taken as clutter-plus-noise training
+  data. Their covariance matrix captures how clutter correlates across every pulse-antenna pair; its
+  inverse, applied to a bank of velocity-and-angle steering vectors, yields weights that maximise the
+  signal-to-interference-plus-noise ratio for each candidate target while suppressing the ridge. A
+  simple threshold on the filtered output then declares detections.</p>
+</details>

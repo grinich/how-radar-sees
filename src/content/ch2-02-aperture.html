@@ -1,0 +1,31 @@
+<h2>Faking a kilometre-wide antenna</h2>
+
+<p>Here is the insight that makes SAR possible. As the satellite flies, the same patch of ground
+stays in its beam for hundreds of pulses. If we record every echo along the way and combine them
+knowing exactly where the satellite was for each, the string of positions acts like one giant
+antenna — a <span class="t-echo">synthetic aperture</span> as long as the flight path over which the
+target stayed in view.</p>
+
+<p>The engine that separates targets along the flight direction is the
+<span class="t-target">Doppler effect</span>. A scatterer the radar is flying toward returns a
+slightly higher frequency; one it is flying away from, a slightly lower one. That spread of
+frequencies — the Doppler bandwidth — becomes the second axis of the image, called
+<em>azimuth</em>. Drag the satellite across the scene and watch the synthetic aperture build and the
+returns fan out in Doppler.</p>
+
+<figure class="fig fig--wide" data-figure="aperture-synthesis">
+  <figcaption>Synthetic aperture formation. The moving antenna keeps the scene in its beam; each
+  target's Doppler shift (blue = approaching, red = receding) places it along the azimuth axis. The
+  synthetic aperture is the beam footprint dragged across the ground.</figcaption>
+</figure>
+
+<p>This leads to one of the most counterintuitive facts in radar: a <em>smaller</em> antenna gives
+<em>better</em> azimuth resolution. A small antenna has a wider beam, so a target stays in view
+longer, so the synthetic aperture is longer. The strip-map azimuth resolution works out to about
+<em>half the physical antenna length</em> — independent of range, just like the range resolution we
+met in Part 1. Two independent axes, two clever tricks, and suddenly the one-pixel radar images
+like a camera.</p>
+
+<p class="note">There is a catch: the radar must pulse fast enough to sample that Doppler bandwidth
+— the pulse repetition frequency must exceed it, or the image ghosts. That tension is the heart of
+Part 3.</p>

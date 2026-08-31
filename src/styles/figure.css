@@ -1,0 +1,59 @@
+/* Figure frame + caption. Figures may bleed slightly wider than the text column. */
+.fig {
+  margin: 2rem auto;
+  padding: 0.75rem;
+  background: var(--fig-bg);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+}
+.fig--wide { max-width: 52rem; }
+
+/* Wraps the canvas so a per-figure pause button can anchor to the animation. */
+.fig__stage { position: relative; width: 100%; }
+
+/* Per-figure pause/play, top-right of the animation. Quiet until you approach. */
+.fig__pause {
+  position: absolute; top: 8px; right: 8px; z-index: 5;
+  width: 30px; height: 30px; padding: 0; display: grid; place-items: center;
+  border-radius: 50%; border: 1px solid var(--rule);
+  background: var(--fig-bg);
+  background: color-mix(in srgb, var(--fig-bg) 78%, transparent);
+  color: var(--muted); cursor: pointer; opacity: 0.5;
+  -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px);
+  transition: opacity 0.14s ease, color 0.14s ease, background 0.14s ease;
+}
+.fig__stage:hover .fig__pause, .fig__pause[aria-pressed="true"], .fig__pause:focus-visible { opacity: 1; }
+.fig__pause:hover { color: var(--ink); background: var(--fig-bg); }
+.fig__pause:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.fig__canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 6px;
+}
+.fig__canvas--3d { aspect-ratio: 4 / 3; cursor: grab; }
+.fig__canvas--3d:active { cursor: grabbing; }
+
+.fig figcaption {
+  color: var(--muted);
+  font-size: var(--step--1);
+  line-height: 1.5;
+  margin-top: 0.7rem;
+  padding: 0 0.25rem;
+}
+
+.fig__readout {
+  display: flex; flex-wrap: wrap; gap: 0.4rem 1.1rem;
+  margin-top: 0.6rem; padding: 0 0.25rem;
+  font-size: var(--step--1); color: var(--muted);
+}
+.fig__readout b { color: var(--ink); font-variant-numeric: tabular-nums; }
+
+.fig--error::after {
+  content: "This figure failed to load.";
+  display: block; padding: 2rem; text-align: center; color: var(--c-bad); font-size: var(--step--1);
+}
+
+/* Placeholder height before a figure lazily mounts, to avoid scroll jumps */
+.fig:empty { min-height: 240px; }

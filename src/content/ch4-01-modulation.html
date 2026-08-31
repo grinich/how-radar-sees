@@ -1,0 +1,28 @@
+<p class="lead">Starlink was built to move internet, not to make radar images. But radar and
+communications are the same physics wearing different clothes, and the radios Starlink flies are
+extraordinary. This part is a tour of that hardware — modulation, antennas, amplifiers — so that
+in Part 5 we can ask what it could do if pointed at the ground as a radar.</p>
+
+<h2>Writing bits onto a wave</h2>
+
+<p>To send ones and zeros through space, you stamp them onto an oscillating carrier by nudging its
+amplitude and phase. Plot each symbol as a point whose distance from the origin is amplitude and
+whose angle is phase, and you get a <span class="t-echo">constellation diagram</span>. Two points
+(BPSK) carry one bit each; four (QPSK) carry two; Starlink's 256-QAM packs eight bits into 256
+points. More points mean more data — but they crowd closer together, so
+<span class="t-noise">noise</span> starts flipping bits. Add noise and watch the symbols smear.</p>
+
+<figure class="fig fig--wide" data-figure="iq-constellation">
+  <figcaption>The I/Q constellation. Pick a scheme (BPSK → 256-QAM) and add channel noise; each
+  received symbol scatters around its ideal point. When the clouds overlap, the decoder guesses wrong
+  and the bit-error rate climbs. Higher-order schemes carry more bits but need a cleaner signal.</figcaption>
+</figure>
+
+<p>So there is an optimal modulation for every signal-to-noise ratio: use the densest constellation
+whose clouds still stay apart. A modern system re-chooses it, per user, many times a second.</p>
+
+<figure class="fig fig--wide" data-figure="ber-curves">
+  <figcaption>Bit-error rate versus signal-to-noise. Each scheme has its own curve; the best choice
+  is whichever delivers the most bits per hertz below your error threshold. Slide the SNR and see
+  which modulation wins.</figcaption>
+</figure>

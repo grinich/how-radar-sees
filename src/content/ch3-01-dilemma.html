@@ -1,0 +1,27 @@
+<p class="lead">A still image misplaces everything that moves — which means a radar that can
+<em>correctly</em> place moving things can track them. Doing that over wide areas, for targets from
+walking soldiers to Mach-8 warheads, is the hardest problem in the field — a persistent, all-weather
+tracking capability the Pentagon has pursued for decades, and that defence reporting calls a
+<a href="https://www.twz.com/space/tracking-ground-air-targets-via-space-force-by-2030-but-aircraft-will-still-play-a-part" target="_blank" rel="noopener">"holy grail" of surveillance</a>. The US is now
+building exactly this — a Space Force / NRO constellation of ground-moving-target radar satellites,
+with launches slated from 2028. This part builds the tools, one tension at a time.</p>
+
+<h2>The Doppler dilemma</h2>
+
+<p>Everything hinges on one number: the <span class="t-transmit">pulse repetition frequency</span>,
+or PRF — how often the radar shouts. It is squeezed from both sides. It must be <em>high</em> enough
+to sample the Doppler bandwidth, or moving and off-centre returns alias into ghosts. But it must be
+<em>low</em> enough that the echo from one pulse returns before the next goes out, or distant returns
+get eclipsed and ranges fold on top of each other. Better resolution widens the Doppler bandwidth
+and pushes the floor up; a wider swath pushes the ceiling down. Slide the PRF and watch the two
+walls close in.</p>
+
+<figure class="fig fig--wide" data-figure="doppler-dilemma">
+  <figcaption>The Doppler dilemma. Below the Doppler floor, azimuth ambiguities ghost the scene;
+  above the range-ambiguity ceiling, returns eclipse and fold. The usable PRF window (green) narrows
+  as you demand finer resolution or a wider swath — and for fast movers it can vanish entirely.</figcaption>
+</figure>
+
+<p>For a 25 cm image the Doppler floor alone can demand a 30,000 Hz PRF, while range ambiguity caps
+existing satellites near 6,000 Hz. Those two numbers do not fit. Resolving that squeeze is what the
+rest of this part's machinery is for.</p>

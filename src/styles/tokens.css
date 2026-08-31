@@ -1,0 +1,46 @@
+/* Design tokens. All colors are custom properties so canvases (via theme.js) and
+   dark mode share one source of truth. */
+:root {
+  --bg: #ffffff;
+  --fig-bg: #f7f7f5;
+  --ink: #1b1b1b;
+  --muted: #6b7280;
+  --rule: #e2e2df;
+  --accent: #2b6cb0;
+  --focus: #2b6cb0;
+
+  /* Semantic colors reused in prose and figures */
+  --c-transmit: #c2410c; /* transmit / pulse */
+  --c-echo: #2563eb;     /* echo / signal */
+  --c-target: #15803d;   /* target / ground */
+  --c-noise: #9333ea;    /* noise */
+  --c-good: #15803d;
+  --c-bad: #dc2626;
+
+  --measure: 42rem;      /* ~672px reading column */
+  --font-body: "IBM Plex Sans", ui-sans-serif, system-ui, "Helvetica Neue", Arial, sans-serif;
+  --step--1: 0.86rem;
+  --step-0: 1.19rem;     /* ~19px body, matching the reference */
+  --step-1: 1.5rem;
+  --step-2: 2rem;
+  --step-3: 2.6rem;
+  --lh: 1.62;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1115;
+    --fig-bg: #161a22;
+    --ink: #e7e7e4;
+    --muted: #99a0ab;
+    --rule: #2a2f3a;
+    --accent: #6aa9e9;
+    --focus: #6aa9e9;
+    --c-transmit: #f97316;
+    --c-echo: #6aa9e9;
+    --c-target: #4ade80;
+    --c-noise: #c084fc;
+    --c-good: #4ade80;
+    --c-bad: #f87171;
+  }
+}

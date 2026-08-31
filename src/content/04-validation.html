@@ -1,0 +1,32 @@
+<h2>Is the model real?</h2>
+
+<p>A calculator is only worth trusting if it reproduces reality. Before we point it at Starlink,
+let's aim it at satellites whose numbers are public and see whether it agrees. But first, a word
+about <span class="t-transmit">frequency</span>. Radar lives in named bands, and each is a different
+compromise between resolution, atmospheric penetration, and what the law allows. Higher frequencies
+carry more bandwidth (sharper images) but are chewed up by rain and water vapour; lower frequencies
+shrug off weather but need enormous antennas.</p>
+
+<figure class="fig fig--wide" data-figure="band-chart">
+  <figcaption>The radar bands and atmospheric absorption. Hover the bands; note where Starlink's own
+  transmit frequencies fall — mostly just outside the slices of spectrum that radars are legally
+  allowed to use.</figcaption>
+</figure>
+
+<p>Now the test. <span class="t-echo">ICEYE</span> flies the most numerous commercial radar
+satellites — small X-band craft with a modest antenna. <span class="t-echo">NISAR</span> is a
+NASA/ISRO giant with a 12-metre dish working at long L- and S-band wavelengths. They sit at opposite
+corners of the design space, which makes them a stringent pair to reproduce. Feed each one's
+published parameters into our engine and compare what it predicts against what the operators
+advertise.</p>
+
+<figure class="fig fig--wide" data-figure="validation-planner">
+  <figcaption>Model versus reality, live. Load each satellite and the same engine reproduces its
+  published resolution and sensitivity (NESZ) — shown beside the real figures — while the SNR curve
+  tracks the bandwidth. Agreement to about a decibel is all we need to trust the tool going
+  forward.</figcaption>
+</figure>
+
+<p>They match. The engine reproduces a tiny commercial X-band satellite and a giant scientific L-band
+one using the same equation, so we can believe it when it tells us something surprising. And it is
+about to.</p>

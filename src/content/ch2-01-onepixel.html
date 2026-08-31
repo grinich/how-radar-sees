@@ -1,0 +1,22 @@
+<p class="lead">In Part 1 we learned how strong and how sharp a radar echo can be. But an echo
+is not a picture. A camera has millions of pixels; a radar antenna, pointed at a scene, sees just
+<em>one</em>. So how does a satellite build a crisp image from a single fat beam? That is the
+strange and beautiful trick of <span class="t-echo">synthetic aperture radar</span> (SAR), and it is
+what this part is about.</p>
+
+<h2>The one-pixel problem</h2>
+
+<p>The angular sharpness of any antenna is set by its size measured in wavelengths: roughly
+<em>λ / D</em>. A camera lens is tens of thousands of wavelengths of visible light across, so it
+resolves millions of angular pixels. A radar antenna is only a handful of wavelengths across, so its
+beam is enormously wide — a single blurry angular pixel. To make an image the old way, a radar would
+have to sweep that fat beam across the scene, one coarse pixel at a time.</p>
+
+<figure class="fig fig--wide" data-figure="one-pixel">
+  <figcaption>Real aperture: angular resolution is λ/D. Shrink the antenna or lengthen the
+  wavelength and the beam balloons into a single useless pixel. Compare the optical camera (millions
+  of fine pixels) with the radar (one fat one).</figcaption>
+</figure>
+
+<p>To match a camera's sharpness, a radar antenna at X-band would need to be <em>kilometres</em>
+across. You cannot fly a kilometre-wide dish. But — remarkably — you can <em>fake</em> one.</p>

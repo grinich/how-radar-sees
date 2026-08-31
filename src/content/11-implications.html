@@ -1,0 +1,66 @@
+<h2>Why space datacenters — and what it all means</h2>
+
+<p>There is a bottleneck hiding behind every capability in this essay: <span class="t-noise">data</span>.
+A single wide radar swath, recorded for a few seconds, is a hundred gigabytes. Forming an image of
+the whole Earth would take tens to hundreds of exaflops — more compute than exists to spare, and far
+more data than even laser links can carry to the ground. The only way to use this firehose is to
+process it where it is collected: in orbit.</p>
+
+<figure class="fig fig--wide" data-figure="data-scale">
+  <figcaption>The data problem. One swath against a laser link's capacity; whole-Earth imaging
+  against the compute of a large datacenter. The gap is why on-orbit processing — not ground
+  stations — is the real purpose of the space datacenters SpaceX has announced.</figcaption>
+</figure>
+
+<p>Which reframes those announced orbital datacenters entirely. They will not out-compete ground-based
+GPU farms at serving chatbots. But as the brain that turns a planet-scale radar and signals-intelligence
+firehose into finished intelligence, they make sense — and the customers who would pay for that
+capability have budgets measured in the trillions.</p>
+
+<h2>Final words</h2>
+
+<p>We started with a simple echo and built, step by step, to an uncomfortable conclusion. Nothing in
+this essay requires exotic new physics; it is the same radar equation we met at the beginning, applied
+to hardware that is already flying or announced. Starlink version 3 has the latent potential to be the
+most capable imaging and signals-intelligence constellation ever built, with only modest modification.</p>
+
+<p>That is worth sitting with. A capability like this in the hands of any single actor — private or
+government — raises hard questions about surveillance, warfare, and the concentration of power, and
+about the legal loopholes that let commercial imagery be sold back to states that could not collect
+it directly. This essay's aim is not alarm but literacy: the physics is knowable, the tradeoffs are
+computable, and an informed public is in a far better position to decide what should and shouldn't be
+built. Now you can compute the tradeoffs yourself. Scroll back up, and experiment.</p>
+
+<h2>Sources &amp; further reading</h2>
+
+<p>This essay is an educational retelling of the video
+<a href="https://www.youtube.com/watch?v=jbp3kdJZ1_A" target="_blank" rel="noopener">"Is Starlink A
+Secret Radar Constellation?"</a> by Noise In Space, whose open-source simulations the physics here is
+faithfully ported from. Full credit for the original analysis belongs to the creator; the references
+below are where to go deeper.</p>
+
+<ul>
+  <li><a href="https://www.youtube.com/watch?v=jbp3kdJZ1_A" target="_blank" rel="noopener">"Is Starlink
+  A Secret Radar Constellation?" — Noise In Space</a>: the original video this piece retells.</li>
+  <li><a href="https://github.com/noiseinspacechannel/NIS-Starlink-Radar-Video" target="_blank" rel="noopener">NIS-Starlink-Radar-Video</a>:
+  the creator's open-source radar simulations (MIT License), from which every equation in this essay is ported.</li>
+  <li><a href="https://www.twz.com/space/tracking-ground-air-targets-via-space-force-by-2030-but-aircraft-will-still-play-a-part" target="_blank" rel="noopener">The
+  War Zone — tracking ground and air targets from space</a>: the defence reporting behind the
+  "holy grail" surveillance claim in Part 3.</li>
+  <li><a href="https://en.wikipedia.org/wiki/Synthetic-aperture_radar" target="_blank" rel="noopener">Synthetic-aperture
+  radar (Wikipedia)</a>: how a moving antenna synthesises a large aperture for fine azimuth resolution.</li>
+  <li><a href="https://en.wikipedia.org/wiki/Radar" target="_blank" rel="noopener">Radar (Wikipedia)</a>:
+  fundamentals and the radar range equation that the SNR budget is built on.</li>
+  <li><a href="https://www.itu.int/rec/R-REC-P.676/en" target="_blank" rel="noopener">ITU-R Recommendation
+  P.676</a>: the standard model for atmospheric gas attenuation used in the band chart.</li>
+  <li><a href="https://sentiwiki.copernicus.eu/web/s1-mission" target="_blank" rel="noopener">ESA Sentinel-1
+  mission (SentiWiki)</a>: a canonical, well-documented operational C-band SAR constellation.</li>
+  <li><a href="https://nisar.jpl.nasa.gov/" target="_blank" rel="noopener">NASA–ISRO NISAR mission</a>:
+  the L/S-band SAR giant used as a validation benchmark in Part 1.</li>
+  <li><a href="https://www.iceye.com/" target="_blank" rel="noopener">ICEYE</a>: the commercial X-band
+  SAR constellation used as the other validation benchmark.</li>
+</ul>
+
+<p class="note">The ported physics and simulations are © 2026 noiseinspacechannel, released under the
+MIT License (see the project's notices for full attribution). This retelling is an independent
+educational work; all credit for the original analysis belongs to Noise In Space.</p>
