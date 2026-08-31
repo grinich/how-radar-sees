@@ -45,6 +45,8 @@ const GLOSSARY = {
   'nulling': "Shaping an array's pattern to put a blind spot (a null) in a chosen direction, to reject a jammer or clutter.",
 };
 
+import { attachPopClamp } from './popclamp.js';
+
 const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 function makeGloss(text, def) {
@@ -63,6 +65,7 @@ function makeGloss(text, def) {
   pop.setAttribute('role', 'tooltip');
   pop.textContent = def;
   span.append(icon, pop);
+  attachPopClamp(span, pop);
   return span;
 }
 

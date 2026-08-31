@@ -42,6 +42,8 @@ const ENTITIES = {
   'Pentagon': { blurb: 'Headquarters of the US Department of Defense, and a common metonym for the American military leadership.', wiki: 'https://en.wikipedia.org/wiki/The_Pentagon', icon: ORG_ICON },
 };
 
+import { attachPopClamp } from './popclamp.js';
+
 const escapeRe = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 function makeCard(text, e) {
@@ -58,6 +60,7 @@ function makeCard(text, e) {
     `<span class="entity__blurb">${e.blurb}</span>` +
     `<a class="entity__link" href="${e.wiki}" target="_blank" rel="noopener">Read on Wikipedia →</a></span>`;
   span.append(card);
+  attachPopClamp(span, card);
   return span;
 }
 

@@ -1,6 +1,9 @@
 /* Reset-ish + reading column typography (Ciechanowski-style single column). */
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
+/* clip (not hidden): kills sideways scroll from off-screen popups without
+   turning html/body into scroll containers */
+html, body { overflow-x: clip; }
 body {
   margin: 0;
   background: var(--bg);

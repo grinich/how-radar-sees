@@ -44,16 +44,21 @@
 /* Glossary term with hover/focus definition popup */
 .gloss { position: relative; border-bottom: 1px dotted var(--muted); cursor: help; }
 .gloss__i { font-size: 0.6em; color: var(--accent); font-weight: 700; font-style: normal; margin-left: 1px; vertical-align: super; }
+/* --pop-shift (set in popclamp.js) nudges an open popup back inside the
+   viewport when its term sits near the column edge */
 .gloss__pop {
-  position: absolute; bottom: calc(100% + 9px); left: 50%; transform: translateX(-50%);
-  width: max-content; max-width: 17rem; padding: 0.6rem 0.75rem; border-radius: 8px;
+  position: absolute; bottom: calc(100% + 9px); left: 50%;
+  transform: translateX(calc(-50% + var(--pop-shift, 0px)));
+  width: max-content; max-width: min(17rem, calc(100vw - 2.5rem)); padding: 0.6rem 0.75rem; border-radius: 8px;
   background: var(--ink); color: var(--bg);
   font-size: 0.8rem; font-weight: 400; line-height: 1.42; text-align: left; white-space: normal;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28); z-index: 30;
   opacity: 0; visibility: hidden; transition: opacity 0.12s ease; pointer-events: none;
 }
 .gloss__pop::after {
-  content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+  content: ''; position: absolute; top: 100%;
+  left: calc(50% - var(--pop-shift, 0px)); /* counter-shift: arrow stays on the term */
+  transform: translateX(-50%);
   border: 6px solid transparent; border-top-color: var(--ink);
 }
 .gloss:hover .gloss__pop, .gloss:focus .gloss__pop, .gloss:focus-within .gloss__pop { opacity: 1; visibility: visible; }
@@ -62,9 +67,9 @@
 /* Named-entity info card (satellites / operators) */
 .entity { position: relative; border-bottom: 1px dotted var(--accent); color: var(--accent); font-weight: 600; cursor: help; }
 .entity__card {
-  position: absolute; top: calc(100% + 10px); left: 0;
+  position: absolute; top: calc(100% + 10px); left: var(--pop-shift, 0px);
   display: flex; gap: 0.7rem; align-items: flex-start;
-  width: max-content; max-width: 20rem; padding: 0.75rem 0.85rem; border-radius: 10px;
+  width: max-content; max-width: min(20rem, calc(100vw - 2.5rem)); padding: 0.75rem 0.85rem; border-radius: 10px;
   background: var(--bg); color: var(--ink); border: 1px solid var(--rule);
   box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22); z-index: 40;
   opacity: 0; visibility: hidden; transform: translateY(-4px);
