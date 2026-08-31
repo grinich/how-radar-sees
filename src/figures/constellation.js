@@ -6,7 +6,7 @@
 import { ThreeFigure } from '../core/ThreeFigure.js';
 import { colInt } from '../core/draw.js';
 import { palette } from '../core/theme.js';
-import earthUrl from '../assets/earth.jpg';
+import coastlines from '../assets/coastline.json';
 
 const R_EARTH = 2;
 const R_ORBIT = 2.38;
@@ -35,21 +35,17 @@ export default class Constellation extends ThreeFigure {
     const sun = new THREE.DirectionalLight(0xffffff, 1.05); sun.position.set(5, 3, 5); this.scene.add(sun);
 
     this.globe = new THREE.Group(); this.scene.add(this.globe);
-    // Real Earth (NASA Blue Marble, public domain). Loaded async; the map appears
-    // once decoded. Faint emissive keeps the night side from going pure black.
-    const earthMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 1, metalness: 0, emissive: 0x0b1a30, emissiveIntensity: 0.28 });
-    const earth = new THREE.Mesh(new THREE.SphereGeometry(R_EARTH, 64, 64), earthMat);
+    // Clean line-art globe: a dark ocean sphere with bright continent outlines
+    // (Natural Earth coastlines, public domain) — easy to read, not a photo.
+    const earth = new THREE.Mesh(new THREE.SphereGeometry(R_EARTH, 64, 48),
+      new THREE.MeshBasicMaterial({ color: 0x0b2138 }));
     this.globe.add(earth);
-    new THREE.TextureLoader().load(earthUrl, (tex) => {
-      tex.colorSpace = THREE.SRGBColorSpace;
-      tex.anisotropy = Math.min(4, this.renderer?.capabilities.getMaxAnisotropy?.() || 1);
-      earthMat.map = tex; earthMat.emissiveMap = tex; earthMat.needsUpdate = true;
-      this.draw();
-    });
+    this.globe.add(new THREE.LineSegments(coastlineGeo(THREE, R_EARTH * 1.003, coastlines),
+      new THREE.LineBasicMaterial({ color: 0x8fc4ff, transparent: true, opacity: 0.85 })));
     this.globe.add(new THREE.Mesh(new THREE.SphereGeometry(R_EARTH * 1.03, 40, 40),
-      new THREE.MeshBasicMaterial({ color: colInt(c.echoCol), transparent: true, opacity: 0.09, side: THREE.BackSide })));
+      new THREE.MeshBasicMaterial({ color: colInt(c.echoCol), transparent: true, opacity: 0.11, side: THREE.BackSide })));
     this.globe.add(new THREE.LineSegments(graticule(THREE, R_EARTH * 1.004),
-      new THREE.LineBasicMaterial({ color: colInt(c.echoCol, 0.7), transparent: true, opacity: 0.1 })));
+      new THREE.LineBasicMaterial({ color: colInt(c.echoCol, 0.7), transparent: true, opacity: 0.08 })));
 
     // orbital-plane rings (faint)
     this.rings = new THREE.LineSegments(new THREE.BufferGeometry(),
@@ -109,16 +105,24 @@ export default class Constellation extends ThreeFigure {
       this.sats.setMatrixAt(i, this._dummy.matrix);
     }
     this.sats.instanceMatrix.needsUpdate = true;
-    // beams from a spread of front-facing satellites to their sub-points
+    // beams from a spread of front-facing satellites — aimed OFF-nadir (a real
+    // beam looks out to the side, not straight down at the sub-satellite point)
     const nb = this.params.beams, verts = [];
     if (nb > 0) {
+      const UP = new THREE.Vector3(0, 1, 0);
       const step = Math.max(1, Math.floor(this.elems.length / (nb * 2)));
       let placed = 0;
       for (let i = 0; i < this.elems.length && placed < nb; i += step) {
         const e = this.elems[i];
         const sp = orbitPos(e.raan, INCL, e.theta0 + w, R_ORBIT, new THREE.Vector3());
         if (sp.z < 0.2) continue; // front hemisphere
-        const g = sp.clone().normalize().multiplyScalar(R_EARTH);
+        const subDir = sp.clone().normalize();
+        const tan = new THREE.Vector3().crossVectors(subDir, UP);
+        if (tan.lengthSq() < 1e-4) tan.set(1, 0, 0);
+        tan.normalize();
+        const side = (i % 2) ? 1 : -1;
+        const ang = 0.32 + 0.3 * (((i * 7) % 5) / 5); // ~18°–36° off-nadir, varied
+        const g = subDir.multiplyScalar(Math.cos(ang)).addScaledVector(tan, side * Math.sin(ang)).multiplyScalar(R_EARTH);
         verts.push(sp.x, sp.y, sp.z, g.x, g.y, g.z); placed++;
       }
     }
@@ -133,6 +137,26 @@ export default class Constellation extends ThreeFigure {
     if (this.THREE) this.updateSats(this.THREE);
     this.orbit?.update();
   }
+}
+
+// lon/lat (degrees) -> point on a sphere of radius R (matches the graticule convention)
+function lonLat(lon, lat, R) {
+  const a = lon * Math.PI / 180, b = lat * Math.PI / 180, cb = Math.cos(b);
+  return [Math.cos(a) * cb * R, Math.sin(b) * R, Math.sin(a) * cb * R];
+}
+
+// Build coastline outlines (array of [lon,lat] polylines) as line segments.
+function coastlineGeo(THREE, R, lines) {
+  const verts = [];
+  for (const line of lines) {
+    for (let i = 0; i < line.length - 1; i++) {
+      const a = lonLat(line[i][0], line[i][1], R), b = lonLat(line[i + 1][0], line[i + 1][1], R);
+      verts.push(a[0], a[1], a[2], b[0], b[1], b[2]);
+    }
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+  return g;
 }
 
 function graticule(THREE, R) {

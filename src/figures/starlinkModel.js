@@ -1,96 +1,113 @@
 // @ts-check
-// The three Starlink generations side by side, drawn to the same scale beside a
-// 1.8 m person — so their real size, and its growth, is legible. Each satellite
-// is modelled on the real deployed shape: a compact bus with the Earth-facing
-// phased-array antenna underneath, and one long solar array. Drag to rotate.
-// Antenna size and transmit power set a radar's reach, which is why the jump from
-// V2 Mini to V3 matters by the end of the essay.
+// The Starlink generations to scale, beside a 1.8 m person. They are genuinely
+// different craft, not one model scaled: V1.5 has a single solar array; V2 and V3
+// have two symmetric arrays on a larger, detailed bus, V3's longer still. Modelled
+// on SpaceX's own generation-comparison render. Drag to rotate. Antenna size and
+// transmit power set a radar's reach — which is why V2→V3 matters by the essay's end.
 import { ThreeFigure } from '../core/ThreeFigure.js';
 import { roundRect, FONT } from '../core/draw.js';
 
-// Approximate deployed dimensions (metres). span = solar-array long dimension.
+// arrays = number of solar wings; dims in metres. span = tip-to-tip.
 const GENS = [
-  { key: 'v1',     name: 'v1.5',    span: '≈10 m', busL: 2.8, busW: 1.3, busH: 0.32, arrLen: 8.1,  arrW: 2.6, x: -4.6 },
-  { key: 'v2mini', name: 'V2 Mini', span: '≈22 m', busL: 4.1, busW: 2.0, busH: 0.38, arrLen: 12.8, arrW: 4.1, x: 2 },
-  { key: 'v3',     name: 'V3',      span: '≈30 m', busL: 5.6, busW: 2.8, busH: 0.45, arrLen: 18.5, arrW: 6.0, x: 11 },
+  { key: 'v1', name: 'V1.5', span: '≈10 m', arrays: 1, busL: 2.8, busW: 1.3, arrLen: 7.6, arrW: 2.3, pods: false, x: -2.5, z: -9.5 },
+  { key: 'v2', name: 'V2',   span: '≈30 m', arrays: 2, busL: 4.2, busW: 2.6, arrLen: 11,  arrW: 3.0, pods: true,  x: 0,    z: 0 },
+  { key: 'v3', name: 'V3',   span: '≈52 m', arrays: 2, busL: 6.4, busW: 2.9, arrLen: 20,  arrW: 3.4, pods: true,  x: 2.5,  z: 11 },
 ];
-const PERSON_X = -9.4;
+const PERSON = { x: -8.5, z: -9.5 };
 
 export default class StarlinkModel extends ThreeFigure {
   build(THREE) {
-    this.scene.add(new THREE.AmbientLight(0xffffff, 0.8));
-    const key = new THREE.DirectionalLight(0xffffff, 0.95); key.position.set(6, 9, 7); this.scene.add(key);
-    const fill = new THREE.DirectionalLight(0x88aaff, 0.35); fill.position.set(-6, -1, -4); this.scene.add(fill);
+    this.scene.add(new THREE.AmbientLight(0xffffff, 0.85));
+    const key = new THREE.DirectionalLight(0xffffff, 1.0); key.position.set(5, 10, 6); this.scene.add(key);
+    const fill = new THREE.DirectionalLight(0x89b0ff, 0.35); fill.position.set(-6, 3, -5); this.scene.add(fill);
 
     const root = this.root3 = new THREE.Group();
-    root.scale.setScalar(0.28);
+    root.scale.setScalar(0.235);
     this.scene.add(root);
 
-    // ground line for the "standing on the ground" scale read
-    const gl = [];
-    for (let x = -13; x <= 16; x += 2) { gl.push(new THREE.Vector3(x, 0, -4), new THREE.Vector3(x, 0, 4)); }
-    gl.push(new THREE.Vector3(-13, 0, 0), new THREE.Vector3(16, 0, 0));
-    root.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(gl),
-      new THREE.LineBasicMaterial({ color: 0x3a4356, transparent: true, opacity: 0.5 })));
-
     const mats = {
-      bus: new THREE.MeshStandardMaterial({ color: 0x2b303a, roughness: 0.55, metalness: 0.5 }),
+      bus: new THREE.MeshStandardMaterial({ color: 0x30353f, roughness: 0.5, metalness: 0.55 }),
       ant: new THREE.MeshStandardMaterial({ color: 0x3f6bbf, emissive: 0x16294a, emissiveIntensity: 0.4, roughness: 0.4, metalness: 0.4 }),
-      array: new THREE.MeshStandardMaterial({ color: 0x17294c, emissive: 0x0a1830, emissiveIntensity: 0.5, roughness: 0.4, metalness: 0.6, side: THREE.DoubleSide }),
-      grid: new THREE.LineBasicMaterial({ color: 0x4a76ad, transparent: true, opacity: 0.4 }),
-      person: new THREE.MeshStandardMaterial({ color: 0x9aa4b4, roughness: 0.9, metalness: 0.05 }),
+      array: new THREE.MeshStandardMaterial({ color: 0x1b3157, emissive: 0x0a1830, emissiveIntensity: 0.45, roughness: 0.45, metalness: 0.55, side: THREE.DoubleSide }),
+      grid: new THREE.LineBasicMaterial({ color: 0x6f9fd8, transparent: true, opacity: 0.45 }),
+      pod: new THREE.MeshStandardMaterial({ color: 0xc7d0dc, roughness: 0.4, metalness: 0.5 }),
+      boom: new THREE.MeshStandardMaterial({ color: 0x8a94a4, roughness: 0.6, metalness: 0.4 }),
+      person: new THREE.MeshStandardMaterial({ color: 0xa2acbc, roughness: 0.85, metalness: 0.05 }),
     };
 
     for (const s of GENS) {
       const sat = buildSat(THREE, s, mats);
-      sat.position.x = s.x;
+      sat.position.set(s.x, 0, s.z);
       root.add(sat);
       const label = makeLabel(THREE, s.name, s.span);
-      label.position.set(s.x, -1.5, 0);
+      label.position.set(s.x - s.busL / 2 - 1.6, 1.0, s.z);
       root.add(label);
     }
 
     const person = buildPerson(THREE, mats.person);
-    person.position.x = PERSON_X;
+    person.position.set(PERSON.x, 0, PERSON.z);
     root.add(person);
     const plabel = makeLabel(THREE, 'person', '1.8 m');
-    plabel.position.set(PERSON_X, -1.5, 0);
+    plabel.position.set(PERSON.x, 2.6, PERSON.z);
     root.add(plabel);
 
-    this.camera.position.set(0.4, 3.2, 10.2);
-    this.camera.lookAt(0.4, 2.75, 0);
-    this.orbit.target.set(0.4, 2.75, 0);
+    this.camera.position.set(1.5, 9.5, 12.5);
+    this.camera.lookAt(1.5, 0.4, 1);
+    this.orbit.target.set(1.5, 0.4, 1);
 
     this.readout = document.createElement('div');
     this.readout.className = 'fig__readout';
     this.readout.innerHTML =
-      '<span>All three to the same scale, beside a <b>1.8 m</b> person.</span>' +
-      '<span>Each: a compact bus, the Earth-facing phased array underneath, one long solar array.</span>';
+      '<span>To scale, beside a <b>1.8 m</b> person.</span>' +
+      '<span>V1.5: one solar array · V2 &amp; V3: two, on a larger bus.</span>';
     this.root.append(this.readout);
   }
 
-  update(dt) { if (this.root3) this.root3.rotation.y += dt * 0.16; this.orbit?.update(); }
+  update(dt) { if (this.root3) this.root3.rotation.y += dt * 0.14; this.orbit?.update(); }
 }
 
 function buildSat(THREE, s, mats) {
   const g = new THREE.Group();
-  // compact bus
-  const bus = new THREE.Mesh(new THREE.BoxGeometry(s.busL, s.busH, s.busW), mats.bus);
-  bus.position.y = s.busH / 2 + 0.03;
+  const busH = 0.22 + s.busW * 0.02;
+  const bus = new THREE.Mesh(new THREE.BoxGeometry(s.busL, busH, s.busW), mats.bus);
+  bus.position.y = busH / 2;
   g.add(bus);
-  // Earth-facing phased-array antenna on the underside
-  const ant = new THREE.Mesh(new THREE.BoxGeometry(s.busL * 0.9, 0.05, s.busW * 0.8), mats.ant);
-  ant.position.y = 0.0;
+  // Earth-facing phased array on the underside
+  const ant = new THREE.Mesh(new THREE.BoxGeometry(s.busL * 0.9, 0.05, s.busW * 0.86), mats.ant);
   g.add(ant);
-  // one long solar array standing up from the bus
-  const arr = new THREE.Mesh(new THREE.BoxGeometry(s.arrW, s.arrLen, 0.06), mats.array);
-  arr.position.y = s.busH + s.arrLen / 2;
-  g.add(arr);
-  // solar-cell grid
-  const cl = [], y0 = s.busH + 0.04, y1 = s.busH + s.arrLen - 0.04, hw = s.arrW / 2 - 0.04, cols = 3;
-  const rows = Math.max(6, Math.round(s.arrLen / 1.3));
-  for (let i = 0; i <= cols; i++) { const x = -hw + 2 * hw * i / cols; cl.push(new THREE.Vector3(x, y0, 0.05), new THREE.Vector3(x, y1, 0.05)); }
-  for (let j = 0; j <= rows; j++) { const y = y0 + (y1 - y0) * j / rows; cl.push(new THREE.Vector3(-hw, y, 0.05), new THREE.Vector3(hw, y, 0.05)); }
+  // corner pods (star trackers / thrusters) on the bigger buses
+  if (s.pods) {
+    for (const sx of [-1, 1]) for (const sz of [-1, 1]) {
+      const pod = new THREE.Mesh(new THREE.SphereGeometry(0.26, 12, 12), mats.pod);
+      pod.position.set(sx * s.busL * 0.4, busH * 0.5, sz * s.busW * 0.42);
+      g.add(pod);
+    }
+  }
+  const sides = s.arrays === 2 ? [1, -1] : [1];
+  for (const dir of sides) {
+    const arr = buildArray(THREE, s.arrLen, s.arrW, mats);
+    arr.scale.x = dir;
+    arr.position.x = dir * (s.busL / 2);
+    g.add(arr);
+    const boom = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.7, 8), mats.boom);
+    boom.rotation.z = Math.PI / 2;
+    boom.position.set(dir * (s.busL / 2 + 0.3), busH * 0.45, 0);
+    g.add(boom);
+  }
+  return g;
+}
+
+// A flat solar array lying in the X–Z plane, extending in +X from a small gap.
+function buildArray(THREE, len, w, mats) {
+  const g = new THREE.Group();
+  const gap = 0.65;
+  const panel = new THREE.Mesh(new THREE.BoxGeometry(len, 0.05, w), mats.array);
+  panel.position.x = gap + len / 2;
+  g.add(panel);
+  const cl = [], cols = Math.max(6, Math.round(len / 1.1)), rows = 3;
+  const x0 = gap, x1 = gap + len, hz = w / 2 - 0.03, y = 0.04;
+  for (let i = 0; i <= cols; i++) { const x = x0 + (x1 - x0) * i / cols; cl.push(new THREE.Vector3(x, y, -hz), new THREE.Vector3(x, y, hz)); }
+  for (let j = 0; j <= rows; j++) { const z = -hz + 2 * hz * j / rows; cl.push(new THREE.Vector3(x0, y, z), new THREE.Vector3(x1, y, z)); }
   g.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(cl), mats.grid));
   return g;
 }
@@ -112,6 +129,6 @@ function makeLabel(THREE, text, sub) {
   if (sub) { g.fillStyle = '#9db4d4'; g.font = `32px ${FONT}`; g.fillText(sub, 160, 92); }
   const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace;
   const spr = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false, depthWrite: false }));
-  spr.scale.set(3.6, 3.6 * 116 / 320, 1);
+  spr.scale.set(4.2, 4.2 * 116 / 320, 1);
   return spr;
 }
