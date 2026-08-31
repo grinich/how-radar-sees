@@ -51,9 +51,9 @@ export default class StarlinkModel extends ThreeFigure {
     plabel.position.set(PERSON.x, 2.6, PERSON.z);
     root.add(plabel);
 
-    this.camera.position.set(1.5, 9.5, 12.5);
-    this.camera.lookAt(1.5, 0.4, 1);
-    this.orbit.target.set(1.5, 0.4, 1);
+    this.camera.position.set(1.3, 6.8, 9.6);
+    this.camera.lookAt(1.3, 0.25, 0.6);
+    this.orbit.target.set(1.3, 0.25, 0.6);
 
     this.readout = document.createElement('div');
     this.readout.className = 'fig__readout';

@@ -13,7 +13,7 @@
 
 /* Segmented control — an inset rounded "pill" floating in a padded track */
 .seg {
-  display: inline-flex; gap: 2px; padding: 3px;
+  display: inline-flex; gap: 2px; padding: 3px; justify-self: start;
   border: 1px solid var(--rule); border-radius: 9px; background: var(--fig-bg);
 }
 .seg__btn {
