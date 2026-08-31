@@ -36,7 +36,7 @@ body {
   text-shadow: 0 2px 26px rgba(0,0,0,0.55);
 }
 
-.prose { max-width: var(--measure); margin-inline: auto; padding: 0 1.25rem 6rem; }
+.prose { max-width: var(--measure); margin-inline: auto; padding: clamp(2rem, 5vw, 3.2rem) 1.25rem 6rem; }
 .prose > * { margin-inline: auto; }
 
 .post-title { font-size: var(--step-3); font-weight: 600; line-height: 1.1; letter-spacing: -0.02em; margin: 2.2rem 0 0.4rem; }

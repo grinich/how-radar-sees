@@ -6,6 +6,7 @@
 import { ThreeFigure } from '../core/ThreeFigure.js';
 import { colInt } from '../core/draw.js';
 import { palette } from '../core/theme.js';
+import earthUrl from '../assets/earth.jpg';
 
 const R_EARTH = 2;
 const R_ORBIT = 2.38;
@@ -34,13 +35,21 @@ export default class Constellation extends ThreeFigure {
     const sun = new THREE.DirectionalLight(0xffffff, 1.05); sun.position.set(5, 3, 5); this.scene.add(sun);
 
     this.globe = new THREE.Group(); this.scene.add(this.globe);
-    const earth = new THREE.Mesh(new THREE.SphereGeometry(R_EARTH, 48, 48),
-      new THREE.MeshStandardMaterial({ color: 0x123a63, roughness: 0.95, emissive: 0x08172a, emissiveIntensity: 0.5 }));
+    // Real Earth (NASA Blue Marble, public domain). Loaded async; the map appears
+    // once decoded. Faint emissive keeps the night side from going pure black.
+    const earthMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 1, metalness: 0, emissive: 0x0b1a30, emissiveIntensity: 0.28 });
+    const earth = new THREE.Mesh(new THREE.SphereGeometry(R_EARTH, 64, 64), earthMat);
     this.globe.add(earth);
+    new THREE.TextureLoader().load(earthUrl, (tex) => {
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.anisotropy = Math.min(4, this.renderer?.capabilities.getMaxAnisotropy?.() || 1);
+      earthMat.map = tex; earthMat.emissiveMap = tex; earthMat.needsUpdate = true;
+      this.draw();
+    });
     this.globe.add(new THREE.Mesh(new THREE.SphereGeometry(R_EARTH * 1.03, 40, 40),
       new THREE.MeshBasicMaterial({ color: colInt(c.echoCol), transparent: true, opacity: 0.09, side: THREE.BackSide })));
     this.globe.add(new THREE.LineSegments(graticule(THREE, R_EARTH * 1.004),
-      new THREE.LineBasicMaterial({ color: colInt(c.echoCol, 0.55), transparent: true, opacity: 0.22 })));
+      new THREE.LineBasicMaterial({ color: colInt(c.echoCol, 0.7), transparent: true, opacity: 0.1 })));
 
     // orbital-plane rings (faint)
     this.rings = new THREE.LineSegments(new THREE.BufferGeometry(),

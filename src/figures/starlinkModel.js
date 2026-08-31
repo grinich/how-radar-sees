@@ -1,92 +1,117 @@
 // @ts-check
-// A Starlink satellite you can spin, shown to scale across generations. The flat
-// underside is the phased-array antenna (Earth-facing); the tall panel is the
-// solar array. Switching generation rescales the model against a fixed grid so
-// the growth in size — and therefore antenna gain and power — is visible. That
-// growth is exactly what makes the later "can it do radar?" answer flip.
+// The three Starlink generations side by side, drawn to the same scale beside a
+// 1.8 m person — so their real size, and its growth, is legible. Each satellite
+// is modelled on the real deployed shape: a compact bus with the Earth-facing
+// phased-array antenna underneath, and one long solar array. Drag to rotate.
+// Antenna size and transmit power set a radar's reach, which is why the jump from
+// V2 Mini to V3 matters by the end of the essay.
 import { ThreeFigure } from '../core/ThreeFigure.js';
-import { palette } from '../core/theme.js';
-import { colInt } from '../core/draw.js';
+import { roundRect, FONT } from '../core/draw.js';
 
-// s = overall size factor (relative), against a fixed reference grid.
-const GENS = {
-  v1:     { name: 'Starlink v1.5',        year: '2021',    span: '≈10 m', mass: '≈260 kg', cap: 'baseline',            bands: 'Ku / Ka',          note: 'First laser inter-satellite links', s: 1.0 },
-  v2mini: { name: 'V2 Mini',              year: '2023',    span: '≈22 m', mass: '≈800 kg', cap: '≈4× the capacity',    bands: 'Ku / Ka',          note: "Today's workhorse — argon Hall thrusters", s: 1.5 },
-  v3:     { name: 'V3 · Direct-to-Cell',  year: '2025–26', span: '≈30 m', mass: '≈1.5 t',  cap: '≈10× the capacity',   bands: 'Ku / Ka + cellular', note: 'Talks straight to ordinary phones; rides Starship', s: 2.0 },
-};
+// Approximate deployed dimensions (metres). span = solar-array long dimension.
+const GENS = [
+  { key: 'v1',     name: 'v1.5',    span: '≈10 m', busL: 2.8, busW: 1.3, busH: 0.32, arrLen: 8.1,  arrW: 2.6, x: -4.6 },
+  { key: 'v2mini', name: 'V2 Mini', span: '≈22 m', busL: 4.1, busW: 2.0, busH: 0.38, arrLen: 12.8, arrW: 4.1, x: 2 },
+  { key: 'v3',     name: 'V3',      span: '≈30 m', busL: 5.6, busW: 2.8, busH: 0.45, arrLen: 18.5, arrW: 6.0, x: 11 },
+];
+const PERSON_X = -9.4;
 
 export default class StarlinkModel extends ThreeFigure {
-  controlsSchema = [
-    { type: 'segmented', name: 'gen', label: 'Generation',
-      options: [['v1.5', 'v1'], ['V2 Mini', 'v2mini'], ['V3', 'v3']], value: 'v2mini' },
-  ];
-
   build(THREE) {
-    const c = palette();
-    this.scene.add(new THREE.AmbientLight(0xffffff, 0.85));
-    const key = new THREE.DirectionalLight(0xffffff, 0.9); key.position.set(5, 7, 5); this.scene.add(key);
-    const fill = new THREE.DirectionalLight(0x88aaff, 0.35); fill.position.set(-5, -2, -3); this.scene.add(fill);
+    this.scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+    const key = new THREE.DirectionalLight(0xffffff, 0.95); key.position.set(6, 9, 7); this.scene.add(key);
+    const fill = new THREE.DirectionalLight(0x88aaff, 0.35); fill.position.set(-6, -1, -4); this.scene.add(fill);
 
-    // Fixed reference grid: the satellite grows against it between generations.
-    this.grid = new THREE.GridHelper(26, 26, colInt(c.rule), colInt(c.rule));
-    this.grid.position.y = -3.4;
-    this.grid.material.transparent = true; this.grid.material.opacity = 0.32;
-    this.scene.add(this.grid);
+    const root = this.root3 = new THREE.Group();
+    root.scale.setScalar(0.28);
+    this.scene.add(root);
 
-    this.sat = new THREE.Group();
-    this.scene.add(this.sat);
+    // ground line for the "standing on the ground" scale read
+    const gl = [];
+    for (let x = -13; x <= 16; x += 2) { gl.push(new THREE.Vector3(x, 0, -4), new THREE.Vector3(x, 0, 4)); }
+    gl.push(new THREE.Vector3(-13, 0, 0), new THREE.Vector3(16, 0, 0));
+    root.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(gl),
+      new THREE.LineBasicMaterial({ color: 0x3a4356, transparent: true, opacity: 0.5 })));
 
-    const chassisMat = new THREE.MeshStandardMaterial({ color: 0xd0d7e2, roughness: 0.5, metalness: 0.5 });
-    const chassis = new THREE.Mesh(new THREE.BoxGeometry(2.4, 0.16, 0.9), chassisMat);
-    this.sat.add(chassis);
+    const mats = {
+      bus: new THREE.MeshStandardMaterial({ color: 0x2b303a, roughness: 0.55, metalness: 0.5 }),
+      ant: new THREE.MeshStandardMaterial({ color: 0x3f6bbf, emissive: 0x16294a, emissiveIntensity: 0.4, roughness: 0.4, metalness: 0.4 }),
+      array: new THREE.MeshStandardMaterial({ color: 0x17294c, emissive: 0x0a1830, emissiveIntensity: 0.5, roughness: 0.4, metalness: 0.6, side: THREE.DoubleSide }),
+      grid: new THREE.LineBasicMaterial({ color: 0x4a76ad, transparent: true, opacity: 0.4 }),
+      person: new THREE.MeshStandardMaterial({ color: 0x9aa4b4, roughness: 0.9, metalness: 0.05 }),
+    };
 
-    // Phased-array antenna, facing Earth (-Y).
-    const antMat = new THREE.MeshStandardMaterial({ color: 0x3f6bbf, roughness: 0.35, metalness: 0.5, emissive: 0x16294a, emissiveIntensity: 0.45 });
-    const antenna = new THREE.Mesh(new THREE.BoxGeometry(2.3, 0.06, 0.82), antMat);
-    antenna.position.y = -0.13; this.sat.add(antenna);
-    const al = [];
-    for (let i = -5; i <= 5; i++) { const x = i * 0.2; al.push(new THREE.Vector3(x, -0.17, -0.4), new THREE.Vector3(x, -0.17, 0.4)); }
-    for (let j = -2; j <= 2; j++) { const z = j * 0.2; al.push(new THREE.Vector3(-1.12, -0.17, z), new THREE.Vector3(1.12, -0.17, z)); }
-    this.sat.add(new THREE.LineSegments(
-      new THREE.BufferGeometry().setFromPoints(al),
-      new THREE.LineBasicMaterial({ color: 0x9dc0f2, transparent: true, opacity: 0.5 })));
+    for (const s of GENS) {
+      const sat = buildSat(THREE, s, mats);
+      sat.position.x = s.x;
+      root.add(sat);
+      const label = makeLabel(THREE, s.name, s.span);
+      label.position.set(s.x, -1.5, 0);
+      root.add(label);
+    }
 
-    // Boom + tall solar array (anti-nadir, +Y).
-    const boom = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.5, 10), chassisMat);
-    boom.position.y = 0.33; this.sat.add(boom);
-    const solarMat = new THREE.MeshStandardMaterial({ color: 0x17294c, roughness: 0.4, metalness: 0.6, emissive: 0x0a1830, emissiveIntensity: 0.5 });
-    const solar = new THREE.Mesh(new THREE.BoxGeometry(1.9, 4.0, 0.05), solarMat);
-    solar.position.y = 2.5; this.sat.add(solar);
-    const cl = [];
-    for (let i = -4; i <= 4; i++) { const x = i * 0.22; cl.push(new THREE.Vector3(x, 0.52, 0.04), new THREE.Vector3(x, 4.48, 0.04)); }
-    for (let j = 0; j <= 9; j++) { const y = 0.52 + j * 0.44; cl.push(new THREE.Vector3(-0.94, y, 0.04), new THREE.Vector3(0.94, y, 0.04)); }
-    this.sat.add(new THREE.LineSegments(
-      new THREE.BufferGeometry().setFromPoints(cl),
-      new THREE.LineBasicMaterial({ color: 0x4a76ad, transparent: true, opacity: 0.4 })));
+    const person = buildPerson(THREE, mats.person);
+    person.position.x = PERSON_X;
+    root.add(person);
+    const plabel = makeLabel(THREE, 'person', '1.8 m');
+    plabel.position.set(PERSON_X, -1.5, 0);
+    root.add(plabel);
+
+    this.camera.position.set(0.4, 3.2, 10.2);
+    this.camera.lookAt(0.4, 2.75, 0);
+    this.orbit.target.set(0.4, 2.75, 0);
 
     this.readout = document.createElement('div');
     this.readout.className = 'fig__readout';
-    this.root.append(this.readout);
-
-    this.camera.position.set(7, 3.4, 8.5);
-    this.orbit.target.set(0, 0.6, 0);
-    this.camera.lookAt(0, 0.6, 0);
-    this.apply();
-  }
-
-  onChange() { this.apply(); }
-
-  apply() {
-    const g = GENS[this.params.gen] || GENS.v2mini;
-    this.sat.scale.setScalar(0.58 * g.s);
     this.readout.innerHTML =
-      `<span>${g.name} · <b>${g.year}</b></span>` +
-      `<span>Span <b>${g.span}</b></span>` +
-      `<span>Mass <b>${g.mass}</b></span>` +
-      `<span>Capacity <b>${g.cap}</b></span>` +
-      `<span>Bands <b>${g.bands}</b></span>` +
-      `<span style="opacity:.75">${g.note}</span>`;
+      '<span>All three to the same scale, beside a <b>1.8 m</b> person.</span>' +
+      '<span>Each: a compact bus, the Earth-facing phased array underneath, one long solar array.</span>';
+    this.root.append(this.readout);
   }
 
-  update(dt) { if (this.sat) this.sat.rotation.y += dt * 0.28; this.orbit?.update(); }
+  update(dt) { if (this.root3) this.root3.rotation.y += dt * 0.16; this.orbit?.update(); }
+}
+
+function buildSat(THREE, s, mats) {
+  const g = new THREE.Group();
+  // compact bus
+  const bus = new THREE.Mesh(new THREE.BoxGeometry(s.busL, s.busH, s.busW), mats.bus);
+  bus.position.y = s.busH / 2 + 0.03;
+  g.add(bus);
+  // Earth-facing phased-array antenna on the underside
+  const ant = new THREE.Mesh(new THREE.BoxGeometry(s.busL * 0.9, 0.05, s.busW * 0.8), mats.ant);
+  ant.position.y = 0.0;
+  g.add(ant);
+  // one long solar array standing up from the bus
+  const arr = new THREE.Mesh(new THREE.BoxGeometry(s.arrW, s.arrLen, 0.06), mats.array);
+  arr.position.y = s.busH + s.arrLen / 2;
+  g.add(arr);
+  // solar-cell grid
+  const cl = [], y0 = s.busH + 0.04, y1 = s.busH + s.arrLen - 0.04, hw = s.arrW / 2 - 0.04, cols = 3;
+  const rows = Math.max(6, Math.round(s.arrLen / 1.3));
+  for (let i = 0; i <= cols; i++) { const x = -hw + 2 * hw * i / cols; cl.push(new THREE.Vector3(x, y0, 0.05), new THREE.Vector3(x, y1, 0.05)); }
+  for (let j = 0; j <= rows; j++) { const y = y0 + (y1 - y0) * j / rows; cl.push(new THREE.Vector3(-hw, y, 0.05), new THREE.Vector3(hw, y, 0.05)); }
+  g.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(cl), mats.grid));
+  return g;
+}
+
+function buildPerson(THREE, mat) {
+  const g = new THREE.Group();
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.13, 16, 16), mat); head.position.y = 1.63; g.add(head);
+  const torso = new THREE.Mesh(new THREE.CapsuleGeometry(0.17, 0.5, 4, 10), mat); torso.position.y = 1.13; g.add(torso);
+  const legs = new THREE.Mesh(new THREE.CapsuleGeometry(0.12, 0.72, 4, 10), mat); legs.position.y = 0.42; g.add(legs);
+  return g;
+}
+
+function makeLabel(THREE, text, sub) {
+  const cv = document.createElement('canvas'); cv.width = 320; cv.height = 116;
+  const g = cv.getContext('2d');
+  g.fillStyle = 'rgba(10,14,22,0.8)'; roundRect(g, 6, 6, 308, 104, 18); g.fill();
+  g.textAlign = 'center';
+  g.fillStyle = '#eaf0f8'; g.font = `600 46px ${FONT}`; g.fillText(text, 160, 50);
+  if (sub) { g.fillStyle = '#9db4d4'; g.font = `32px ${FONT}`; g.fillText(sub, 160, 92); }
+  const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace;
+  const spr = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthTest: false, depthWrite: false }));
+  spr.scale.set(3.6, 3.6 * 116 / 320, 1);
+  return spr;
 }
