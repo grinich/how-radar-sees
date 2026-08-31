@@ -45,6 +45,7 @@ export const registry = {
   // §8 sweep
   'antenna-sweep': () => import('../figures/antennaSweep.js'),
   // §9 DTC
+  'dtc-antenna': () => import('../figures/dtcAntenna.js'),
   'dtc-explorer': () => import('../figures/dtcExplorer.js'),
   'video-sar': () => import('../figures/videoSar.js'),
   // Ch3 — tracking motion
