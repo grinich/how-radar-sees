@@ -60,7 +60,6 @@ export const registry = {
   'sigint': () => import('../figures/sigint.js'),
   // §11 implications
   'data-scale': () => import('../figures/dataScale.js'),
-  'radar-timeline': () => import('../figures/radarTimeline.js'),
   // New concepts
   'coverage-revisit': () => import('../figures/coverageRevisit.js'),
   'insar-fringes': () => import('../figures/insarFringes.js'),
