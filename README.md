@@ -13,7 +13,7 @@ attribution.
 
 **Live at <https://how-radar-sees.pages.dev>** (Cloudflare Pages).
 
-**A single long-scroll interactive essay** (Ciechanowski-style) — 46 interactive figures across five
+**A single long-scroll interactive essay** (Ciechanowski-style) — 52 interactive figures across five
 parts, with a long table of contents down the right side and hover-to-define glossary terms:
 
 1. **Seeing with Echoes** — opens with a **live Starlink tracker** (real TLEs from CelesTrak,

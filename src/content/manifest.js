@@ -23,6 +23,7 @@ export const SECTIONS = [
   'ch3-01-dilemma.html',
   'ch3-02-scan.html',
   'ch3-03-interferometry.html',
+  'ch3-03b-insar.html',
   'ch3-04-crt.html',
   'ch3-05-stap.html',
   'ch3-06-distributed.html',
@@ -39,6 +40,7 @@ export const SECTIONS = [
   '07-duplexing.html',
   '08-sweep.html',
   '09-dtc.html',
+  '10-coverage.html',
   '11-implications.html',
 ];
 

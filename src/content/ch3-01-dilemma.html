@@ -36,3 +36,20 @@ round trip takes nearly 5 ms, dozens of pulse intervals — so the ceiling is no
 one-pulse-at-a-time. It is about sorting echo windows: each pulse's returns must land in a window
 no other pulse's returns can reach. The squeeze is the same; the loopholes in it are where the next
 section lives.</p>
+
+<details class="go-deeper">
+  <summary>Go deeper: one picture holds the whole squeeze</summary>
+  <p>Range resolution, velocity resolution, and this PRF dilemma are not three facts — they are one,
+  and there is a single picture that shows it: the <em>ambiguity function</em>, the radar's response
+  spread over delay (which reads as range) and Doppler (which reads as velocity). Switch the waveform
+  and watch it change shape.</p>
+  <figure class="fig fig--wide" data-figure="ambiguity-function">
+    <figcaption>The ambiguity function. A plain pulse is one broad blob — sharp range and sharp
+    velocity cannot both be had. A chirp is a sheared ridge: sharp, but a shift in velocity now looks
+    like a shift in range. A coherent pulse train is a bed of nails whose peaks repeat every pulse
+    interval in range and every PRF in velocity — the dashed box is the one unambiguous window, and
+    raising the PRF makes it taller in velocity only by making it narrower in range.</figcaption>
+  </figure>
+  <p>That last panel <em>is</em> the dilemma, drawn. The whole tension is the shape of one box you
+  cannot make big in both directions at once.</p>
+</details>

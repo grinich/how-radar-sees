@@ -1,0 +1,45 @@
+<h2>The same phase, read as a ruler</h2>
+
+<p>Along-track interferometry compared two looks taken a fraction of a second apart, and read
+motion out of the difference. Separate the two looks <em>across</em> the track instead — two antennas
+offset sideways, or the same satellite flying the same orbit twice — and the identical phase
+comparison measures something else entirely: not how the ground moved, but its shape.</p>
+
+<p>Each point is a little closer to one antenna than the other, and that path difference wraps the
+<span class="t-echo">phase</span> into <em>fringes</em>. One fringe is a fixed step of elevation, so
+counting them from a valley to a summit rebuilds the terrain — a contour map drawn in radio waves.
+This is how one radar can measure the height of a whole planet: in 2000 the Shuttle flew two SAR
+antennas on a 60-metre mast and mapped nearly all of Earth's land in eleven days.</p>
+
+<figure class="fig fig--wide" data-figure="insar-fringes">
+  <figcaption>Interferometric SAR. In <em>topography</em>, fringes count elevation — each colour cycle
+  is one step up the terrain. Switch to <em>deformation</em> and the same fringes count centimetres
+  of ground motion between two passes; switch to <em>coherence</em> and watch where the two looks
+  stop agreeing.</figcaption>
+</figure>
+
+<p>Now fly the same orbit twice, weeks apart, and subtract one pass from the other. Everything that
+held still cancels to nothing. Anything that crept toward or away from the satellite in between is
+left drawn in fringes — but now each fringe is not metres of height, it is
+<strong>half a wavelength of motion</strong>, a few centimetres. A city sinking as its aquifer is
+pumped dry, a volcano swelling before it erupts, the ground lurching in an earthquake: all of it
+comes back as bullseyes of colour, measured from three hundred kilometres up to better than a
+centimetre. This is the most widely used trick in all of civilian radar, and it runs on the exact
+phase Part 3 has been spending on movers.</p>
+
+<p>There is a catch, and it is a second sensor in disguise. The comparison only means anything where
+the fine speckle pattern still matches between the two passes — where the looks stay
+<span class="t-echo">coherent</span>. Disturb the ground between passes — plough it, drive over it,
+dig it — and the speckle scrambles; coherence collapses. That collapse betrays a
+<span class="t-target">tyre track or a footpath</span> that changed the surface without changing how
+bright it is: invisible to the amplitude image, glaring in the coherence one.</p>
+
+<figure class="fig fig--wide" data-figure="change-detection">
+  <figcaption>Coherent change detection. Step through two passes, their amplitude difference, and
+  their coherence. A vehicle that appeared lights up the amplitude change; a disturbed-earth track
+  that barely altered the brightness shows up only in the loss of coherence.</figcaption>
+</figure>
+
+<p>Topography, deformation, and the ghost of anything that moved the soil — all from comparing the
+phase of two looks. But for genuine movers, along-track interferometry left a problem open: a single
+baseline wraps, and a fast target reads as a slow one. Resolving that takes more than two antennas.</p>
