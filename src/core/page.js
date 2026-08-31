@@ -14,10 +14,13 @@ import { mountAll } from './runtime.js';
 import { decorateGlossary } from './glossary.js';
 import { decorateEntities } from './entities.js';
 
-/** @param {string[]} sections  section HTML partials in order */
-export function bootPage(sections) {
+/** Decorate the build-time-inlined prose and mount the interactive layer. */
+export function bootPage() {
   const app = document.getElementById('app');
-  app.innerHTML = sections.join('\n');
+  if (!app.children.length) {
+    console.error('bootPage: no inlined prose found — is the inline-prose Vite plugin running?');
+    return;
+  }
 
   decorateGlossary(app);
   decorateEntities(app);
@@ -32,6 +35,8 @@ function buildTOC() {
 
   const toc = document.createElement('nav');
   toc.className = 'toc';
+  toc.id = 'toc';
+  toc.tabIndex = -1; // focus target for the skip link
   toc.setAttribute('aria-label', 'Contents');
   const list = document.createElement('div');
   list.className = 'toc__list';
@@ -50,7 +55,10 @@ function buildTOC() {
     list.append(a);
   });
   toc.append(list);
-  document.body.append(toc);
+  // Before <main>, so keyboard users reach navigation without traversing the essay.
+  document.body.insertBefore(toc, document.querySelector('main'));
+  const openOverlay = buildMobileToc(toc);
+  buildSkipLink(toc, openOverlay);
 
   // Hide the TOC while the header is on screen, so they never overlap.
   const header = document.querySelector('.site-header');
@@ -78,7 +86,9 @@ function buildTOC() {
     const link = linkFor.get(current.id);
     if (!link || link === active) return;
     active?.classList.remove('is-active');
+    active?.removeAttribute('aria-current');
     link.classList.add('is-active');
+    link.setAttribute('aria-current', 'true');
     active = link;
     // keep it visible inside the TOC without moving the page
     const tr = toc.getBoundingClientRect(), lr = link.getBoundingClientRect();
@@ -95,4 +105,67 @@ function buildTOC() {
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll, { passive: true });
   updateActive();
+}
+
+/**
+ * Below the desktop breakpoint (1180px, see nav.css) the TOC is hidden; a fixed
+ * "Contents" button toggles it as an overlay panel instead.
+ * @param {HTMLElement} toc
+ * @returns {() => void} function that opens the overlay
+ */
+function buildMobileToc(toc) {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'toc-fab';
+  btn.textContent = 'Contents';
+  btn.setAttribute('aria-label', 'Table of contents');
+  btn.setAttribute('aria-expanded', 'false');
+  btn.setAttribute('aria-controls', toc.id);
+
+  const backdrop = document.createElement('div');
+  backdrop.className = 'toc-backdrop';
+
+  const open = () => {
+    toc.classList.add('is-open');
+    backdrop.classList.add('is-open');
+    btn.setAttribute('aria-expanded', 'true');
+  };
+  const close = (refocus = false) => {
+    if (!toc.classList.contains('is-open')) return;
+    toc.classList.remove('is-open');
+    backdrop.classList.remove('is-open');
+    btn.setAttribute('aria-expanded', 'false');
+    if (refocus) btn.focus();
+  };
+
+  btn.addEventListener('click', () => (toc.classList.contains('is-open') ? close() : open()));
+  backdrop.addEventListener('click', () => close());
+  toc.addEventListener('click', (e) => {
+    if (/** @type {HTMLElement} */ (e.target).closest('a')) close();
+  });
+  window.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(true); });
+
+  toc.after(btn);
+  document.body.append(backdrop);
+  return open;
+}
+
+/**
+ * Visually-hidden "skip to contents" link, first in the tab order (see base.css).
+ * @param {HTMLElement} toc
+ * @param {() => void} openOverlay
+ */
+function buildSkipLink(toc, openOverlay) {
+  const a = document.createElement('a');
+  a.className = 'skip-link';
+  a.href = '#' + toc.id;
+  a.textContent = 'Skip to table of contents';
+  a.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (window.matchMedia('(max-width: 1180px)').matches) openOverlay();
+    else toc.classList.remove('is-hidden'); // it hides behind the header at the top of the page
+    const first = toc.querySelector('a');
+    (first || toc).focus();
+  });
+  document.body.prepend(a);
 }

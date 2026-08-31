@@ -42,7 +42,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" 
   <text x="80" y="150" font-family="Helvetica, Arial, sans-serif" font-size="25" font-weight="700" letter-spacing="7" fill="#7fb0e6">AN INTERACTIVE ESSAY</text>
   <text x="74" y="300" font-family="Helvetica, Arial, sans-serif" font-size="102" font-weight="700" letter-spacing="-3" fill="#ffffff">How Radar Sees</text>
   <text x="80" y="372" font-family="Helvetica, Arial, sans-serif" font-size="40" fill="#c9d4e2">and why Starlink might be watching</text>
-  <text x="80" y="566" font-family="Helvetica, Arial, sans-serif" font-size="27" fill="#6f8199">how-radar-sees.pages.dev  ·  42 interactive figures on radar &amp; SAR</text>
+  <text x="80" y="566" font-family="Helvetica, Arial, sans-serif" font-size="27" fill="#6f8199">how-radar-sees.pages.dev  ·  46 interactive figures on radar &amp; SAR</text>
 </svg>`;
 
 mkdirSync('public', { recursive: true });

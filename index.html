@@ -3,18 +3,38 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>How Radar Sees</title>
-  <meta name="description" content="An interactive essay on how radar and synthetic aperture radar work — and whether Starlink could be a secret radar constellation. 42 interactive figures." />
+  <title>How Radar Sees — an interactive essay on radar, SAR, and Starlink</title>
+  <meta name="description" content="An interactive essay on how radar and synthetic aperture radar work — and whether Starlink could be a secret radar constellation. 46 interactive figures." />
   <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-  <meta property="og:type" content="website" />
+  <link rel="canonical" href="https://how-radar-sees.pages.dev/" />
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0e1116" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="How Radar Sees" />
   <meta property="og:title" content="How Radar Sees" />
-  <meta property="og:description" content="An interactive essay on how radar and synthetic aperture radar work — and whether Starlink could be a secret radar constellation. 42 interactive figures." />
+  <meta property="og:description" content="An interactive essay on how radar and synthetic aperture radar work — and whether Starlink could be a secret radar constellation. 46 interactive figures." />
   <meta property="og:image" content="https://how-radar-sees.pages.dev/og.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="A satellite sweeping a radar beam across Earth at night, with the title How Radar Sees." />
   <meta property="og:url" content="https://how-radar-sees.pages.dev/" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="How Radar Sees" />
   <meta name="twitter:description" content="How radar and SAR work — and whether Starlink could be a secret radar constellation." />
   <meta name="twitter:image" content="https://how-radar-sees.pages.dev/og.png" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "How Radar Sees",
+    "alternativeHeadline": "Could Starlink be a secret radar constellation?",
+    "description": "An interactive essay on how radar and synthetic aperture radar work — and whether Starlink could be a secret radar constellation.",
+    "image": "https://how-radar-sees.pages.dev/og.png",
+    "url": "https://how-radar-sees.pages.dev/",
+    "dateModified": "2026-08-31",
+    "isBasedOn": "https://www.youtube.com/watch?v=jbp3kdJZ1_A"
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet" />
@@ -126,6 +146,18 @@
     </div>
   </header>
   <main class="prose" id="app"></main>
+  <footer class="site-footer">
+    <p>An educational retelling of
+      <a href="https://www.youtube.com/watch?v=jbp3kdJZ1_A" target="_blank" rel="noopener">“Is Starlink A Secret Radar Constellation?”</a>
+      and two companion videos by <strong>Noise In Space</strong>, whose MIT-licensed simulations power every figure.
+      <a href="./notices.html">Notices &amp; licenses</a> ·
+      <a href="https://github.com/grinich/starlink-radar" target="_blank" rel="noopener">Source</a></p>
+  </footer>
+  <style>
+    .site-footer { max-width: 42rem; margin: 0 auto; padding: 2rem 1.25rem 3.5rem;
+      font-size: 0.85rem; color: var(--muted, #6b7280); border-top: 1px solid var(--rule, #e0e0e0); }
+    .site-footer a { color: inherit; }
+  </style>
   <script type="module" src="/src/pages/index.js"></script>
 </body>
 </html>

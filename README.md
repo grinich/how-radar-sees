@@ -13,7 +13,7 @@ attribution.
 
 **Live at <https://how-radar-sees.pages.dev>** (Cloudflare Pages).
 
-**A single long-scroll interactive essay** (Ciechanowski-style) — ~42 interactive figures across five
+**A single long-scroll interactive essay** (Ciechanowski-style) — 46 interactive figures across five
 parts, with a long table of contents down the right side and hover-to-define glossary terms:
 
 1. **Seeing with Echoes** — opens with a **live Starlink tracker** (real TLEs from CelesTrak,
@@ -50,7 +50,9 @@ npm run preview  # serve the built dist/
 ## Architecture
 
 - **Vanilla ES modules + Vite.** No UI framework. Interactivity lives inside canvases driven
-  imperatively per frame.
+  imperatively per frame. The prose itself is inlined into `index.html` at build time (the
+  `inline-prose` plugin in `vite.config.js`, ordered by `src/content/manifest.js`), so crawlers,
+  reader mode, and no-JS readers get the full text; the JS only boots the interactive layer.
 - **`src/physics/`** — a faithful port of the creator's validated engine (`SAR_Visualizer.html` /
   `sar_simulation_env.py`). Pinned by `test/physics.test.js`.
 - **`src/core/`** — the figure harness: a `Figure` base with `Canvas2DFigure` / `ThreeFigure`

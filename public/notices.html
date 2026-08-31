@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Notices &amp; licenses — How Radar Sees</title>
+  <meta name="robots" content="noindex" />
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  <style>
+    :root { color-scheme: light dark; }
+    body {
+      max-width: 42rem; margin: 0 auto; padding: 2rem 1.25rem 4rem;
+      font: 16px/1.6 ui-sans-serif, system-ui, "IBM Plex Sans", sans-serif;
+      color: #1a1a1a; background: #ffffff;
+    }
+    @media (prefers-color-scheme: dark) { body { color: #e2e5ea; background: #0e1116; } }
+    h1 { font-size: 1.5rem; } h2 { font-size: 1.15rem; margin-top: 2rem; }
+    a { color: inherit; }
+    pre {
+      white-space: pre-wrap; font: 12px/1.5 ui-monospace, monospace;
+      padding: 0.75rem 1rem; border: 1px solid rgba(128,128,128,0.35); border-radius: 6px;
+      overflow-x: auto;
+    }
+    p.back { margin-bottom: 2rem; }
+  </style>
+</head>
+<body>
+  <p class="back"><a href="./">&larr; Back to the essay</a></p>
+  <h1>Notices &amp; attribution</h1>
+
+  <p><strong>How Radar Sees</strong> is an educational, interactive retelling of the physics and
+  engineering described in three YouTube videos by the channel <strong>Noise In Space</strong>.
+  All credit for the original analysis belongs to the creator — please watch the originals:</p>
+  <ul>
+    <li><a href="https://www.youtube.com/watch?v=jbp3kdJZ1_A">“Is Starlink A Secret Radar Constellation?”</a></li>
+    <li><a href="https://www.youtube.com/watch?v=-GTpBMPjjFc">“How The U.S. Will Track EVERY Vehicle from Space: SAR GMTI/AMTI”</a></li>
+    <li><a href="https://www.youtube.com/watch?v=U6veU66z2TQ">“The Insane Engineering of Starlink V3”</a></li>
+  </ul>
+
+  <h2>Ported simulation engine — Noise In Space (MIT)</h2>
+  <p>The radar physics on this site (range equation, SNR budget, resolution, Doppler, DPCA, NESZ,
+  atmospheric loss) is ported from the creator’s open-source simulations at
+  <a href="https://github.com/noiseinspacechannel">github.com/noiseinspacechannel</a>
+  (NIS-Starlink-Radar-Video, NIS-SAR-AMTIGMTI-Video, NIS-Starlink-Video), released under the
+  MIT License:</p>
+  <pre>MIT License
+
+Copyright (c) 2026 noiseinspacechannel
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</pre>
+
+  <h2>three.js (MIT)</h2>
+  <p>3-D rendering by <a href="https://threejs.org">three.js</a>:</p>
+  <pre>The MIT License
+
+Copyright © 2010–present three.js authors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</pre>
+
+  <h2>satellite.js (MIT)</h2>
+  <p>SGP4 orbit propagation for the live constellation figure by
+  <a href="https://github.com/shashwatak/satellite-js">satellite.js</a>:</p>
+  <pre>MIT License
+
+Copyright (C) 2013 Shashwat Kandadai, UCSC Jack Baskin School of Engineering
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</pre>
+
+  <h2>Data</h2>
+  <ul>
+    <li><strong>Starlink orbital elements (TLEs)</strong> — courtesy of
+    <a href="https://celestrak.org">CelesTrak</a>, Dr. T.S. Kelso. Fetched live and
+    edge-cached for two hours to respect CelesTrak’s update cadence; a bundled snapshot
+    serves as offline fallback.</li>
+    <li><strong>Coastlines</strong> — <a href="https://www.naturalearthdata.com/">Natural Earth</a>
+    (ne_110m_coastline), public domain.</li>
+  </ul>
+
+  <h2>Assets &amp; fonts</h2>
+  <ul>
+    <li><strong>Starlink satellite 3-D models</strong> — built procedurally for this site (no
+    third-party assets). Dimensions follow SpaceX-published material: the Oct 2022 FCC filing,
+    the “Brightness Mitigation Best Practices” paper (2022), and the
+    <a href="https://starlink.com/updates/starlink-version-3-satellites">Starlink V3 update</a>.</li>
+    <li><strong>IBM Plex Sans</strong> — © IBM Corp., licensed under the
+    <a href="https://openfontlicense.org">SIL Open Font License 1.1</a>, served via Google Fonts.</li>
+  </ul>
+</body>
+</html>

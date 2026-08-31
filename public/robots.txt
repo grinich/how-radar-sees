@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://how-radar-sees.pages.dev/sitemap.xml
